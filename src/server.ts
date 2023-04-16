@@ -17,7 +17,8 @@ express()
   .use(express.urlencoded( { extended: true }))
   .set("views", path.join(__dirname, "views"))
   .set("view engine", "ejs")
-  .get("/", async(req, res) => {
-    res.send('Hello World!')
+  .get("/", async(req: any, res: any) => {
+    let msg: string = 'Hello World!'
+    res.send(msg)
   })
   .listen(PORT, () => console.log(`Listening on ${PORT}`))
