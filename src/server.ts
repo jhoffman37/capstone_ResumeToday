@@ -1,8 +1,9 @@
 require("dotenv").config();
-const express = require("express");
-const path = require("path");
+import express, {Request, Response} from "express";
+import path from "path";
+import { Pool } from "pg";
+
 const PORT = process.env.PORT || 5163;
-const { POOL, Pool } = require("pg");
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -17,7 +18,7 @@ express()
   .use(express.urlencoded( { extended: true }))
   .set("views", path.join(__dirname, "views"))
   .set("view engine", "ejs")
-  .get("/", async(req: any, res: any) => {
+  .get("/", async(req: Request, res: Response) => {
     let msg: string = 'Hello World!'
     res.send(msg)
   })
