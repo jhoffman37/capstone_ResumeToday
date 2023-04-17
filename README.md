@@ -11,9 +11,12 @@ This is a NodeJs/Express application
 
 We are using TypeScript to have a better type system
 
+A .env file will be required to run the webserver. It should contain the following:
+- Optional: PORT (defaults to 5163)
+- DATABASE_URL (the url to the database)
+
 ### Dependencies
 - express
 - node
 - pg
 - typescript
-- .env file with the database url and port number
