@@ -9,7 +9,8 @@ This is a NodeJs/Express application
 
 `npm start` to deploy the web server
 
-We are using TypeScript to have a better type system
+The project used TypeScript instead of JavaScript. To compile the TypeScript files, run `tsc` in the root directory. or 
+just run `npm start` to compile TS files and start the web server.
 
 A .env file will be required to run the webserver. It should contain the following:
 - Optional: PORT (defaults to 5163)
