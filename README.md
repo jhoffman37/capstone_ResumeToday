@@ -16,3 +16,4 @@ We are using TypeScript to have a better type system
 - node
 - pg
 - typescript
+- .env file with the database url and port number
