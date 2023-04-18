@@ -22,4 +22,14 @@ express()
     let msg: string = 'Hello World!'
     res.send(msg)
   })
+  .get("/health", async(req: Request, res: Response) => {
+    if (pool) {
+      let data = await pool.query('SELECT * FROM users')
+      if (data.rows && data.rows.length > 0) {
+        res.status(200).send('OK')
+      } else {
+        res.status(500).send('Error')
+      }
+    }
+  })
   .listen(PORT, () => console.log(`Listening on ${PORT}`))
