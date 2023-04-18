@@ -2,9 +2,16 @@ import { getPool } from "./util";
 
 const pool = getPool();
 
+export type User = {
+  id: number,
+  name: string,
+};
+
 const getAllUsers = async () => {
-  let result = await pool.query('SELECT * FROM users;')
-  return result.rows;
+  let users: User[];
+  let result = await pool.query('SELECT * FROM users;');
+  users = result.rows;
+  return users;
 }
 
 const UserDB = {

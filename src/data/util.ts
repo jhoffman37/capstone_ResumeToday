@@ -7,4 +7,4 @@ export const getPool = function() {
         rejectUnauthorized: false
       }
     })
-}
+};

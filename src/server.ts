@@ -18,10 +18,10 @@ express()
     if (Data.Users) {
       let data = await Data.Users.getAllUsers();
       if (data && data.length > 0) {
-        res.status(200).send('OK')
+        res.status(200).send('OK');
       } else {
-        res.status(500).send('Error')
+        res.status(500).send('Error');
       }
     }
   })
-  .listen(PORT, () => console.log(`Listening on ${PORT}`))
+  .listen(PORT, () => console.log(`Listening on ${PORT}`));
