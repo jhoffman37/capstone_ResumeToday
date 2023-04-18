@@ -1,18 +1,11 @@
 require("dotenv").config();
 import express, {Request, Response} from "express";
 import path from "path";
-import { Pool } from "pg";
+import Data from "./data";
 
 const PORT = process.env.PORT || 5163;
 
 const indexRouter = require("./routes/index");
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false
-  }
-});
 
 express()
   .use(express.static(path.join(__dirname, "../public")))
@@ -22,9 +15,9 @@ express()
   .set("view engine", "ejs")
   .use("/", indexRouter)
   .get("/health", async(req: Request, res: Response) => {
-    if (pool) {
-      let data = await pool.query('SELECT * FROM users')
-      if (data.rows && data.rows.length > 0) {
+    if (Data.Users) {
+      let data = await Data.Users.getAllUsers();
+      if (data && data.length > 0) {
         res.status(200).send('OK')
       } else {
         res.status(500).send('Error')
