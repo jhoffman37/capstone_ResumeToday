@@ -5,6 +5,8 @@ import { Pool } from "pg";
 
 const PORT = process.env.PORT || 5163;
 
+const indexRouter = require("./routes/index");
+
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: {
@@ -18,9 +20,7 @@ express()
   .use(express.urlencoded( { extended: true }))
   .set("views", path.join(__dirname, "../views"))
   .set("view engine", "ejs")
-  .get("/", async(req: Request, res: Response) => {
-    res.render("pages/home.ejs")
-  })
+  .use("/", indexRouter)
   .get("/health", async(req: Request, res: Response) => {
     if (pool) {
       let data = await pool.query('SELECT * FROM users')
