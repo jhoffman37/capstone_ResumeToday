@@ -7,14 +7,19 @@ router.get("/resume", (req: Request, res: Response) => {
   res.render("pages/newResume.ejs");
 });
 router.get("/resume/view/:id", async (req: Request, res: Response) => {
-  const id: number = Number.parseInt(req.params.id);
-  const resume: Resume = await ResumeDB.get(id);
-  const user: User = (await UserDB.getAllUsers())[resume.user_id];
-
-  res.render("pages/resume.ejs", {
-    resume,
-    user
-  });
+  try {
+    const id: number = Number.parseInt(req.params.id);
+    const resume: Resume = await ResumeDB.get(id);
+    const user: User = (await UserDB.getAllUsers())[resume.user_id];
+  
+    res.render("pages/resume.ejs", {
+      resume,
+      user
+    });
+  } catch {
+    res.status(404).send('This resume does not exist!')
+  }
+  
 });
 router.post("/resume/validate", async function (req: Request, res: Response) {
   const result = {
