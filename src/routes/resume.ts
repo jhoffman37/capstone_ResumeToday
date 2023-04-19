@@ -13,6 +13,7 @@ router.get("/resume/view/:id", async (req: Request, res: Response) => {
     const user: User = (await UserDB.getAllUsers())[resume.user_id];
   
     res.render("pages/resume.ejs", {
+      title: user.name,
       resume,
       user
     });
