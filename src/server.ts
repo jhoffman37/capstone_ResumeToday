@@ -2,6 +2,7 @@ require("dotenv").config();
 import express, {Request, Response} from "express";
 import path from "path";
 import Data from "./data";
+import resumeRouter from "./routes/resume";
 
 const PORT = process.env.PORT || 5163;
 
@@ -14,6 +15,7 @@ express()
   .set("views", path.join(__dirname, "../views"))
   .set("view engine", "ejs")
   .use("/", indexRouter)
+  .use(resumeRouter)
   .get("/health", async(req: Request, res: Response) => {
     if (Data.Users) {
       let data = await Data.Users.getAllUsers();
