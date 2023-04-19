@@ -1,3 +1,7 @@
+:root {
+  --error-color: #a82929;
+}
+
 body {
 }
 
@@ -87,6 +91,12 @@ a:hover {
 }
 
 .error-msg {
-  color: #a82929;
+  color: var(--error-color);
   font-style: italic;
+}
+
+#resume-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
 }
