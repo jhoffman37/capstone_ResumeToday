@@ -1,4 +1,4 @@
-<%- include('../shared/signedInHeader.ejs') %>
+<%- include("../shared/signedInHeader.ejs") %>
 
 <!DOCTYPE html>
 <html lang ="en">
@@ -9,8 +9,47 @@
 <body>
   <h1>New Resume</h1>
 
-  <script>
+  <form id="resume-form">
+    <label for="title">Title *</label>
+    <input type="text" id="title">
 
+    <!--? Are we pulling the name from the account? -->
+    <label for="name">Name *</label>
+    <input type="text" id="name">
+
+    <label for="about">About me</label>
+    <input type="text" id="about">
+
+    <span class="error-msg"></span>
+    <button type="submit">Save</button>
+  </form>
+
+  <script>
+    const form = document.getElementById("resume-form");
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const values = form.querySelectorAll("input");
+
+      // Validate form because you can never trust the client
+      const res = await fetch("/resume/validate", {
+        method: "POST",
+        body: JSON.stringify({
+          title: values[0].value,
+          name: values[1].value,
+          about: values[2].value
+        }),
+        headers: { "Content-Type": "application/json" }
+      });
+
+      const result = await res.json();
+      if (!result.success) {
+        document.querySelector("span.error-msg").innerHTML = result.msg;
+        return;
+      }
+      window.location.replace(`/resume/view/${result.resumeId}`);
+    })
+    
   </script>
 </body>
 </html>

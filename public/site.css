@@ -85,3 +85,8 @@ a:link {
 a:hover {
   color: #000;
 }
+
+.error-msg {
+  color: #a82929;
+  font-style: italic;
+}
