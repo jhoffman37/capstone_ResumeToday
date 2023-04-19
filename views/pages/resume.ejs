@@ -1,0 +1,20 @@
+<%- include("../shared/signedInHeader.ejs") %>
+
+<!DOCTYPE html>
+<html lang ="en">
+<head>
+  <title><%= resume.title %> - Resume Today</title>
+  <meta charset="UTF-8">
+</head>
+<body>
+  <h1><%= user.name %></h1>
+  
+  <%_ if (resume.about !== "") { _%>
+    <h2>About Me</h2>
+    <p><%= resume.about %></p>
+  <%_ } _%>
+  <script>
+
+  </script>
+</body>
+</html>

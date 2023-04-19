@@ -2,12 +2,12 @@ import { getPool } from "./util";
 
 const pool = getPool();
 
-export type User = {
+type User = {
   id: number,
   name: string,
 };
 
-const getAllUsers = async () => {
+const getAllUsers = async (): Promise<User[]> => {
   let users: User[];
   let result = await pool.query('SELECT * FROM users;');
   users = result.rows;
@@ -18,4 +18,4 @@ const UserDB = {
   getAllUsers
 }
 
-export default UserDB;
+export { User, UserDB };

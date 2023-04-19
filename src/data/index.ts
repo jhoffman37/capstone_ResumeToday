@@ -1,4 +1,4 @@
-import UserDB from "./userDB";
+import { UserDB } from "./userDB";
 
 const Data = {
   Users: UserDB

@@ -13,10 +13,6 @@
     <label for="title">Title *</label>
     <input type="text" id="title">
 
-    <!--? Are we pulling the name from the account? -->
-    <label for="name">Name *</label>
-    <input type="text" id="name">
-
     <label for="about">About me</label>
     <input type="text" id="about">
 
@@ -36,8 +32,7 @@
         method: "POST",
         body: JSON.stringify({
           title: values[0].value,
-          name: values[1].value,
-          about: values[2].value
+          about: values[1].value
         }),
         headers: { "Content-Type": "application/json" }
       });
