@@ -5,6 +5,8 @@ const pool = getPool();
 type User = {
   id: number,
   name: string,
+  username: string,
+  password: string,
 };
 
 const getAllUsers = async (): Promise<User[]> => {
