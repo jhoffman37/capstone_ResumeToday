@@ -22,3 +22,4 @@ A .env file will be required to run the webserver. It should contain the followi
 - pg
 - typescript
 - express-jwt
+- bcrypt
