@@ -17,4 +17,4 @@ router.get("/", (req: Request, res: Response) => {
     res.render("pages/register.ejs");
   });
 
-module.exports = router;
+export default router;
