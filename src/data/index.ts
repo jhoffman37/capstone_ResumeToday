@@ -1,7 +1,9 @@
 import { UserDB } from "./userDB";
+import { ResumeDB } from "./resumeDB";
 
 const Data = {
-  Users: UserDB
+  Users: UserDB,
+  Resumes: ResumeDB,
 }
 
 export default Data;
