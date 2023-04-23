@@ -19,22 +19,22 @@ const getAllUsers = async (): Promise<User[]> => {
 
 const insertNewUser = async (name: string, username: string, password_hash: string, salt: string): Promise<User> => {
   let user: User;
-  let result = await pool.query(`INSERT INTO users (name, username, password, salt) 
+  let result = await pool.query(`INSERT INTO users (name, username, password_hash, salt) 
     VALUES ($1, $2, $3, $4) RETURNING *;`, [name, username, password_hash, salt]);
   user = result.rows[0];
   return user;
 }
 
-const getUserByUsername = async (username: string): Promise<User> => {
-  let user: User;
+const getUsersByUsername = async (username: string): Promise<User[]> => {
+  let user: User[];
   let result = await pool.query('SELECT * FROM users WHERE username=$1;', [username]);
-  user = result.rows[0];
+  user = result.rows;
   return user;
 }
 
 const UserDB = {
   getAllUsers,
-  getUserByUsername,
+  getUsersByUsername,
   insertNewUser
 }
 
