@@ -5,7 +5,7 @@ CREATE TABLE users
     id   SERIAL PRIMARY KEY,
     name TEXT NOT NULL,
     username TEXT NOT NULL,
-    password TEXT NOT NULL
+    password TEXT NOT NULL,
+    salt TEXT NOT NULL
 );
 
-INSERT INTO users (name, username, password) VALUES ('Test User', 'testusername', 'testpassword');

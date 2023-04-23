@@ -1,5 +1,5 @@
-import { UserDB } from "./userDB";
-import { ResumeDB } from "./resumeDB";
+import { UserDB, User } from "./userDB";
+import { ResumeDB, Resume } from "./resumeDB";
 
 const Data = {
   Users: UserDB,
@@ -7,3 +7,4 @@ const Data = {
 }
 
 export default Data;
+export { User, Resume };
