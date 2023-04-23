@@ -6,7 +6,7 @@ type User = {
   id: number,
   name: string,
   username: string,
-  password: string,
+  password_hash: string,
   salt: string
 };
 
