@@ -15,6 +15,8 @@ just run `npm start` to compile TS files and start the web server.
 A .env file will be required to run the webserver. It should contain the following:
 - Optional: PORT (defaults to 5163)
 - DATABASE_URL (the url to the database)
+- JWT_SECRET (the secret used to sign JWTs)
+- JWT_EXPIRY (the expiry time for JWTs)
 
 ### Dependencies
 - express
