@@ -8,18 +8,6 @@ import resumeRouter from "./routes/resume";
 import indexRouter from "./routes/index";
 import userAuthRouter from "./routes/userAuth";
 
-import "bcryptjs";
-
-const genTestPassword = async () => {
-  let salt = await bcrypt.genSalt(10);
-  let hash = await bcrypt.hash("password", salt);
-  console.log("salt: " + salt);
-  console.log("hashed password: " + hash);
-}
-
-genTestPassword();
-
-
 const PORT = process.env.PORT || 5163;
 
 express()
