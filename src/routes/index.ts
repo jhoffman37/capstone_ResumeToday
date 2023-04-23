@@ -10,6 +10,9 @@ router.get("/", (req: Request, res: Response) => {
   .get("/contact", (req: Request, res: Response) => {
     res.render("pages/contact.ejs");
   })
+  .get("/help", async(req: Request, res: Response) => {
+    res.render("pages/help.ejs");
+  })
   .get("/login", (req: Request, res: Response) => {
     res.render("pages/login.ejs");
   })
