@@ -17,10 +17,10 @@ const getAllUsers = async (): Promise<User[]> => {
   return users;
 }
 
-const insertNewUser = async (name: string, username: string, password: string, salt: string): Promise<User> => {
+const insertNewUser = async (name: string, username: string, password_hash: string, salt: string): Promise<User> => {
   let user: User;
   let result = await pool.query(`INSERT INTO users (name, username, password, salt) 
-    VALUES ($1, $2, $3, $4) RETURNING *;`, [name, username, password, salt]);
+    VALUES ($1, $2, $3, $4) RETURNING *;`, [name, username, password_hash, salt]);
   user = result.rows[0];
   return user;
 }
