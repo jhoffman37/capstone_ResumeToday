@@ -26,7 +26,4 @@ express()
       }
     }
   })
-  .get("/help", async(req: Request, res: Response) => {
-    res.render("pages/help.ejs");
-  })
   .listen(PORT, () => console.log(`Listening on ${PORT}`));
