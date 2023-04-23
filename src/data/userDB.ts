@@ -7,6 +7,7 @@ type User = {
   name: string,
   username: string,
   password: string,
+  salt: string
 };
 
 const getAllUsers = async (): Promise<User[]> => {
