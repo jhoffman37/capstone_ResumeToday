@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import Data from "../data";
 
-type AuthUser = {
+export type AuthUser = {
   id: number;
   username: string;
 }
