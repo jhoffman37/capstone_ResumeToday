@@ -17,6 +17,7 @@ A .env file will be required to run the webserver. It should contain the followi
 - DATABASE_URL (the url to the database)
 - JWT_SECRET (the secret used to sign JWTs)
 - JWT_EXPIRY (the expiry time for JWTs)
+- Optional: SALT_ROUNDS (defaults to 10)
 
 ### Dependencies
 - express
