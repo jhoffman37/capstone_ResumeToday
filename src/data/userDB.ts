@@ -4,7 +4,8 @@ const pool = getPool();
 
 type User = {
   id: number,
-  name: string,
+  first_name: string,
+  last_name: string,
   username: string,
   password_hash: string,
   salt: string
