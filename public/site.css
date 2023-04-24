@@ -99,7 +99,7 @@ a:hover {
   font-style: italic;
 }
 
-.form {
+form, fieldset div {
   display: flex;
   flex-direction: column;
   gap: 1em;

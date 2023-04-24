@@ -29,8 +29,51 @@ router.post("/resume/validate", async function (req: Request, res: Response) {
     resumeId: -1
   };
 
-  if (isStringEmpty(req.body.title))
+  const form = req.body.form;
+  if (!form.title)
     result.msg += "Must include a title for this resume<br>";
+
+  // Validate all education data
+  const edu = {
+    name: true,
+    where: true,
+    date: true
+  }
+  for (const data of form.education) {
+    edu.name = data.schoolName;
+    edu.where = data.where;
+    edu.date = data.dateOfGraduation
+  }
+
+  if (!edu.name)
+    result.msg += "Must include the name for your education(s)<br>";
+  if (!edu.where)
+    result.msg += "Missing the location (country, state, city) of your education(s)<br>";
+  if (!edu.date)
+    result.msg += "Must provide a graduation date<br>";
+
+  // Validate all work expierence data
+  const work = {
+    company: true,
+    position: true,
+    where: true,
+    start: true
+  }
+  for (const data of form.workExpierence) {
+    work.company = data.company;
+    work.position = data.position;
+    work.where = data.where;
+    work.start = data.startDate;
+  }
+
+  if (!work.company)
+    result.msg += "Must include the name of the company you worked at<br>";
+  if (!work.position)
+    result.msg += "Must include your position title of your workplace(s)<br>";
+  if (!work.where)
+    result.msg += "Missing the location (country, state, city) of your workplace(s)<br>";
+  if (!work.start)
+    result.msg += "Must provide the date you started working at your workplace(s)<br>";
 
   // If there is an error message, we can safely assume success is false
   result.success = result.msg === "";
@@ -42,8 +85,8 @@ router.post("/resume/validate", async function (req: Request, res: Response) {
       id: -1,
       //TODO: Get logged in user id
       user_id: 0,
-      title: req.body.title,
-      about: req.body.about,
+      title: form.title,
+      about: form.obj,
     };
     
     await ResumeDB.insert(resume);

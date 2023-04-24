@@ -75,7 +75,7 @@
 
     const addEducation = function () {
       const node = document.createElement("div");
-      node.className = "form"
+      node.className = "section-edu";
       
       const elements = [
         template.label("School Name *"),
@@ -99,7 +99,7 @@
 
     const addWorkExpierence = function () {
       const node = document.createElement("div");
-      node.className = "form"
+      node.className = "section-work";
       
       const elements = [
         template.label("Company *"),
@@ -136,14 +136,60 @@
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      const values = form.querySelectorAll("input, textarea");
+      const toCamalCase = function (str) {
+        const lower = str.toLowerCase();
+        const words = lower.split('-');
+        if (words.length <= 1)
+          return lower;
+
+        let newStr = words[0];
+        for (let i = 1; i < words.length; i++) {
+          const word = words[i];
+          const firstLetter = word.charAt(0).toUpperCase();
+
+          newStr += firstLetter + word.slice(1);
+        }
+        return newStr;
+      }
+
+      const formData = {
+        education: [],
+        workExpierence: []
+      };
+
+      // Add all values except education and work data
+      {
+        const query = form.querySelectorAll("form > input, form > textarea");
+        for (const input of query) {
+          formData[toCamalCase(input.id)] = input.value;
+        }
+      }
+
+      // Grab each education section, add all input values and push to list
+      const eduQuery = document.querySelectorAll(".section-edu");
+      for (const section of eduQuery) {
+        const data = {};
+        for (const input of section.querySelectorAll("input, textarea")) {
+          data[toCamalCase(input.id)] = input.value;
+        }
+        formData.education.push(data);
+      }
+      
+      // Same as above but for work data
+      const workQuery = document.querySelectorAll(".section-work");
+      for (const section of workQuery) {
+        const data = {};
+        for (const input of section.querySelectorAll("input, textarea")) {
+          data[toCamalCase(input.id)] = input.value;
+        }
+        formData.workExpierence.push(data);
+      }
 
       // Validate form because you can never trust the client
       const res = await fetch("/resume/validate", {
         method: "POST",
         body: JSON.stringify({
-          title: values[0].value,
-          about: values[1].value
+          form: formData
         }),
         headers: { "Content-Type": "application/json" }
       });
