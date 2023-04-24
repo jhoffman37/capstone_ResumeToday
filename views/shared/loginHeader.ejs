@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <title>
-    <%- if (locals.title) { -%>
-      <%- title %> -
-    <%_ } else {_%>
-          Resume Today
-    <%- } -%>
-  </title>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" type="text/css" href="/site.css">
-</head>
-<body id="body">
-  <header>
-   <h1><img src="../ResumeTodayLogo.png" alt="Resume Today"></h1>
-  </header>
+  <head>
+    <title>
+      <%- if (locals.title) { -%>
+        <%- title %> -
+      <%_ } else {_%>
+            Resume Today
+      <%- } -%>
+    </title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/site.css">
+  </head>
+  <body id="body">
+    <header>
+      <h1><img src="../ResumeTodayLogo.png" alt="Resume Today"></h1>
+    </header>
     <nav>
       <ul>
         <li><a href='/'>Home</a></li>
@@ -26,3 +26,5 @@
         <li><a href='/login'>Login</a></li>
       </ul>
     </nav>
+  </body>
+</html>
