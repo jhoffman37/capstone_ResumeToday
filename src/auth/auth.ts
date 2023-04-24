@@ -21,7 +21,7 @@ export const authenticateToken =  async (req: Request, res: Response, next: Next
   if (token == null) return res.sendStatus(401);
   if (process.env.JWT_SECRET) {
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-      if (err) return res.sendStatus(403);
+      if (err) next();
       req.user = user as AuthUser;
       next();
     });
