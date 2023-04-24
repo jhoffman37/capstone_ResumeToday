@@ -1,12 +1,12 @@
-Document.querySelector('#loginSubmit').addEventListener('submit', async (e) => {
-    const errorMessage = Document.querySelector('#error');
-
+document.querySelector('#loginSubmit').addEventListener('click', async (e) => {
     e.preventDefault();
-    const username = Document.querySelector('#username').value;
-    const password = Document.querySelector('#password').value;
+
+    const errorMessage = document.querySelector('#error');
+    const username = document.querySelector('#username').value;
+    const password = document.querySelector('#password').value;
     const data = { username, password };
 
-    const resp = await fetch('/login', {
+    const resp = await fetch('/user/authenticate', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -17,9 +17,7 @@ Document.querySelector('#loginSubmit').addEventListener('submit', async (e) => {
     const respJson = await resp.json();
 
     if (respJson.success) {
-        const accessToken = respJson.accessToken;
-        localStorage.setItem('accessToken', accessToken);
-        window.location.href = '/home';
+        window.location.href = '/';
     } else {
         errorMessage.innerHTML = respJson.msg;
     }

@@ -13,7 +13,8 @@ router.post("/authenticate", async (req: Request, res: Response) => {
       if (userID && process.env.JWT_SECRET) {
         const accessToken = jwt.sign({username ,id: userID}, process.env.JWT_SECRET,
           {expiresIn: process.env.JWT_EXPIRES_IN ? process.env.JWT_EXPIRES_IN : "1h"});
-        res.status(200).json({success: true, msg: "User Logged In", accessToken});
+        res.status(200).json({success: true, msg: "User Logged In"}).cookie('accessToken',
+          accessToken, {httpOnly: true, secure: true});
       } else {
         res.status(401).json({success: false, msg: "Invalid credentials"});
       }
@@ -36,7 +37,8 @@ router.post("/authenticate", async (req: Request, res: Response) => {
         if (user && process.env.JWT_SECRET) {
           const accessToken = jwt.sign({username ,id: user.id}, process.env.JWT_SECRET,
             {expiresIn: process.env.JWT_EXPIRES_IN ? process.env.JWT_EXPIRES_IN : "1h"});
-          res.status(201).json({success: true, msg: "User created", accessToken});
+          res.status(201).json({success: true, msg: "User created"}).cookie('accessToken',
+            accessToken, {httpOnly: true, secure: true});
         } else {
           res.status(400).json({success: false, msg: "Invalid request"});
         }

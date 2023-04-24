@@ -18,7 +18,7 @@ express()
   .set("view engine", "ejs")
   .use("/", indexRouter)
   .use(resumeRouter)
-  .use('/user',userAuthRouter)
+  .use('/user', userAuthRouter)
   .get("/health", async(req: Request, res: Response) => {
     if (Data.Users) {
       let data = await Data.Users.getAllUsers();
