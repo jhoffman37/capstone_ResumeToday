@@ -9,6 +9,7 @@ CREATE TABLE users
     salt TEXT NOT NULL
 );
 
+-- password: 'password'
 insert into users (name, username, password_hash, salt) values
                                                             ('Test User', 'testusername',
                                                              '$2a$10$juW0X0tmLTm/09PHXqfcqe2EXUv80Qw/whkWO1fPwN5ENwLtg6w.K',
