@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
   <title>
-    <%_ if (locals.title) { _%>
+    <%- if (locals.title) { -%>
       <%- title %> -
-    <%_ } _%>
-    Resume Today
+    <%_ } else {_%>
+          Resume Today
+    <%- } -%>
   </title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
