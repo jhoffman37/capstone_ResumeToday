@@ -10,8 +10,8 @@ router.post("/authenticate", async (req: Request, res: Response) => {
     const {username, password} = req.body;
     if (username && password) {
       let userID = await verifyUser(username, password);
-      if (userID && process.env.ACCESS_TOKEN_SECRET) {
-        const accessToken = jwt.sign({username ,id: userID}, process.env.ACCESS_TOKEN_SECRET);
+      if (userID && process.env.JWT_SECRET) {
+        const accessToken = jwt.sign({username ,id: userID}, process.env.JWT_SECRET);
         res.status(200).json({msg: "User Logged In", accessToken});
       } else {
         res.status(401).json({msg: "Invalid credentials"});
