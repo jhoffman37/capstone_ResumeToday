@@ -1,4 +1,4 @@
-Document.querySelector('#loginSubmit').addEventListener('submit', async (e) => {
+Document.querySelector('#registerSubmit').addEventListener('submit', async (e) => {
     const errorMessage = Document.querySelector('#error');
 
     e.preventDefault();
