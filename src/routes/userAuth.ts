@@ -30,7 +30,7 @@ router.post("/authenticate", async (req: Request, res: Response) => {
     try {
       const {first_name, last_name, username, password} = req.body;
       if (first_name && last_name && username && password) {
-        const salt = await bcrypt.genSalt(process.env.SALT_ROUNDS ? parseInt(process.env.SALT_ROUNDS) : 10);
+        const salt = await bcrypt.genSalt(process.env.BCRYPT_SALT_ROUNDS ? parseInt(process.env.BCRYPT_SALT_ROUNDS) : 10);
         const passwordHash = await bcrypt.hash(password, salt);
         const user = await Data.Users.insertNewUser(first_name, last_name, username, passwordHash, salt);
         if (user) {
