@@ -9,14 +9,14 @@ This is a NodeJs/Express application
 
 `npm start` to deploy the web server
 
-The project uses TypeScript instead of JavaScript. To compile the TypeScript files, run `tsc` in the root directory. or 
+The project uses TypeScript instead of JavaScript. To compile the TypeScript files, run `tsc` in the root directory, or 
 just run `npm start` to compile TS files and start the web server.
 
 A .env file will be required to run the webserver. It should contain the following:
 - Optional: PORT (defaults to 5163)
-- DATABASE_URL (the url to the database)
-- JWT_SECRET (the secret used to sign JWTs)
-- JWT_EXPIRY (the expiry time for JWTs)
+- Required: DATABASE_URL (the url to the database)
+- Required: JWT_SECRET (the secret used to sign JWTs)
+- Optional: JWT_EXPIRES_IN (the expiry time for JWTs) (defaults to 1h)
 - Optional: SALT_ROUNDS (defaults to 10)
 
 ### Dependencies
