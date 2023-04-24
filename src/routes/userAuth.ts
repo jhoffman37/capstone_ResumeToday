@@ -33,8 +33,10 @@ router.post("/authenticate", async (req: Request, res: Response) => {
         const salt = await bcrypt.genSalt(process.env.BCRYPT_SALT_ROUNDS ? parseInt(process.env.BCRYPT_SALT_ROUNDS) : 10);
         const passwordHash = await bcrypt.hash(password, salt);
         const user = await Data.Users.insertNewUser(first_name, last_name, username, passwordHash, salt);
-        if (user) {
-          res.status(201).json({success: true, msg: "User created"});
+        if (user && process.env.JWT_SECRET) {
+          const accessToken = jwt.sign({username ,id: user.id}, process.env.JWT_SECRET,
+            {expiresIn: process.env.JWT_EXPIRES_IN ? process.env.JWT_EXPIRES_IN : "1h"});
+          res.status(201).json({success: true, msg: "User created", accessToken});
         } else {
           res.status(400).json({success: false, msg: "Invalid request"});
         }

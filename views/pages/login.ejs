@@ -2,15 +2,15 @@
 
 <body>
   <h1>Login</h1>
-    <form action="/user/authenticate" method="POST">
+    <form>
         <label for="username">Username: </label>
-        <input type="text" name="username" placeholder="username" />
+        <input id="username" type="text" name="username" placeholder="username" required/>
         <label for="password">Password: </label>
-        <input type="password" name="password" placeholder="password" />
-        <input type="submit" value="Login" />
+        <input id="password" type="password" name="password" placeholder="password" required/>
+        <input id="loginSubmit" type="submit" value="Login"/>
     </form>
-  <script>
-
-  </script>
+    <p>Don't have an account? <a href="/register">Register</a></p>
+    <p id="error" class="error-msg"></p>
+  <script type="text/javascript" src="scripts/login.js"></script>
 </body>
 </html>
