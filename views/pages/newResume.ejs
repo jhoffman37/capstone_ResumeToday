@@ -3,12 +3,32 @@
 <body>
   <h1>New Resume</h1>
 
-  <form id="resume-form">
-    <label for="title">Title *</label>
-    <input type="text" id="title">
+  <form id="resume-form" class="form">
+    <span>* is a required field</span>
 
-    <label for="about">About me</label>
-    <textarea type="text" id="about"></textarea>
+    <label for="title">Title *</label>
+    <input type="text" id="title" name="title">
+
+    <label for="obj">Objective</label>
+    <textarea type="text" id="obj" name="obj"></textarea>
+
+    <fieldset id="education">
+      <legend>Education</legend>
+      <button type="button", onclick="addEducation()">Add an education</button>
+      <button type="button", onclick="remove('education')">Remove an education</button>
+    </fieldset>
+
+    <fieldset id="expierence">
+      <legend>Work Expierence</legend>
+      <button type="button", onclick="addWorkExpierence()">Add expierence</button>
+      <button type="button", onclick="remove('expierence')">Remove expierence</button>
+    </fieldset>
+
+    <label for="skills">Skills</label>
+    <textarea type="text" id="skills" name="skills"></textarea>
+
+    <label for="awards">Awards and Honors</label>
+    <textarea type="text" id="awards" name="awards"></textarea>
 
     <span class="error-msg"></span>
     <button type="submit">Save</button>
@@ -16,6 +36,103 @@
 
   <script>
     const form = document.getElementById("resume-form");
+
+    // Converts any text such as a label name to an attribute format
+    // e.g. "Work Expierence *" -> "work-expierence" 
+    const toAttributeStr = function (str) {
+      return str.toLowerCase().replace('/[^a-zA-Z0-9 ]/g', '').trimEnd().replace(' ', '-');
+    }
+    const template = {
+      label: function (name) {
+        const label = document.createElement("label");
+        label.innerHTML = name;
+        label.htmlFor = toAttributeStr(name);
+
+        return label;
+      },
+      input: function (name, type) {
+        const input = document.createElement(type !== "textarea" ? "input" : type);
+        const attr = toAttributeStr(name);
+
+        if (type === "textarea")
+          type = "text";
+
+        input.type = type;
+        input.id = attr;
+        input.name = attr;
+
+        return input;
+      }
+    }
+
+    const remove = function (from) {
+      const element = document.getElementById(from);
+     
+      // Ignore the first 3 elements (buttons and legend)
+      if (element.children.length > 3)
+        element.lastElementChild.remove();
+    }
+
+    const addEducation = function () {
+      const node = document.createElement("div");
+      node.className = "form"
+      
+      const elements = [
+        template.label("School Name *"),
+        template.input("school-name", "text"),
+
+        template.label("Where *"),
+        template.input("where", "text"),
+
+        template.label("Date of graduation *"),
+        template.input("date-of-graduation", "date"),
+
+        template.label("Certificates"),
+        template.input("certificates", "textarea"),
+      ];
+
+      for (const element of elements) {
+        node.appendChild(element);
+      }
+      document.getElementById("education").appendChild(node);
+    }
+
+    const addWorkExpierence = function () {
+      const node = document.createElement("div");
+      node.className = "form"
+      
+      const elements = [
+        template.label("Company *"),
+        template.input("company", "text"),
+
+        template.label("Position title *"),
+        template.input("position", "text"),
+
+        template.label("Where *"),
+        template.input("where", "text"),
+
+        template.label("Start date *"),
+        template.input("start-date", "date"),
+
+        template.label("End date"),
+        template.input("end-date", "date"),
+
+        template.label("Job duties"),
+        template.input("job-duties", "textarea"),
+      ];
+
+      for (const element of elements) {
+        node.appendChild(element);
+      }
+      document.getElementById("expierence").appendChild(node);
+    }
+
+    // Init form
+    window.addEventListener("load", (e) => {
+      addEducation();
+      addWorkExpierence();
+    });
+
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
