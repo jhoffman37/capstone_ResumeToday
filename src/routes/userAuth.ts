@@ -13,17 +13,17 @@ router.post("/authenticate", async (req: Request, res: Response) => {
       if (userID && process.env.JWT_SECRET) {
         const accessToken = jwt.sign({username ,id: userID}, process.env.JWT_SECRET,
           {expiresIn: process.env.JWT_EXPIRES_IN ? process.env.JWT_EXPIRES_IN : "1h"});
-        res.status(200).json({msg: "User Logged In", accessToken});
+        res.status(200).json({success: true, msg: "User Logged In", accessToken});
       } else {
-        res.status(401).json({msg: "Invalid credentials"});
+        res.status(401).json({success: false, msg: "Invalid credentials"});
       }
     } else {
-      res.status(400).json({msg: "Invalid request"});
+      res.status(400).json({success: false, msg: "Invalid request"});
     }
   }
   catch (err) {
     console.log(err);
-    res.status(503).json({msg: "Error authenticating user"});
+    res.status(503).json({success: false, msg: "Error authenticating user"});
   }
 })
   .post("/register", async (req: Request, res: Response) => {
@@ -34,16 +34,16 @@ router.post("/authenticate", async (req: Request, res: Response) => {
         const passwordHash = await bcrypt.hash(password, salt);
         const user = await Data.Users.insertNewUser(first_name, last_name, username, passwordHash, salt);
         if (user) {
-          res.status(201).json({msg: "User created"});
+          res.status(201).json({success: true, msg: "User created"});
         } else {
-          res.status(400).json({msg: "Invalid request"});
+          res.status(400).json({success: false, msg: "Invalid request"});
         }
       } else {
-        res.status(400).json({msg: "Invalid request"});
+        res.status(400).json({success: false, msg: "Invalid request"});
       }
     } catch (err) {
       console.log(err);
-      res.status(503).json({msg: "Error registering user"});
+      res.status(503).json({success: false, msg: "Error registering user"});
     }
   });
 
