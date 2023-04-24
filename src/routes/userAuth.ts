@@ -11,7 +11,7 @@ router.post("/authenticate", async (req: Request, res: Response) => {
     if (username && password) {
       let userID = await verifyUser(username, password);
       if (userID && process.env.JWT_SECRET) {
-        const accessToken = jwt.sign({username ,id: userID}, process.env.JWT_SECRET,
+        const accessToken = jwt.sign({id: userID, username}, process.env.JWT_SECRET,
           {expiresIn: process.env.JWT_EXPIRES_IN ? process.env.JWT_EXPIRES_IN : "1h"});
         res.status(200).json({success: true, msg: "User Logged In"}).cookie('authorization','Bearer ' +
           accessToken, {httpOnly: true, secure: true});
@@ -35,7 +35,7 @@ router.post("/authenticate", async (req: Request, res: Response) => {
         const passwordHash = await bcrypt.hash(password, salt);
         const user = await Data.Users.insertNewUser(first_name, last_name, username, passwordHash, salt);
         if (user && process.env.JWT_SECRET) {
-          const accessToken = jwt.sign({username ,id: user.id}, process.env.JWT_SECRET,
+          const accessToken = jwt.sign({id: user.id, username}, process.env.JWT_SECRET,
             {expiresIn: process.env.JWT_EXPIRES_IN ? process.env.JWT_EXPIRES_IN : "1h"});
           res.status(201).json({success: true, msg: "User created"}).cookie('authorization', 'Bearer ' +
             accessToken, {httpOnly: true, secure: true});
