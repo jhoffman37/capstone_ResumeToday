@@ -27,11 +27,11 @@ router.post("/authenticate", async (req: Request, res: Response) => {
 })
   .post("/register", async (req: Request, res: Response) => {
     try {
-      const {name, username, password} = req.body;
-      if (name && username && password) {
+      const {first_name, last_name, username, password} = req.body;
+      if (first_name && last_name && username && password) {
         const salt = await bcrypt.genSalt(process.env.SALT_ROUNDS ? parseInt(process.env.SALT_ROUNDS) : 10);
         const passwordHash = await bcrypt.hash(password, salt);
-        const user = await Data.Users.insertNewUser(name, username, passwordHash, salt);
+        const user = await Data.Users.insertNewUser(first_name, last_name, username, passwordHash, salt);
         if (user) {
           res.status(201).json({msg: "User created"});
         } else {
