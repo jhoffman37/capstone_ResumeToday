@@ -40,9 +40,9 @@ router.post("/resume/validate", async function (req: Request, res: Response) {
     date: true
   }
   for (const data of form.education) {
-    edu.name = data.schoolName;
-    edu.where = data.where;
-    edu.date = data.dateOfGraduation
+    edu.name = edu.name && data.schoolName;
+    edu.where = edu.where && data.where;
+    edu.date = edu.date && data.dateOfGraduation;
   }
 
   if (!edu.name)
@@ -60,10 +60,10 @@ router.post("/resume/validate", async function (req: Request, res: Response) {
     start: true
   }
   for (const data of form.workExpierence) {
-    work.company = data.company;
-    work.position = data.position;
-    work.where = data.where;
-    work.start = data.startDate;
+    work.company = work.company && data.company;
+    work.position = work.position && data.position;
+    work.where = work.where && data.where;
+    work.start = work.start && data.startDate;
   }
 
   if (!work.company)
