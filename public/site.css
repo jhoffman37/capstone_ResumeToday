@@ -99,8 +99,9 @@ a:hover {
   font-style: italic;
 }
 
-#resume-form {
+form, fieldset div {
   display: flex;
   flex-direction: column;
   gap: 1em;
+  text-align: left;
 }
