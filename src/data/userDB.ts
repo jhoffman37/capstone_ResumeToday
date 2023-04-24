@@ -22,7 +22,7 @@ const insertNewUser = async (first_name: string, last_name: string, username: st
   let user: User;
   let result = await pool.query(`INSERT INTO users (first_name, last_name, username, 
                    password_hash, salt) 
-    VALUES ($1, $2, $3, $4) RETURNING *;`, [name, username, password_hash, salt]);
+    VALUES ($1, $2, $3, $4) RETURNING *;`, [first_name, last_name, username, password_hash, salt]);
   user = result.rows[0];
   return user;
 }
