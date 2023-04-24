@@ -1,207 +1,207 @@
 <%- include("../shared/signedInHeader.ejs") %>
 
-<body>
-  <h1>New Resume</h1>
+  <body>
+    <h1>New Resume</h1>
 
-  <form id="resume-form" class="form">
-    <span>* is a required field</span>
+    <form id="resume-form" class="form">
+      <span>* is a required field</span>
 
-    <label for="title">Title *</label>
-    <input type="text" id="title" name="title">
+      <label for="title">Title *</label>
+      <input type="text" id="title" name="title">
 
-    <label for="obj">Objective</label>
-    <textarea type="text" id="obj" name="obj"></textarea>
+      <label for="obj">Objective</label>
+      <textarea type="text" id="obj" name="obj"></textarea>
 
-    <fieldset id="education">
-      <legend>Education</legend>
-      <button type="button", onclick="addEducation()">Add an education</button>
-      <button type="button", onclick="remove('education')">Remove an education</button>
-    </fieldset>
+      <fieldset id="education">
+        <legend>Education</legend>
+        <button type="button", onclick="addEducation()">Add an education</button>
+        <button type="button", onclick="remove('education')">Remove an education</button>
+      </fieldset>
 
-    <fieldset id="expierence">
-      <legend>Work Expierence</legend>
-      <button type="button", onclick="addWorkExpierence()">Add expierence</button>
-      <button type="button", onclick="remove('expierence')">Remove expierence</button>
-    </fieldset>
+      <fieldset id="expierence">
+        <legend>Work Expierence</legend>
+        <button type="button", onclick="addWorkExpierence()">Add expierence</button>
+        <button type="button", onclick="remove('expierence')">Remove expierence</button>
+      </fieldset>
 
-    <label for="skills">Skills</label>
-    <textarea type="text" id="skills" name="skills"></textarea>
+      <label for="skills">Skills</label>
+      <textarea type="text" id="skills" name="skills"></textarea>
 
-    <label for="awards">Awards and Honors</label>
-    <textarea type="text" id="awards" name="awards"></textarea>
+      <label for="awards">Awards and Honors</label>
+      <textarea type="text" id="awards" name="awards"></textarea>
 
-    <span class="error-msg"></span>
-    <button type="submit">Save</button>
-  </form>
+      <span class="error-msg"></span>
+      <button type="submit">Save</button>
+    </form>
 
-  <script>
-    const form = document.getElementById("resume-form");
+    <script>
+      const form = document.getElementById("resume-form");
 
-    // Converts any text such as a label name to an attribute format
-    // e.g. "Work Expierence *" -> "work-expierence" 
-    const toAttributeStr = function (str) {
-      return str.toLowerCase().replace('/[^a-zA-Z0-9 ]/g', '').trimEnd().replace(' ', '-');
-    }
-    const template = {
-      label: function (name) {
-        const label = document.createElement("label");
-        label.innerHTML = name;
-        label.htmlFor = toAttributeStr(name);
-
-        return label;
-      },
-      input: function (name, type) {
-        const input = document.createElement(type !== "textarea" ? "input" : type);
-        const attr = toAttributeStr(name);
-
-        if (type === "textarea")
-          type = "text";
-
-        input.type = type;
-        input.id = attr;
-        input.name = attr;
-
-        return input;
+      // Converts any text such as a label name to an attribute format
+      // e.g. "Work Expierence *" -> "work-expierence" 
+      const toAttributeStr = function (str) {
+        return str.toLowerCase().replace('/[^a-zA-Z0-9 ]/g', '').trimEnd().replace(' ', '-');
       }
-    }
+      const template = {
+        label: function (name) {
+          const label = document.createElement("label");
+          label.innerHTML = name;
+          label.htmlFor = toAttributeStr(name);
 
-    const remove = function (from) {
-      const element = document.getElementById(from);
-     
-      // Ignore the first 3 elements (buttons and legend)
-      if (element.children.length > 3)
-        element.lastElementChild.remove();
-    }
+          return label;
+        },
+        input: function (name, type) {
+          const input = document.createElement(type !== "textarea" ? "input" : type);
+          const attr = toAttributeStr(name);
 
-    const addEducation = function () {
-      const node = document.createElement("div");
-      node.className = "section-edu";
-      
-      const elements = [
-        template.label("School Name *"),
-        template.input("school-name", "text"),
+          if (type === "textarea")
+            type = "text";
 
-        template.label("Where *"),
-        template.input("where", "text"),
+          input.type = type;
+          input.id = attr;
+          input.name = attr;
 
-        template.label("Date of graduation *"),
-        template.input("date-of-graduation", "date"),
-
-        template.label("Certificates"),
-        template.input("certificates", "textarea"),
-      ];
-
-      for (const element of elements) {
-        node.appendChild(element);
-      }
-      document.getElementById("education").appendChild(node);
-    }
-
-    const addWorkExpierence = function () {
-      const node = document.createElement("div");
-      node.className = "section-work";
-      
-      const elements = [
-        template.label("Company *"),
-        template.input("company", "text"),
-
-        template.label("Position title *"),
-        template.input("position", "text"),
-
-        template.label("Where *"),
-        template.input("where", "text"),
-
-        template.label("Start date *"),
-        template.input("start-date", "date"),
-
-        template.label("End date"),
-        template.input("end-date", "date"),
-
-        template.label("Job duties"),
-        template.input("job-duties", "textarea"),
-      ];
-
-      for (const element of elements) {
-        node.appendChild(element);
-      }
-      document.getElementById("expierence").appendChild(node);
-    }
-
-    // Init form
-    window.addEventListener("load", (e) => {
-      addEducation();
-      addWorkExpierence();
-    });
-
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      const toCamalCase = function (str) {
-        const lower = str.toLowerCase();
-        const words = lower.split('-');
-        if (words.length <= 1)
-          return lower;
-
-        let newStr = words[0];
-        for (let i = 1; i < words.length; i++) {
-          const word = words[i];
-          const firstLetter = word.charAt(0).toUpperCase();
-
-          newStr += firstLetter + word.slice(1);
-        }
-        return newStr;
-      }
-
-      const formData = {
-        education: [],
-        workExpierence: []
-      };
-
-      // Add all values except education and work data
-      {
-        const query = form.querySelectorAll("form > input, form > textarea");
-        for (const input of query) {
-          formData[toCamalCase(input.id)] = input.value;
+          return input;
         }
       }
 
-      // Grab each education section, add all input values and push to list
-      const eduQuery = document.querySelectorAll(".section-edu");
-      for (const section of eduQuery) {
-        const data = {};
-        for (const input of section.querySelectorAll("input, textarea")) {
-          data[toCamalCase(input.id)] = input.value;
-        }
-        formData.education.push(data);
-      }
-      
-      // Same as above but for work data
-      const workQuery = document.querySelectorAll(".section-work");
-      for (const section of workQuery) {
-        const data = {};
-        for (const input of section.querySelectorAll("input, textarea")) {
-          data[toCamalCase(input.id)] = input.value;
-        }
-        formData.workExpierence.push(data);
+      const remove = function (from) {
+        const element = document.getElementById(from);
+       
+        // Ignore the first 3 elements (buttons and legend)
+        if (element.children.length > 3)
+          element.lastElementChild.remove();
       }
 
-      // Validate form because you can never trust the client
-      const res = await fetch("/resume/validate", {
-        method: "POST",
-        body: JSON.stringify({
-          form: formData
-        }),
-        headers: { "Content-Type": "application/json" }
+      const addEducation = function () {
+        const node = document.createElement("div");
+        node.className = "section-edu";
+        
+        const elements = [
+          template.label("School Name *"),
+          template.input("school-name", "text"),
+
+          template.label("Where *"),
+          template.input("where", "text"),
+
+          template.label("Date of graduation *"),
+          template.input("date-of-graduation", "date"),
+
+          template.label("Certificates"),
+          template.input("certificates", "textarea"),
+        ];
+
+        for (const element of elements) {
+          node.appendChild(element);
+        }
+        document.getElementById("education").appendChild(node);
+      }
+
+      const addWorkExpierence = function () {
+        const node = document.createElement("div");
+        node.className = "section-work";
+        
+        const elements = [
+          template.label("Company *"),
+          template.input("company", "text"),
+
+          template.label("Position title *"),
+          template.input("position", "text"),
+
+          template.label("Where *"),
+          template.input("where", "text"),
+
+          template.label("Start date *"),
+          template.input("start-date", "date"),
+
+          template.label("End date"),
+          template.input("end-date", "date"),
+
+          template.label("Job duties"),
+          template.input("job-duties", "textarea"),
+        ];
+
+        for (const element of elements) {
+          node.appendChild(element);
+        }
+        document.getElementById("expierence").appendChild(node);
+      }
+
+      // Init form
+      window.addEventListener("load", (e) => {
+        addEducation();
+        addWorkExpierence();
       });
 
-      const result = await res.json();
-      if (!result.success) {
-        document.querySelector("span.error-msg").innerHTML = result.msg;
-        return;
-      }
-      window.location.replace(`/resume/view/${result.resumeId}`);
-    })
-    
-  </script>
-</body>
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const toCamalCase = function (str) {
+          const lower = str.toLowerCase();
+          const words = lower.split('-');
+          if (words.length <= 1)
+            return lower;
+
+          let newStr = words[0];
+          for (let i = 1; i < words.length; i++) {
+            const word = words[i];
+            const firstLetter = word.charAt(0).toUpperCase();
+
+            newStr += firstLetter + word.slice(1);
+          }
+          return newStr;
+        }
+
+        const formData = {
+          education: [],
+          workExpierence: []
+        };
+
+        // Add all values except education and work data
+        {
+          const query = form.querySelectorAll("form > input, form > textarea");
+          for (const input of query) {
+            formData[toCamalCase(input.id)] = input.value;
+          }
+        }
+
+        // Grab each education section, add all input values and push to list
+        const eduQuery = document.querySelectorAll(".section-edu");
+        for (const section of eduQuery) {
+          const data = {};
+          for (const input of section.querySelectorAll("input, textarea")) {
+            data[toCamalCase(input.id)] = input.value;
+          }
+          formData.education.push(data);
+        }
+        
+        // Same as above but for work data
+        const workQuery = document.querySelectorAll(".section-work");
+        for (const section of workQuery) {
+          const data = {};
+          for (const input of section.querySelectorAll("input, textarea")) {
+            data[toCamalCase(input.id)] = input.value;
+          }
+          formData.workExpierence.push(data);
+        }
+
+        // Validate form because you can never trust the client
+        const res = await fetch("/resume/validate", {
+          method: "POST",
+          body: JSON.stringify({
+            form: formData
+          }),
+          headers: { "Content-Type": "application/json" }
+        });
+
+        const result = await res.json();
+        if (!result.success) {
+          document.querySelector("span.error-msg").innerHTML = result.msg;
+          return;
+        }
+        window.location.replace(`/resume/view/${result.resumeId}`);
+      })
+      
+    </script>
+  </body>
 </html>
