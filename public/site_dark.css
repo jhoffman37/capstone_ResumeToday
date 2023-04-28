@@ -14,32 +14,19 @@ header {
   width: 50px;
 }
 
-header h1 {
-  position: relative;
-  padding: 20px;
-  left: 100px;
-  height: 100px;
-  width: 100px;
+img#logo {
+  height: 150px;
 }
 
-h1 img {
-  position: relative;
-  height: 200px;
-  left: -160px;
-}
-
-h1 a {
-  position: relative;
+header a {
   height: 150px;
   width: 100px;
-  left: 80px;
-  bottom: 70px;
   display: inline-block;
 }
 
 nav {
   text-align: center;
-  border: 1px solid #fff;
+  border-bottom: 1px solid #fff;
   padding: 30px;
   font-weight: bold; 
   margin-right: 50px;
@@ -58,8 +45,7 @@ nav li {
 }
 #toggle-btn {
   position: relative;
-  left: 1030px;
-  bottom: 70px;
+  top: 25px;
 }
 #index {
   margin-left: 20px;

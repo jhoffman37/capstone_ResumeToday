@@ -12,6 +12,14 @@ function toggleMode() {
     logo.src = "../ResumeTodayLogo.png";
   }
 
+    // Add 'hidden' attribute to body
+    document.body.setAttribute('hidden', '');
+
+    // Remove 'hidden' attribute after 5ms
+    setTimeout(function() {
+      document.body.removeAttribute('hidden');
+    }, 5);
+
   cssMode.setAttribute('href', newMode);
   localStorage.setItem('preferredMode', newMode);
 }
