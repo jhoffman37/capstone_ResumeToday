@@ -3,8 +3,8 @@
 }
 
 body {
-  background-color: white;
-  color:#000;
+  background-color: #000;
+  color:white;
 }
 
 header {
@@ -14,12 +14,11 @@ header {
   width: 50px;
 }
 
-img#logo{
+img#logo {
   height: 150px;
 }
 
 header a {
-  position: relative;
   height: 150px;
   width: 100px;
   display: inline-block;
@@ -27,7 +26,7 @@ header a {
 
 nav {
   text-align: center;
-  border-bottom: 1px solid #000;
+  border-bottom: 1px solid #fff;
   padding: 30px;
   padding-bottom: 60px;
   font-weight: bold; 
@@ -42,7 +41,7 @@ nav > ul {
 nav li {
   display: inline-block;
   padding: 0em 1em 0em 1em;
-  border: 1px solid #000;
+  border: 1px solid #fff;
   border-radius: 10px;
 }
 #toggle-btn {
@@ -74,19 +73,19 @@ div {
 }
 
 p1 {
-  border: 1px solid #000;
+  border: 1px solid #fff;
   border-radius: 50px;
   padding: 30px;
 }
 
 p2 {
-  border: 1px solid #000;
+  border: 1px solid #fff;
   border-radius: 30px;
   padding: 20px;
 }
 
 p3 {
-  border: 1px solid #000;
+  border: 1px solid #fff;
   border-radius: 30px;
   padding: 20px;
   font-weight: bold;
@@ -98,7 +97,7 @@ a:link {
 }
 
 a:hover {
-  color: #000;
+  color: #fff;
 }
 
 .error-msg {

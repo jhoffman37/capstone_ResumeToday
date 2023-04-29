@@ -4,6 +4,9 @@ const router = express.Router();
 router.get("/", (req: Request, res: Response) => {
   res.render("pages/home.ejs");
 })
+  .get("/home", (req: Request, res: Response) => {
+    res.render("pages/home.ejs");
+  })
   .get("/about", (req: Request, res: Response) => {
     res.render("pages/about.ejs");
   })
