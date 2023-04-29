@@ -10,7 +10,7 @@ router.get("/", authenticateToken, (req: Request, res: Response) => {
   }
 })
   .get("/home", (req: Request, res: Response) => {
-    res.render("pages/home.ejs");
+    res.redirect("/");
   })
   .get("/about", (req: Request, res: Response) => {
     res.render("pages/about.ejs");
