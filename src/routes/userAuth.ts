@@ -13,8 +13,8 @@ router.post("/authenticate", async (req: Request, res: Response) => {
       if (userID && process.env.JWT_SECRET) {
         const accessToken = jwt.sign({id: userID, username}, process.env.JWT_SECRET,
           {expiresIn: process.env.JWT_EXPIRES_IN ? process.env.JWT_EXPIRES_IN : "1h"});
-        res.status(200).json({success: true, msg: "User Logged In"}).cookie('authorization','Bearer ' +
-          accessToken, {httpOnly: true, secure: true});
+        res.status(200).cookie('authorization','Bearer ' +
+          accessToken, {httpOnly: true, secure: true}).json({success: true, msg: "User Logged In"});
       } else {
         res.status(401).json({success: false, msg: "Invalid credentials"});
       }
@@ -37,17 +37,21 @@ router.post("/authenticate", async (req: Request, res: Response) => {
         if (user && process.env.JWT_SECRET) {
           const accessToken = jwt.sign({id: user.id, username}, process.env.JWT_SECRET,
             {expiresIn: process.env.JWT_EXPIRES_IN ? process.env.JWT_EXPIRES_IN : "1h"});
-          res.status(201).json({success: true, msg: "User created"}).cookie('authorization', 'Bearer ' +
-            accessToken, {httpOnly: true, secure: true});
+          res.status(201).cookie('authorization', 'Bearer ' +
+            accessToken, {httpOnly: true, secure: true}).json({success: true, msg: "User created"});
         } else {
           res.status(400).json({success: false, msg: "Invalid request"});
         }
       } else {
         res.status(400).json({success: false, msg: "Invalid request"});
       }
-    } catch (err) {
-      console.log(err);
-      res.status(503).json({success: false, msg: "Error registering user"});
+    } catch (err : any) {
+      if (err === 'UserAlreadyExists') {
+        res.status(409).json({success: false, msg: "Username already exists"});
+      } else {
+        console.log(err);
+        res.status(503).json({success: false, msg: "Error registering user"});
+      }
     }
   });
 
