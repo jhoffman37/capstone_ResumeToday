@@ -23,5 +23,6 @@ document.querySelector('#registerSubmit').addEventListener('click', async (e) =>
         window.location.href = '/';
     } else {
         errorMessage.innerHTML = respJson.msg;
+        password.value = '';
     }
 });
