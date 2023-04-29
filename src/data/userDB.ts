@@ -50,7 +50,7 @@ const checkUserExists = async (username: string): Promise<boolean> => {
 
 const UserDB = {
   getAllUsers,
-  getUsersByUsername: getUserByUsername,
+  getUserByUsername,
   insertNewUser
 }
 

@@ -18,7 +18,9 @@
   },
   "homepage": "https://github.com/jhoffman37/capstone_ResumeToday#readme",
   "dependencies": {
+    "@types/cookie-parser": "^1.4.3",
     "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
     "dotenv": "^16.0.3",
     "ejs": "^3.1.9",
     "express": "^4.18.2",

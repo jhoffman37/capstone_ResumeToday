@@ -16,12 +16,12 @@ declare module 'express-serve-static-core' {
 }
 
 export const authenticateToken =  async (req: Request, res: Response, next: NextFunction) => {
-  const authHeader = req.headers['authorization'];
+  const authHeader = req.cookies['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
-  if (token == null) return res.sendStatus(401);
+  if (token === null) return next();
   if (process.env.JWT_SECRET) {
-    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-      if (err) next();
+    jwt.verify(token, process.env.JWT_SECRET, (err: any, user: any) => {
+      if (err) return next();
       req.user = user as AuthUser;
       next();
     });
@@ -30,12 +30,10 @@ export const authenticateToken =  async (req: Request, res: Response, next: Next
 
 //Returns a user id if the user is in the database, otherwise returns null
 export const verifyUser = async (username: string, password: string) => {
-  let users = await Data.Users.getUsersByUsername(username);
-  for (const user of users) {
-    const valid = await bcrypt.compare(password, user.password_hash);
-    if (valid) {
-      return user.id;
-    }
+  let user = await Data.Users.getUserByUsername(username);
+  const valid = await bcrypt.compare(password, user.password_hash);
+  if (valid) {
+    return user.id;
   }
   return null;
 }

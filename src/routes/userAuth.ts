@@ -53,6 +53,14 @@ router.post("/authenticate", async (req: Request, res: Response) => {
         res.status(503).json({success: false, msg: "Error registering user"});
       }
     }
+  })
+  .post("/logout", async (req: Request, res: Response) => {
+    try {
+      res.status(200).clearCookie('authorization').json({success: true, msg: "User logged out"});
+    } catch (err) {
+      console.log(err);
+      res.status(503).json({success: false, msg: "Error logging out user"});
+    }
   });
 
 export default router;

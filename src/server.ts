@@ -7,12 +7,14 @@ import Data from "./data/index";
 import resumeRouter from "./routes/resume";
 import indexRouter from "./routes/index";
 import userAuthRouter from "./routes/userAuth";
+import cookieParser from "cookie-parser";
 
 const PORT = process.env.PORT || 5163;
 
 express()
   .use(express.static(path.join(__dirname, "../public")))
   .use(express.json())
+  .use(cookieParser())
   .use(express.urlencoded( { extended: true }))
   .set("views", path.join(__dirname, "../views"))
   .set("view engine", "ejs")

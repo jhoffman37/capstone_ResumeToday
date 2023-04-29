@@ -1,8 +1,13 @@
 import express, {Request, Response} from "express";
+import {authenticateToken} from "../auth/auth";
 const router = express.Router();
 
-router.get("/", (req: Request, res: Response) => {
-  res.render("pages/home.ejs");
+router.get("/", authenticateToken, (req: Request, res: Response) => {
+  if (req.user) {
+    res.render("pages/home.ejs", {user: req.user});
+  } else {
+    res.render("pages/home.ejs");
+  }
 })
   .get("/home", (req: Request, res: Response) => {
     res.render("pages/home.ejs");
