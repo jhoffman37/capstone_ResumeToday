@@ -2,18 +2,17 @@
 <html lang="en">
 <%- include('../shared/head') %>
 <body>
-  
+
   <%- include("../shared/signedInHeader.ejs") %>
 
   <h1><%= user.first_name + ' ' + user.last_name %></h1>
-    
-    <%_ if (resume.html !== "") { _%>
-      <h2>About Me</h2>
-      <p><%= resume.html %></p>
-    <%_ } _%>
-    <script>
+   
+  <!-- Render resume here -->
+  <%- resume.html %>
+   
+  <script>
 
-    </script>
+  </script>
 
 </body>
 </html>

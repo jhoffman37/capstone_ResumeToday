@@ -79,6 +79,62 @@ router.post("/resume-validate", async function (req: Request, res: Response) {
   result.success = result.msg === "";
 
   if (result.success) {
+
+    // Construct HTML
+    //
+    // We serialize the HTML data just in case the user wants
+    // to more freely edit their resume page. By saving the HTML string
+    // to the database, we need not worry about where elements are positioned.
+    const obj = form.obj ? `<h2>${form.obj}</h2>` : "";
+
+    let education = form.education.length ? "<h2>Education</h2>" : "";
+
+    for (const data of form.education) {
+      education += `
+        <section class="education">
+          <h3>${data.schoolName}</h3>
+          <div class="edu-setting">
+            <span class="edu-grad">${data.dateOfGraduation}</span>
+            <span class="edu-where">${data.where}</span>
+          </div>
+          <p class="edu-certificates">${data.certificates}</p>
+        </section>
+    `;
+    }
+
+    let work_exp = form.workExpierence.length ? "<h2>Work Experience</h2>" : "";
+
+    for (const data of form.workExpierence) {
+      const workDuration = `${data.startDate} - ${data.endDate}`;
+      work_exp += `
+        <section class="work-experience">
+          <h3>${data.position}</h3>
+          <span class="work-company">${data.company}</span>
+          <div class="work-setting">
+            <span class="work-duration">${workDuration}</span>
+            <span class="work-where">${data.where}</span>
+          </div>
+          <p class="work-duties">${data.jobDuties}</p>
+        </section>
+      `;
+    }
+
+    const skills = form.skills ? `<h2>Skills</h2
+      <p>${form.skills}</p>
+    ` : "";
+
+    const awards = form.awards ? `<h2>Awards</h2
+      <p>${form.awards}</p>
+    ` : "";
+
+    const html = `
+      ${obj}
+      ${education}
+      ${work_exp}
+      ${skills}
+      ${awards}
+    `;
+
     // Insert resume into database
     const resume: Resume = {
       // Use -1 as a placeholder since this has no id yet
@@ -86,7 +142,7 @@ router.post("/resume-validate", async function (req: Request, res: Response) {
       //TODO: Get logged in user id
       user_id: 0,
       title: form.title,
-      html: "",
+      html
     };
     
     try {
