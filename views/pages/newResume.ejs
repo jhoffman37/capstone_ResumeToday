@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <%- include('../shared/head') %>
+<%- include('../shared/head') %>
 <body>
   <%- include("../shared/signedInHeader.ejs") %>
   
@@ -156,6 +156,7 @@
       }
 
       const formData = {
+        title: document.getElementById("title").innerHTML,
         education: [],
         workExpierence: []
       };
@@ -189,7 +190,7 @@
       }
 
       // Validate form because you can never trust the client
-      const res = await fetch("/resume/validate", {
+      const res = await fetch("/resume-validate", {
         method: "POST",
         body: JSON.stringify({
           form: formData
@@ -202,7 +203,7 @@
         document.querySelector("span.error-msg").innerHTML = result.msg;
         return;
       }
-      window.location.replace(`/resume/view/${result.resumeId}`);
+      window.location.replace(`/resume-view/${result.resumeId}`);
     })
     
   </script>

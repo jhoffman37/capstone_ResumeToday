@@ -3,10 +3,10 @@ import { Resume, ResumeDB } from "../data/resumeDB";
 import { User, UserDB} from "../data/userDB";
 const router = express.Router();
 
-router.get("/resume", (req: Request, res: Response) => {
+router.get("/resume-new", (req: Request, res: Response) => {
   res.render("pages/newResume.ejs");
 });
-router.get("/resume/view/:id", async (req: Request, res: Response) => {
+router.get("/resume-view/:id", async (req: Request, res: Response) => {
   try {
     const id: number = Number.parseInt(req.params.id);
     const resume: Resume = await ResumeDB.get(id);
@@ -22,7 +22,7 @@ router.get("/resume/view/:id", async (req: Request, res: Response) => {
   }
   
 });
-router.post("/resume/validate", async function (req: Request, res: Response) {
+router.post("/resume-validate", async function (req: Request, res: Response) {
   const result = {
     success: false,
     msg: '',
@@ -86,14 +86,14 @@ router.post("/resume/validate", async function (req: Request, res: Response) {
       //TODO: Get logged in user id
       user_id: 0,
       title: form.title,
-      about: form.obj,
+      html: "",
     };
     
     try {
       await ResumeDB.insert(resume);
       result.resumeId = (await ResumeDB.getAll()).length;
     } catch (e) {
-      console.error("Failed to insert resume data into database. Is the correct data being passed?");
+      console.error(e);
 
       result.success = false;
       result.msg += "Uh oh! A problem with saving this resume has occured. Please try again later";
