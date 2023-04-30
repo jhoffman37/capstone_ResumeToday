@@ -55,6 +55,7 @@ router.post("/authenticate", async (req: Request, res: Response) => {
     }
   })
   .post("/logout", async (req: Request, res: Response) => {
+    console.log("Logging out user");
     try {
       res.status(200).clearCookie('authorization').json({success: true, msg: "User logged out"});
     } catch (err) {

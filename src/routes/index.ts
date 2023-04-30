@@ -3,28 +3,24 @@ import {authenticateToken} from "../auth/auth";
 const router = express.Router();
 
 router.get("/", authenticateToken, (req: Request, res: Response) => {
-  if (req.user) {
-    res.render("pages/home.ejs", {user: req.user});
-  } else {
-    res.render("pages/home.ejs");
-  }
+  res.render("pages/home.ejs", {user: req.user ? req.user : null});
 })
-  .get("/home", (req: Request, res: Response) => {
+  .get("/home", async (req: Request, res: Response) => {
     res.redirect("/");
   })
-  .get("/about", (req: Request, res: Response) => {
-    res.render("pages/about.ejs");
+  .get("/about", authenticateToken, async (req: Request, res: Response) => {
+    res.render("pages/about.ejs", {user: req.user ? req.user : null});
   })
-  .get("/contact", (req: Request, res: Response) => {
-    res.render("pages/contact.ejs");
+  .get("/contact", authenticateToken, async (req: Request, res: Response) => {
+    res.render("pages/contact.ejs", {user: req.user ? req.user : null});
   })
-  .get("/help", async(req: Request, res: Response) => {
-    res.render("pages/help.ejs");
+  .get("/help", authenticateToken, async(req: Request, res: Response) => {
+    res.render("pages/help.ejs", {user: req.user ? req.user : null});
   })
-  .get("/login", (req: Request, res: Response) => {
-    res.render("pages/login.ejs");
+  .get("/login", authenticateToken, async (req: Request, res: Response) => {
+    res.render("pages/login.ejs", {user: req.user ? req.user : null});
   })
-  .get("/register", (req: Request, res: Response) => {
+  .get("/register", async (req: Request, res: Response) => {
     res.render("pages/register.ejs");
   });
 

@@ -1,5 +1,20 @@
-<%- include('../shared/loginHeader.ejs') %>
-
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="utf-8">
+    <title>Resume Today</title>
+    <link id='default' rel="stylesheet" type="text/css" href="/site.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<% if (typeof user === 'object' && user ) {%>
+    <%- include('../shared/signedInHeader', {user: user}) %>
+<% } else { %>
+    <%- include('../shared/loginHeader') %>
+<% } %>
 <body>
   <h1>Login</h1>
     <form>
@@ -9,8 +24,8 @@
         <input id="password" type="password" name="password" placeholder="Password" required/>
         <input id="loginSubmit" type="submit" value="Login"/>
     </form>
-    <p>Don't have an account? <a href="/register">Register</a></p>
-    <p id="error" class="error-msg"></p>
+  <p>Don't have an account? <a href="/register">Register</a></p>
+  <p id="error" class="error-msg"></p>
   <script type="text/javascript" src="scripts/login.js"></script>
 </body>
 </html>

@@ -11,33 +11,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
   <body>
-      <header id="homeHeader">
-      <a href='/home'>
-        <img id='logo' src="../ResumeTodayLogo.png" alt="Resume Today">
-      </a>
-      </header>
-      <nav>
-        <ul>
-        <li><a href='/home'>Home</a></li>
-        <li><a href='/about'>About</a></li>
-        <li><a href='/contact'>Contact</a></li>
-        <li><a href='/help'>Help/Tutorial</a></li>
-        <li><a href='/register'>Register</a></li>
-        <li><a href='/login'>Login</a></li>
-        </ul>
-      </nav>
-      <button id="toggle-btn">Light/Dark</button>
-      <main id="index">
-        <h2>Home</h2>
-        <br>
-        <p1>Welcome to Resume Today</p1>
-        <br>
-        <div><p2>Make Resumes that Stand Out!</p2></div>
-        <br>
-        <div id = register><p3><a href='/register'>Get Started Now!</a></p3></div>
-        <br>
-        <div id = buildStrong><p1>Build a Strong one of a kind resume today!</p1>
-      </main>
-      <script src="../toggle.js"></script>
+    <% if (typeof user === 'object' && user ) {%>
+      <%- include('../shared/signedInHeader', {user: user}) %>
+    <% } else { %>
+      <%- include('../shared/loginHeader') %>
+    <% } %>
+    <main id="index">
+      <h2>Home</h2>
+      <br>
+      <p1>Welcome to Resume Today</p1>
+      <br>
+      <div><p2>Make Resumes that Stand Out!</p2></div>
+      <br>
+      <div id = register><p3><a href='/register'>Get Started Now!</a></p3></div>
+      <br>
+      <div id = buildStrong><p1>Build a Strong one of a kind resume today!</p1> </div>
+    </main>
   </body>
 </html>
