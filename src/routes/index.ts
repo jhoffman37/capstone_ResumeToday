@@ -20,8 +20,8 @@ router.get("/", authenticateToken, (req: Request, res: Response) => {
   .get("/login", authenticateToken, async (req: Request, res: Response) => {
     res.render("pages/login.ejs", {user: req.user ? req.user : null});
   })
-  .get("/register", async (req: Request, res: Response) => {
-    res.render("pages/register.ejs");
+  .get("/register", authenticateToken, async (req: Request, res: Response) => {
+    res.render("pages/register.ejs", {user: req.user ? req.user : null});
   });
 
 export default router;

@@ -11,11 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
   <body>
-    <% if (typeof user === 'object' && user ) {%>
-      <%- include('../shared/signedInHeader', {user: user}) %>
-    <% } else { %>
-      <%- include('../shared/loginHeader') %>
-    <% } %>
+    <%- include('../shared/header', {user}) %>
     <main id="index">
       <h2>Home</h2>
       <br>
