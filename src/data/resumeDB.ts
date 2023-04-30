@@ -6,7 +6,7 @@ type Resume = {
   id: number,
   user_id: number,
   title: string,
-  about: string,
+  html: string,
 };
 
 const getAll = async (): Promise<Resume[]> => {
@@ -23,9 +23,9 @@ const get = async (id: number): Promise<Resume> => {
 }
 
 const insert = async (resume: Resume) => {
-  let sql = `INSERT INTO resumes (user_id, title, about)
+  let sql = `INSERT INTO resumes (user_id, title, html)
     VALUES ($1, $2, $3)`;
-  await pool.query(sql, [resume.user_id, resume.title, resume.about]);
+  await pool.query(sql, [resume.user_id, resume.title, resume.html]);
 }
 
 const ResumeDB = {
