@@ -89,8 +89,16 @@ router.post("/resume/validate", async function (req: Request, res: Response) {
       about: form.obj,
     };
     
-    await ResumeDB.insert(resume);
-    result.resumeId = (await ResumeDB.getAll()).length;
+    try {
+      await ResumeDB.insert(resume);
+      result.resumeId = (await ResumeDB.getAll()).length;
+    } catch (e) {
+      console.error("Failed to insert resume data into database. Is the correct data being passed?");
+
+      result.success = false;
+      result.msg += "Uh oh! A problem with saving this resume has occured. Please try again later";
+    }
+    
   }
   res.send(result);
 });
