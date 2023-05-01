@@ -91,7 +91,7 @@
     // Converts any text such as a label name to an attribute format
     // e.g. "Work Expierence *" -> "work-expierence"
     const toAttributeStr = function (str) {
-      return str.toLowerCase().replace(/[^a-zA-Z0-9 ]/g, '').trimEnd().replace(' ', '-');
+      return str.toLowerCase().replace(/[^a-zA-Z0-9 -]/g, '').trimEnd().replace(' ', '-');
     }
     const template = {
       label: function (name) {

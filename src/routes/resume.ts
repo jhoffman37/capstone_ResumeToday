@@ -216,13 +216,13 @@ router.post("/resume-validate", async function (req: Request, res: Response) {
 
     //TODO: Get logged in user id
     resume.user_id = 0;
-    resume.title = title;
+    resume.title = form.title;
     resume.html = html;
     
     try {
 
       // Check if editing existing resume
-      if (req.body.url.search("resume-edit")) {
+      if (req.body.url.search("resume-edit") != -1) {
         const id = Number.parseInt(req.body.url.split('/')[2]);
         resume.id = id;
         result.resumeId = id;

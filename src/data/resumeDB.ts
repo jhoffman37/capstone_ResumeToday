@@ -10,9 +10,6 @@ class Resume {
   title: string = "";
   html: string = "";
 
-  // Converts a string to an Html Element
-  // "Borrowed" code from here 
-  // https://stackoverflow.com/questions/494143/creating-a-new-dom-element-from-an-html-string-using-built-in-dom-methods-or-pro
   public getAsHtmlElement(): Document {
     const html = this.html.trim();
     const dom = new JSDOM(html);
