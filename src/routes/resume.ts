@@ -2,6 +2,7 @@ import express, {Request, Response} from "express";
 import { Resume, ResumeDB } from "../data/resumeDB";
 import { User, UserDB} from "../data/userDB";
 import { title } from "process";
+import {authenticateToken} from "../auth/auth";
 const router = express.Router();
 
 type FormData = {
@@ -13,16 +14,16 @@ type FormData = {
   awards: string | undefined
 }
 
-router.get("/resume-edit", (req: Request, res: Response) => {
-  res.render("pages/edit.ejs");
+router.get("/resume-edit", authenticateToken, (req: Request, res: Response) => {
+  res.render("pages/edit.ejs", {user: req.user ? req.user : null});
 })
-router.get("/resume-edit/:id", async (req: Request, res: Response) => {
+router.get("/resume-edit/:id", authenticateToken, async (req: Request, res: Response) => {
   const id = Number.parseInt(req.params.id);
   const resume_data = await ResumeDB.get(id);
 
   if (!resume_data) {
     const msg = `Could not load resume as it does not exist`;
-    res.render("pages/edit.ejs", {
+    res.render("pages/edit.ejs", { user: req.user ? req.user : null,
       msg
     });
     return;
@@ -36,9 +37,9 @@ router.get("/resume-edit/:id", async (req: Request, res: Response) => {
   resume.html = resume_data.html;
 
   // Check HTML for possible form values
-  
+
   const html: Document = resume.getAsHtmlElement();
-  
+
   const education = [];
   for (const edu of html.querySelectorAll('.education')) {
     const data: any = {};
@@ -65,7 +66,7 @@ router.get("/resume-edit/:id", async (req: Request, res: Response) => {
 
     workExpierence.push(data);
   }
-  
+
   const data: FormData = {
     projectTitle: resume.title,
     obj: html.getElementById("obj")?.innerHTML,
@@ -76,26 +77,24 @@ router.get("/resume-edit/:id", async (req: Request, res: Response) => {
   };
   res.render("pages/resumeForm.ejs", data);
 });
-router.get("/resume-new", (req: Request, res: Response) => {
-  res.render("pages/resumeForm.ejs");
+router.get("/resume-new", authenticateToken, (req: Request, res: Response) => {
+  res.render("pages/resumeForm.ejs", {user: req.user ? req.user : null});
 });
-router.get("/resume-view/:id", async (req: Request, res: Response) => {
+router.get("/resume-view/:id", authenticateToken, async (req: Request, res: Response) => {
   try {
     const id: number = Number.parseInt(req.params.id);
     const resume: Resume = await ResumeDB.get(id);
-    const user: User = (await UserDB.getAllUsers())[resume.user_id];
-  
-    res.render("pages/resume.ejs", {
+
+    res.render("pages/resume.ejs", { user: req.user ? req.user : null,
       title: resume.title,
-      resume,
-      user
+      resume
     });
   } catch {
     res.status(404).send('This resume does not exist!')
   }
-  
+
 });
-router.post("/resume-validate", async function (req: Request, res: Response) {
+router.post("/resume-validate", authenticateToken, async function (req: Request, res: Response) {
   const result = {
     success: false,
     msg: '',
@@ -214,11 +213,10 @@ router.post("/resume-validate", async function (req: Request, res: Response) {
     // Use -1 as a placeholder since this has no id yet
     resume.id = -1;
 
-    //TODO: Get logged in user id
-    resume.user_id = 0;
+    resume.user_id = req.user.id;
     resume.title = form.title;
     resume.html = html;
-    
+
     try {
 
       // Check if editing existing resume
@@ -240,7 +238,7 @@ router.post("/resume-validate", async function (req: Request, res: Response) {
       result.success = false;
       result.msg += "Uh oh! A problem with saving this resume has occured. Please try again later";
     }
-    
+
   }
   res.send(result);
 });
