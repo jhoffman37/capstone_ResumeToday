@@ -49,6 +49,8 @@
           <input id="company" type="text" name="company" value="<%= work.company %>">
           <label for="position">Position title *</label>
           <input id="position" type="text" name="position" value="<%= work.position%>">
+          <label for="where">Where *</label>
+          <input id="where" type="text" name="where" value="<%= work.where %>">
           <label for="start-date">Start date *</label>
           <input id="start-date" type="date" name="start-date" value="<%= work.startDate %>">
           <label for="end-date">End date *</label>
@@ -77,7 +79,7 @@
     // Converts any text such as a label name to an attribute format
     // e.g. "Work Expierence *" -> "work-expierence"
     const toAttributeStr = function (str) {
-      return str.toLowerCase().replace('/[^a-zA-Z0-9 ]/g', '').trimEnd().replace(' ', '-');
+      return str.toLowerCase().replace(/[^a-zA-Z0-9 ]/g, '').trimEnd().replace(' ', '-');
     }
     const template = {
       label: function (name) {
