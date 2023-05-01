@@ -40,10 +40,18 @@ const insert = async (resume: Resume) => {
   await pool.query(sql, [resume.user_id, resume.title, resume.html]);
 }
 
+const update = async (resume: Resume) => {
+  const sql = `UPDATE resumes
+    SET title = $1, html = $2
+    WHERE id = $3`;
+  await pool.query(sql, [resume.title, resume.html, resume.id]);
+}
+
 const ResumeDB = {
   get,
   getAll,
-  insert
+  insert,
+  update,
 }
 
 export { Resume, ResumeDB };

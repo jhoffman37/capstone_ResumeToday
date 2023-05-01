@@ -5,7 +5,7 @@ import { title } from "process";
 const router = express.Router();
 
 type FormData = {
-  title: string,
+  projectTitle: string,
   obj: string | undefined,
   education: any[],
   workExpierence: any[],
@@ -43,10 +43,10 @@ router.get("/resume-edit/:id", async (req: Request, res:Response) => {
   for (const edu of html.querySelectorAll('.education')) {
     const data: any = {};
 
-    data["schoolName"] = edu.querySelector('school-name')?.innerHTML;
-    data["dateOfGraduation"] = edu.querySelector('edu-grad')?.innerHTML;
-    data["where"] = edu.querySelector("edu-where")?.innerHTML;
-    data["certificates"] = edu.querySelector("edu-certificates")?.innerHTML;
+    data["schoolName"] = edu.querySelector('.school-name')?.innerHTML;
+    data["dateOfGraduation"] = edu.querySelector('.edu-grad')?.innerHTML;
+    data["where"] = edu.querySelector(".edu-where")?.innerHTML;
+    data["certificates"] = edu.querySelector(".edu-certificates")?.innerHTML;
 
     education.push(data);
   }
@@ -67,7 +67,7 @@ router.get("/resume-edit/:id", async (req: Request, res:Response) => {
   }
   
   const data: FormData = {
-    title: resume.title,
+    projectTitle: resume.title,
     obj: html.getElementById("obj")?.innerHTML,
     education,
     workExpierence,
@@ -220,8 +220,20 @@ router.post("/resume-validate", async function (req: Request, res: Response) {
     resume.html = html;
     
     try {
-      await ResumeDB.insert(resume);
-      result.resumeId = (await ResumeDB.getAll()).length;
+
+      // Check if editing existing resume
+      if (req.body.url.search("resume-edit")) {
+        const id = Number.parseInt(req.body.url.split('/')[2]);
+        resume.id = id;
+        result.resumeId = id;
+
+        await ResumeDB.update(resume);
+
+      } else {
+        await ResumeDB.insert(resume);
+        result.resumeId = (await ResumeDB.getAll()).length;
+      }
+
     } catch (e) {
       console.error(e);
 
@@ -232,9 +244,5 @@ router.post("/resume-validate", async function (req: Request, res: Response) {
   }
   res.send(result);
 });
-
-function isStringEmpty(str: string): boolean {
-  return str === undefined || str === "";
-}
 
 export default router;

@@ -4,13 +4,21 @@
 <body>
   <%- include("../shared/signedInHeader.ejs") %>
 
-  <h1>New Resume</h1>
+  <h1>
+    <!-- If this field exists, user is most likely in edit mode -->
+    <%_ if (locals.projectTitle) { _%>
+      Edit
+    <%_ } else { _%>
+      New
+    <%_ } _%>
+    Resume
+  </h1>
 
   <form id="resume-form" class="form">
     <span>* is a required field</span>
 
     <label for="title">Title *</label>
-    <input type="text" id="title" name="title" value="<%= locals.title %>">
+    <input type="text" id="title" name="title" value="<%= locals.projectTitle %>">
 
     <label for="obj">Objective</label>
     <textarea type="text" id="obj" name="obj"><%= locals.obj %></textarea>
@@ -20,8 +28,9 @@
       <button type="button" onclick="addEducation()">Add an education</button>
       <button type="button" onclick="remove('education')">Remove an education</button>
 
-      <%_ for (const edu of locals.education) { _%>
-        
+      <%_ if (locals.education) { _%>
+        <%_ for (const edu of locals.education) { _%>
+          
       <div class="section-edu">
         <label for="school-name">School Name *</label>
         <input id="school-name" type="text" name="school-name" value="<%= edu.schoolName %>">
@@ -33,7 +42,8 @@
         <textarea id="certificates" name="certificates"><%= edu.certificates %></textarea>
       </div>
 
-      <%_ } -%> 
+        <%_ } -%> 
+      <%_ } -%>
 
     </fieldset>
 
@@ -42,7 +52,8 @@
       <button type="button" onclick="addWorkExpierence()">Add expierence</button>
       <button type="button" onclick="remove('expierence')">Remove expierence</button>
 
-      <%_ for (const work of locals.workExpierence) { _%>
+      <%_ if (locals.education) { _%>
+        <%_ for (const work of locals.workExpierence) { _%>
         
         <div class="section-work">
           <label for="company">Company *</label>
@@ -58,7 +69,8 @@
           <label for="job-duties">Job duties</label>
           <textarea id="job-duties" name="job-duties"><%= work.jobDuties %></textarea>
         </div>
-  
+    
+          <%_ } -%>
         <%_ } -%> 
 
     </fieldset>
@@ -169,10 +181,10 @@
     }
 
     // Init form
-    window.addEventListener("load", (e) => {
-      addEducation();
-      addWorkExpierence();
-    });
+    // window.addEventListener("load", (e) => {
+    //   addEducation();
+    //   addWorkExpierence();
+    // });
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -234,6 +246,7 @@
       const res = await fetch("/resume-validate", {
         method: "POST",
         body: JSON.stringify({
+          url: window.location.pathname,
           form: formData
         }),
         headers: { "Content-Type": "application/json" }
