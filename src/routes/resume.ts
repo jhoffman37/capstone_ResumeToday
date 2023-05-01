@@ -13,21 +13,21 @@ type FormData = {
   awards: string | undefined
 }
 
-router.get("/resume-edit/:id", async (req: Request, res:Response) => {
-  let resume_data: Resume;
+router.get("/resume-edit", (req: Request, res: Response) => {
+  res.render("pages/edit.ejs");
+})
+router.get("/resume-edit/:id", async (req: Request, res: Response) => {
+  const id = Number.parseInt(req.params.id);
+  const resume_data = await ResumeDB.get(id);
 
-  try {
-    const id = Number.parseInt(req.params.id);
-    resume_data = await ResumeDB.get(id);
-  } catch (e) {
-    console.error(e);
-
+  if (!resume_data) {
     const msg = `Could not load resume as it does not exist`;
     res.render("pages/edit.ejs", {
       msg
     });
     return;
   }
+
   // Create class representing the resume
   const resume = new Resume();
   resume.id = resume_data.id;
