@@ -45,6 +45,40 @@ nav li {
   border: 1px solid #000;
   border-radius: 10px;
 }
+
+nav li:hover {
+  background-color: #000;
+}
+
+nav a:hover {
+  color: #4a86e8;
+}
+
+a {
+  text-decoration: none;
+  color: #000;
+}
+
+a:hover {
+  color: #4a86e8;
+}
+
+#navButtons {
+  border: 1px solid #000;
+  border-radius: 10px;
+  width: fit-content;
+  margin: auto;
+  padding: 0;
+}
+
+#navLink {
+  color: #4a86e8;
+}
+
+#navButtons li {
+  margin: 10px;
+}
+
 #toggle-btn {
   position: relative;
   top: 25px;
@@ -97,15 +131,6 @@ p3 {
   border-radius: 30px;
   padding: 20px;
   font-weight: bold;
-}
-
-a:link {
-  text-decoration: none;
-  color: #00F;
-}
-
-a:hover {
-  color: #000;
 }
 
 .error-msg {
