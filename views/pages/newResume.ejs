@@ -3,7 +3,7 @@
 <%- include('../shared/head') %>
 <body>
   <%- include("../shared/signedInHeader.ejs") %>
-  
+
   <h1>New Resume</h1>
 
   <form id="resume-form" class="form">
@@ -41,7 +41,7 @@
     const form = document.getElementById("resume-form");
 
     // Converts any text such as a label name to an attribute format
-    // e.g. "Work Expierence *" -> "work-expierence" 
+    // e.g. "Work Expierence *" -> "work-expierence"
     const toAttributeStr = function (str) {
       return str.toLowerCase().replace('/[^a-zA-Z0-9 ]/g', '').trimEnd().replace(' ', '-');
     }
@@ -70,7 +70,7 @@
 
     const remove = function (from) {
       const element = document.getElementById(from);
-     
+
       // Ignore the first 3 elements (buttons and legend)
       if (element.children.length > 3)
         element.lastElementChild.remove();
@@ -79,7 +79,7 @@
     const addEducation = function () {
       const node = document.createElement("div");
       node.className = "section-edu";
-      
+
       const elements = [
         template.label("School Name *"),
         template.input("school-name", "text"),
@@ -103,7 +103,7 @@
     const addWorkExpierence = function () {
       const node = document.createElement("div");
       node.className = "section-work";
-      
+
       const elements = [
         template.label("Company *"),
         template.input("company", "text"),
@@ -181,7 +181,7 @@
         }
         formData.education.push(data);
       }
-      
+
       // Same as above but for work data
       const workQuery = document.querySelectorAll(".section-work");
       for (const section of workQuery) {
@@ -208,7 +208,7 @@
       }
       window.location.replace(`/resume-view/${result.resumeId}`);
     })
-    
+
   </script>
 
 </body>
