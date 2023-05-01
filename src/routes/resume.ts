@@ -4,7 +4,7 @@ import { User, UserDB} from "../data/userDB";
 const router = express.Router();
 
 router.get("/resume-new", (req: Request, res: Response) => {
-  res.render("pages/newResume.ejs");
+  res.render("pages/resumeForm.ejs");
 });
 router.get("/resume-view/:id", async (req: Request, res: Response) => {
   try {
