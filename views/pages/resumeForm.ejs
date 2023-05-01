@@ -10,28 +10,62 @@
     <span>* is a required field</span>
 
     <label for="title">Title *</label>
-    <input type="text" id="title" name="title">
+    <input type="text" id="title" name="title" value="<%= locals.title %>">
 
     <label for="obj">Objective</label>
-    <textarea type="text" id="obj" name="obj"></textarea>
+    <textarea type="text" id="obj" name="obj"><%= locals.obj %></textarea>
 
     <fieldset id="education">
       <legend>Education</legend>
-      <button type="button", onclick="addEducation()">Add an education</button>
-      <button type="button", onclick="remove('education')">Remove an education</button>
+      <button type="button" onclick="addEducation()">Add an education</button>
+      <button type="button" onclick="remove('education')">Remove an education</button>
+
+      <%_ for (const edu of locals.education) { _%>
+        
+      <div class="section-edu">
+        <label for="school-name">School Name *</label>
+        <input id="school-name" type="text" name="school-name" value="<%= edu.schoolName %>">
+        <label for="where">Where *</label>
+        <input id="where" type="text" name="where" value="<%= edu.where %>">
+        <label for="date-of-graduation">Date of graduation *</label>
+        <input id="date-of-graduation" type="date" name="date-of-graduation" value="<%= edu.dateOfGraduation %>">
+        <label for="certificates">Certificates</label>
+        <textarea id="certificates" name="certificates"><%= edu.certificates %></textarea>
+      </div>
+
+      <%_ } -%> 
+
     </fieldset>
 
     <fieldset id="expierence">
       <legend>Work Expierence</legend>
-      <button type="button", onclick="addWorkExpierence()">Add expierence</button>
-      <button type="button", onclick="remove('expierence')">Remove expierence</button>
+      <button type="button" onclick="addWorkExpierence()">Add expierence</button>
+      <button type="button" onclick="remove('expierence')">Remove expierence</button>
+
+      <%_ for (const work of locals.workExpierence) { _%>
+        
+        <div class="section-work">
+          <label for="company">Company *</label>
+          <input id="company" type="text" name="company" value="<%= work.company %>">
+          <label for="position">Position title *</label>
+          <input id="position" type="text" name="position" value="<%= work.position%>">
+          <label for="start-date">Start date *</label>
+          <input id="start-date" type="date" name="start-date" value="<%= work.startDate %>">
+          <label for="end-date">End date *</label>
+          <input id="end-date" type="date" name="end-date" value="<%= work.endDate %>">
+          <label for="job-duties">Job duties</label>
+          <textarea id="job-duties" name="job-duties"><%= work.jobDuties %></textarea>
+        </div>
+  
+        <%_ } -%> 
+
     </fieldset>
 
     <label for="skills">Skills</label>
-    <textarea type="text" id="skills" name="skills"></textarea>
+    <textarea type="text" id="skills" name="skills"><%= locals.skills %></textarea>
 
     <label for="awards">Awards and Honors</label>
-    <textarea type="text" id="awards" name="awards"></textarea>
+    <textarea type="text" id="awards" name="awards"><%= locals.awards %></textarea>
 
     <span class="error-msg"></span>
     <button type="submit">Save</button>
@@ -98,6 +132,7 @@
         node.appendChild(element);
       }
       document.getElementById("education").appendChild(node);
+      return node;
     }
 
     const addWorkExpierence = function () {
@@ -128,6 +163,7 @@
         node.appendChild(element);
       }
       document.getElementById("expierence").appendChild(node);
+      return node;
     }
 
     // Init form

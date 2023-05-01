@@ -1,8 +1,81 @@
 import express, {Request, Response} from "express";
 import { Resume, ResumeDB } from "../data/resumeDB";
 import { User, UserDB} from "../data/userDB";
+import { title } from "process";
 const router = express.Router();
 
+type FormData = {
+  title: string,
+  obj: string | undefined,
+  education: any[],
+  workExpierence: any[],
+  skills: string | undefined,
+  awards: string | undefined
+}
+
+router.get("/resume-edit/:id", async (req: Request, res:Response) => {
+  let resume_data: Resume;
+
+  try {
+    const id = Number.parseInt(req.params.id);
+    resume_data = await ResumeDB.get(id);
+  } catch (e) {
+    console.error(e);
+
+    const msg = `Could not load resume as it does not exist`;
+    res.render("pages/edit.ejs", {
+      msg
+    });
+    return;
+  }
+  // Create class representing the resume
+  const resume = new Resume();
+  resume.id = resume_data.id;
+  resume.user_id = resume_data.user_id;
+  resume.title = resume_data.title;
+  resume.html = resume_data.html;
+
+  // Check HTML for possible form values
+  
+  const html: Document = resume.getAsHtmlElement();
+  
+  const education = [];
+  for (const edu of html.querySelectorAll('.education')) {
+    const data: any = {};
+
+    data["schoolName"] = edu.querySelector('school-name')?.innerHTML;
+    data["dateOfGraduation"] = edu.querySelector('edu-grad')?.innerHTML;
+    data["where"] = edu.querySelector("edu-where")?.innerHTML;
+    data["certificates"] = edu.querySelector("edu-certificates")?.innerHTML;
+
+    education.push(data);
+  }
+
+  const workExpierence = [];
+  for (const work of html.querySelectorAll('.work-experience')) {
+    const data: any = {};
+    const workDuration = work.querySelector('.work-duration')?.innerHTML.split(' - ');
+
+    data["position"] = work.querySelector('.work-position')?.innerHTML;
+    data["company"] = work.querySelector('.work-company')?.innerHTML;
+    data["startDate"] = workDuration?.at(0);
+    data["endDate"] = workDuration?.at(1);
+    data["where"] = work.querySelector(".work-where")?.innerHTML;
+    data["jobDuties"] = work.querySelector('.work-duties')?.innerHTML;
+
+    workExpierence.push(data);
+  }
+  
+  const data: FormData = {
+    title: resume.title,
+    obj: html.getElementById("obj")?.innerHTML,
+    education,
+    workExpierence,
+    skills: html.getElementById("skills")?.innerHTML,
+    awards: html.getElementById("awards")?.innerHTML
+  };
+  res.render("pages/resumeForm.ejs", data);
+});
 router.get("/resume-new", (req: Request, res: Response) => {
   res.render("pages/resumeForm.ejs");
 });
@@ -85,14 +158,14 @@ router.post("/resume-validate", async function (req: Request, res: Response) {
     // We serialize the HTML data just in case the user wants
     // to more freely edit their resume page. By saving the HTML string
     // to the database, we need not worry about where elements are positioned.
-    const obj = form.obj ? `<h2>${form.obj}</h2>` : "";
+    const obj = form.obj ? `<h2 id="obj">${form.obj}</h2>` : "";
 
-    let education = form.education.length ? "<h2>Education</h2>" : "";
+    let education = form.education.length ? '<h2 id="education">Education</h2>' : "";
 
     for (const data of form.education) {
       education += `
         <section class="education">
-          <h3>${data.schoolName}</h3>
+          <h3 id="school-name">${data.schoolName}</h3>
           <div class="edu-setting">
             <span class="edu-grad">${data.dateOfGraduation}</span>
             <span class="edu-where">${data.where}</span>
@@ -108,7 +181,7 @@ router.post("/resume-validate", async function (req: Request, res: Response) {
       const workDuration = `${data.startDate} - ${data.endDate}`;
       work_exp += `
         <section class="work-experience">
-          <h3>${data.position}</h3>
+          <h3 class="work-position">${data.position}</h3>
           <span class="work-company">${data.company}</span>
           <div class="work-setting">
             <span class="work-duration">${workDuration}</span>
@@ -120,11 +193,11 @@ router.post("/resume-validate", async function (req: Request, res: Response) {
     }
 
     const skills = form.skills ? `<h2>Skills</h2
-      <p>${form.skills}</p>
+      <p id="skills">${form.skills}</p>
     ` : "";
 
     const awards = form.awards ? `<h2>Awards</h2
-      <p>${form.awards}</p>
+      <p id="awards">${form.awards}</p>
     ` : "";
 
     const html = `
@@ -136,14 +209,15 @@ router.post("/resume-validate", async function (req: Request, res: Response) {
     `;
 
     // Insert resume into database
-    const resume: Resume = {
-      // Use -1 as a placeholder since this has no id yet
-      id: -1,
-      //TODO: Get logged in user id
-      user_id: 0,
-      title: form.title,
-      html
-    };
+    const resume = new Resume();
+
+    // Use -1 as a placeholder since this has no id yet
+    resume.id = -1;
+
+    //TODO: Get logged in user id
+    resume.user_id = 0;
+    resume.title = title;
+    resume.html = html;
     
     try {
       await ResumeDB.insert(resume);
