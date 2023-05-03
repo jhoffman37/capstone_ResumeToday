@@ -2,7 +2,7 @@ import express, {Request, Response} from "express";
 import { Resume, ResumeDB } from "../data/resumeDB";
 import { User, UserDB} from "../data/userDB";
 import { title } from "process";
-import {authenticateToken} from "../auth/auth";
+import {AuthUser, authenticateToken} from "../auth/auth";
 const router = express.Router();
 
 type FormData = {
@@ -11,7 +11,8 @@ type FormData = {
   education: any[],
   workExpierence: any[],
   skills: string | undefined,
-  awards: string | undefined
+  awards: string | undefined,
+  user: AuthUser | null
 }
 
 router.get("/resume-edit", authenticateToken, (req: Request, res: Response) => {
@@ -73,7 +74,8 @@ router.get("/resume-edit/:id", authenticateToken, async (req: Request, res: Resp
     education,
     workExpierence,
     skills: html.getElementById("skills")?.innerHTML,
-    awards: html.getElementById("awards")?.innerHTML
+    awards: html.getElementById("awards")?.innerHTML,
+    user: req.user || null
   };
   res.render("pages/resumeForm.ejs", data);
 });
