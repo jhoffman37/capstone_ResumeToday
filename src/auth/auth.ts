@@ -7,6 +7,8 @@ import Data from "../data";
 export type AuthUser = {
   id: number;
   username: string;
+  first_name: string;
+  last_name: string;
 }
 
 declare module 'express-serve-static-core' {
