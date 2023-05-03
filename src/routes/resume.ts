@@ -2,20 +2,21 @@ import express, {Request, Response} from "express";
 import { Resume, ResumeDB } from "../data/resumeDB";
 import { User, UserDB} from "../data/userDB";
 import { title } from "process";
-import {authenticateToken} from "../auth/auth";
+import {AuthUser, authenticateToken} from "../auth/auth";
 const router = express.Router();
 
 type FormData = {
   projectTitle: string,
   obj: string | undefined,
   education: any[],
-  workExpierence: any[],
+  workExperience: any[],
   skills: string | undefined,
-  awards: string | undefined
+  awards: string | undefined,
+  user: AuthUser | null
 }
 
 router.get("/resume-edit", authenticateToken, (req: Request, res: Response) => {
-  res.render("pages/edit.ejs", {user: req.user ? req.user : null});
+  res.render("pages/edit.ejs", {user: req.user ? req.user : null})
 })
 router.get("/resume-edit/:id", authenticateToken, async (req: Request, res: Response) => {
   const id = Number.parseInt(req.params.id);
@@ -23,6 +24,14 @@ router.get("/resume-edit/:id", authenticateToken, async (req: Request, res: Resp
 
   if (!resume_data) {
     const msg = `Could not load resume as it does not exist`;
+    res.render("pages/edit.ejs", { user: req.user ? req.user : null,
+      msg
+    });
+    return;
+  }
+
+  if (!req.user || resume_data.user_id !== req.user.id) {
+    const msg = `You do not have permission to edit this resume`;
     res.render("pages/edit.ejs", { user: req.user ? req.user : null,
       msg
     });
@@ -52,7 +61,7 @@ router.get("/resume-edit/:id", authenticateToken, async (req: Request, res: Resp
     education.push(data);
   }
 
-  const workExpierence = [];
+  const workExperience = [];
   for (const work of html.querySelectorAll('.work-experience')) {
     const data: any = {};
     const workDuration = work.querySelector('.work-duration')?.innerHTML.split(' - ');
@@ -64,16 +73,17 @@ router.get("/resume-edit/:id", authenticateToken, async (req: Request, res: Resp
     data["where"] = work.querySelector(".work-where")?.innerHTML;
     data["jobDuties"] = work.querySelector('.work-duties')?.innerHTML;
 
-    workExpierence.push(data);
+    workExperience.push(data);
   }
 
   const data: FormData = {
     projectTitle: resume.title,
     obj: html.getElementById("obj")?.innerHTML,
     education,
-    workExpierence,
+    workExperience,
     skills: html.getElementById("skills")?.innerHTML,
-    awards: html.getElementById("awards")?.innerHTML
+    awards: html.getElementById("awards")?.innerHTML,
+    user: req.user || null
   };
   res.render("pages/resumeForm.ejs", data);
 });
@@ -84,6 +94,11 @@ router.get("/resume-view/:id", authenticateToken, async (req: Request, res: Resp
   try {
     const id: number = Number.parseInt(req.params.id);
     const resume: Resume = await ResumeDB.get(id);
+
+    if (!req.user || resume.user_id !== req.user.id) {
+      res.status(401).send('You do not have permission to view this resume')
+      return;
+    }
 
     res.render("pages/resume.ejs", { user: req.user ? req.user : null,
       title: resume.title,
@@ -124,14 +139,14 @@ router.post("/resume-validate", authenticateToken, async function (req: Request,
   if (!edu.date)
     result.msg += "Must provide a graduation date<br>";
 
-  // Validate all work expierence data
+  // Validate all work experience data
   const work = {
     company: true,
     position: true,
     where: true,
     start: true
   }
-  for (const data of form.workExpierence) {
+  for (const data of form.workExperience) {
     work.company = work.company && data.company;
     work.position = work.position && data.position;
     work.where = work.where && data.where;
@@ -174,9 +189,9 @@ router.post("/resume-validate", authenticateToken, async function (req: Request,
     `;
     }
 
-    let work_exp = form.workExpierence.length ? "<h2>Work Experience</h2>" : "";
+    let work_exp = form.workExperience.length ? "<h2>Work Experience</h2>" : "";
 
-    for (const data of form.workExpierence) {
+    for (const data of form.workExperience) {
       const workDuration = `${data.startDate} - ${data.endDate}`;
       work_exp += `
         <section class="work-experience">
