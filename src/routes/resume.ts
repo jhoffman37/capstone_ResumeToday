@@ -9,7 +9,7 @@ type FormData = {
   projectTitle: string,
   obj: string | undefined,
   education: any[],
-  workExpierence: any[],
+  workExperience: any[],
   skills: string | undefined,
   awards: string | undefined,
   user: AuthUser | null
@@ -61,7 +61,7 @@ router.get("/resume-edit/:id", authenticateToken, async (req: Request, res: Resp
     education.push(data);
   }
 
-  const workExpierence = [];
+  const workExperience = [];
   for (const work of html.querySelectorAll('.work-experience')) {
     const data: any = {};
     const workDuration = work.querySelector('.work-duration')?.innerHTML.split(' - ');
@@ -73,14 +73,14 @@ router.get("/resume-edit/:id", authenticateToken, async (req: Request, res: Resp
     data["where"] = work.querySelector(".work-where")?.innerHTML;
     data["jobDuties"] = work.querySelector('.work-duties')?.innerHTML;
 
-    workExpierence.push(data);
+    workExperience.push(data);
   }
 
   const data: FormData = {
     projectTitle: resume.title,
     obj: html.getElementById("obj")?.innerHTML,
     education,
-    workExpierence,
+    workExperience,
     skills: html.getElementById("skills")?.innerHTML,
     awards: html.getElementById("awards")?.innerHTML,
     user: req.user || null
@@ -139,14 +139,14 @@ router.post("/resume-validate", authenticateToken, async function (req: Request,
   if (!edu.date)
     result.msg += "Must provide a graduation date<br>";
 
-  // Validate all work expierence data
+  // Validate all work experience data
   const work = {
     company: true,
     position: true,
     where: true,
     start: true
   }
-  for (const data of form.workExpierence) {
+  for (const data of form.workExperience) {
     work.company = work.company && data.company;
     work.position = work.position && data.position;
     work.where = work.where && data.where;
@@ -189,9 +189,9 @@ router.post("/resume-validate", authenticateToken, async function (req: Request,
     `;
     }
 
-    let work_exp = form.workExpierence.length ? "<h2>Work Experience</h2>" : "";
+    let work_exp = form.workExperience.length ? "<h2>Work Experience</h2>" : "";
 
-    for (const data of form.workExpierence) {
+    for (const data of form.workExperience) {
       const workDuration = `${data.startDate} - ${data.endDate}`;
       work_exp += `
         <section class="work-experience">

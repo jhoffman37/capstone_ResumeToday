@@ -47,13 +47,13 @@
 
     </fieldset>
 
-    <fieldset id="expierence">
-      <legend>Work Expierence</legend>
-      <button type="button" onclick="addWorkExpierence()">Add expierence</button>
-      <button type="button" onclick="remove('expierence')">Remove expierence</button>
+    <fieldset id="experience">
+      <legend>Work Experience</legend>
+      <button type="button" onclick="addWorkExperience()">Add experience</button>
+      <button type="button" onclick="remove('experience')">Remove experience</button>
 
       <%_ if (locals.education) { _%>
-        <%_ for (const work of locals.workExpierence) { _%>
+        <%_ for (const work of locals.workExperience) { _%>
         
         <div class="section-work">
           <label for="company">Company *</label>
@@ -89,7 +89,7 @@
     const form = document.getElementById("resume-form");
 
     // Converts any text such as a label name to an attribute format
-    // e.g. "Work Expierence *" -> "work-expierence"
+    // e.g. "Work Experience *" -> "work-experience"
     const toAttributeStr = function (str) {
       return str.toLowerCase().replace(/[^a-zA-Z0-9 -]/g, '').trimEnd().replace(' ', '-');
     }
@@ -149,7 +149,7 @@
       return node;
     }
 
-    const addWorkExpierence = function () {
+    const addWorkExperience = function () {
       const node = document.createElement("div");
       node.className = "section-work";
 
@@ -176,14 +176,14 @@
       for (const element of elements) {
         node.appendChild(element);
       }
-      document.getElementById("expierence").appendChild(node);
+      document.getElementById("experience").appendChild(node);
       return node;
     }
 
     // Init form
     // window.addEventListener("load", (e) => {
     //   addEducation();
-    //   addWorkExpierence();
+    //   addWorkExperience();
     // });
 
     form.addEventListener("submit", async (e) => {
@@ -209,7 +209,7 @@
         title: document.getElementById("title").innerHTML,
         obj: document.getElementById("obj").innerHTML,
         education: [],
-        workExpierence: [],
+        workExperience: [],
         skills: document.getElementById("skills").innerHTML,
         awards: document.getElementById("awards").innerHTML,
       };
@@ -239,7 +239,7 @@
         for (const input of section.querySelectorAll("input, textarea")) {
           data[toCamalCase(input.id)] = input.value;
         }
-        formData.workExpierence.push(data);
+        formData.workExperience.push(data);
       }
 
       // Validate form because you can never trust the client
