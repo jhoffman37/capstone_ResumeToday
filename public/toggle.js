@@ -26,16 +26,3 @@ function toggleMode() {
 
 var toggleBtn = document.getElementById('toggle-btn');
 toggleBtn.addEventListener('click', toggleMode);
-
-// check if user has a preferred mode and set it
-var preferredMode = localStorage.getItem('preferredMode');
-if (preferredMode) {
-  var cssMode = document.querySelector('#default');
-  var logo = document.querySelector('#logo');
-  cssMode.setAttribute('href', preferredMode);
-  if (preferredMode == '../site_dark.css') {
-    logo.src = "../ResumeTodayLogo_dark.png";
-  } else {
-    logo.src = "../ResumeTodayLogo.png";
-  }
-}

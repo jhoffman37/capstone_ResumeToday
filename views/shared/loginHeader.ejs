@@ -13,3 +13,28 @@
 </nav>
 <button id="toggle-btn">Light/Dark</button>
 <script src="../toggle.js"></script>
+<script>
+function showTheme() {
+  // check if user has a preferred mode and set it
+var preferredMode = localStorage.getItem('preferredMode');
+if (preferredMode) {
+  var cssMode = document.querySelector('#default');
+  var logo = document.querySelector('#logo');
+  cssMode.setAttribute('href', preferredMode);
+  if (preferredMode == '../site_dark.css') {
+    logo.src = "../ResumeTodayLogo_dark.png";
+  } else {
+    logo.src = "../ResumeTodayLogo.png";
+  }
+}
+}
+
+function showContent() {
+  document.body.style.visibility = 'visible';
+  document.body.style.opacity = 1;
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+  showTheme();
+  showContent();
+});</script>
