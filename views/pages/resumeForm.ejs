@@ -74,9 +74,73 @@
         <%_ } -%> 
 
     </fieldset>
-
-    <label for="skills">Skills</label>
-    <textarea type="text" id="skills" name="skills"><%= locals.skills %></textarea>
+    <fieldset id="skills">
+      <legend>Skills</legend>
+      <button type="button" id="add-skill-btn">Add Skill</button>
+      <button type="button" onclick="remove('skills')">Remove Skill</button>
+      <div id="skills-container">
+      <select id="skills" name="skills">
+        <option value="">Select a skill</option>
+        <optgroup label="Technical Skills">
+          <option value="Software Proficiency">Software proficiency</option>
+          <option value="Data Analysis">Data analysis and manipulation</option>
+          <option value="Web Design">Web design and development</option>
+          <option value="Network Administration">Network administration and security</option>
+          <option value="Database Management">Database management</option>
+        </optgroup>
+        <optgroup label="Programming Skills">
+          <option value="HTML">HTML</option>
+          <option value="CSS">CSS</option>
+          <option value="JavaScript">JavaScript</option>
+          <option value="C++">Java</option>
+          <option value="PHP">PHP</option>
+          <option value="SQL">SQL</option>
+          <option value="PostgresSQL">PostgresSQL</option>
+          <option value="Node">Node</option>
+          <option value="TypeScript">TypeScript</option>
+          <option value="Rust">Rust</option>
+          <option value="Python">Python</option>
+          <option value="C++">C++</option>
+          <option value="C#">C#</option>
+        </optgroup>
+        <optgroup label="Communication Skills">
+          <option value="Written Communication">Written and verbal communication</option>
+          <option value="Public Speaking">Public speaking</option>
+          <option value="Interpersonal Skills">Interpersonal skills</option>
+          <option value="Active Listening">Active listening</option>
+          <option value="Conflict Resolution">Conflict resolution</option>
+        </optgroup>
+        <optgroup label="Analytical Skills">
+          <option value="Critical Thinking">Critical thinking</option>
+          <option value="Problem Solving">Problem-solving</option>
+          <option value="Decision Making">Decision-making</option>
+          <option value="Research and Analysis">Research and analysis</option>
+          <option value="Quantitative Reasoning">Quantitative reasoning</option>
+        </optgroup>
+        <optgroup label="Leadership Skills">
+          <option value="Team Management">Team management</option>
+          <option value="Project Management">Project management</option>
+          <option value="Strategic Planning">Strategic planning</option>
+          <option value="Delegation">Delegation</option>
+          <option value="Mentoring and Coaching">Mentoring and coaching</option>
+        </optgroup>
+        <optgroup label="Organizational Skills">
+          <option value="Time Management">Time management</option>
+          <option value="Prioritization">Prioritization</option>
+          <option value="Scheduling">Scheduling</option>
+          <option value="Budgeting">Budgeting</option>
+          <option value="Resource Allocation">Resource allocation</option>
+        </optgroup>
+        <optgroup label="Creative Skills">
+          <option value="Graphic Design">Graphic design</option>
+          <option value="Content Creation">Content creation</option>
+          <option value="Video Production">Video production</option>
+          <option value="Photography">Photography</option>
+          <option value="Writing and Editing">Writing and editing</option>
+        </optgroup>
+      </select>
+    </div>
+  </fieldset>
 
     <label for="awards">Awards and Honors</label>
     <textarea type="text" id="awards" name="awards"><%= locals.awards %></textarea>
@@ -180,6 +244,57 @@
       return node;
     }
 
+// Get the button and container elements
+const addSkillBtn = document.getElementById('add-skill-btn');
+const skills = document.getElementById('skills');
+
+// Define the skill options as an array of objects
+const skillOptions = [
+  { category: 'Technical Skills', options: ['Software proficiency', 'Data analysis and manipulation', 'Web design and development', 'Network administration and security', 'Database management'] },
+  { category: 'Programming Skills', options: ['HTML', 'CSS', 'JavaScript', 'PHP', 'SQL', 'PostgresSQL', 'Node', 'TypeScript', 'Rust']},
+  { category: 'Communication Skills', options: ['Written and verbal communication', 'Public speaking', 'Interpersonal skills', 'Active listening', 'Conflict resolution'] },
+  { category: 'Analytical Skills', options: ['Critical thinking', 'Problem-solving', 'Decision-making', 'Research and analysis', 'Quantitative reasoning'] },
+  { category: 'Leadership Skills', options: ['Team management', 'Project management', 'Strategic planning', 'Delegation', 'Mentoring and coaching'] },
+  { category: 'Organizational Skills', options: ['Time management', 'Prioritization', 'Scheduling', 'Budgeting', 'Resource allocation'] },
+  { category: 'Creative Skills', options: ['Graphic design', 'Content creation', 'Video production', 'Photography', 'Writing and editing'] }
+];
+
+// Define a function to create a new dropdown input with the specified options
+function createSkillDropdown(skillOptions) {
+  // Create the elements for the dropdown input
+  const select = document.createElement('select');
+  select.name = 'skill';
+  const defaultOption = document.createElement('option');
+  defaultOption.value = '';
+  defaultOption.textContent = 'Select a skill';
+  select.appendChild(defaultOption);
+
+  // Add the options to the dropdown input
+  skillOptions.forEach(option => {
+    const optgroup = document.createElement('optgroup');
+    optgroup.label = option.category;
+    option.options.forEach(skill => {
+      const option = document.createElement('option');
+      option.value = skill;
+      option.textContent = skill;
+      optgroup.appendChild(option);
+    });
+    select.appendChild(optgroup);
+  });
+
+  // Create a container for the dropdown input
+  const node = document.createElement('div');
+  node.appendChild(select);
+  return node;
+}
+
+// Add an event listener to the button to create a new dropdown input when clicked
+addSkillBtn.addEventListener('click', () => {
+  const newDropdown = createSkillDropdown(skillOptions);
+  skills.appendChild(newDropdown);
+});
+
+
     // Init form
     // window.addEventListener("load", (e) => {
     //   addEducation();
@@ -210,7 +325,7 @@
         obj: document.getElementById("obj").innerHTML,
         education: [],
         workExperience: [],
-        skills: document.getElementById("skills").innerHTML,
+        skills: Array.from(document.querySelectorAll("#skills option:checked")).map(option => option.value),
         awards: document.getElementById("awards").innerHTML,
       };
 
