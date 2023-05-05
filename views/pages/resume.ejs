@@ -16,18 +16,17 @@
   
   <div class="fb-like" data-href="https://resume-today.onrender.com/resume-view" data-width="10" data-layout="" data-action="" data-size="" data-share="true"></div>
   
-  <script src = "https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.1/axios.min.js">
-  </script>
+  <script src = "https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.1/axios.min.js"> </script>
   <script>
     async function startDownload() {
     let results = await axios({
-    url: 'resume.ejs',
+    url: 'resume.html',
     method: 'GET',
     responseType: 'blob'
     })
     let hidden_a = document.createElement('a');
     hidden_a.href = window.URL.createObjectURL(new Blob([results.data]));
-    hidden_a.setAttribute('download', 'resume.ejs');
+    hidden_a.setAttribute('download', 'resume.html');
     document.body.appendChild(hidden_a);
     hidden_a.click();
     }
