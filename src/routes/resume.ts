@@ -2,7 +2,7 @@ import express, {Request, Response} from "express";
 import { Resume, ResumeDB } from "../data/resumeDB";
 import { User, UserDB} from "../data/userDB";
 import { title } from "process";
-import {AuthUser, authenticateToken} from "../auth/auth";
+import {AuthUser, authenticateToken, authenticateTokenStrict} from "../auth/auth";
 const router = express.Router();
 
 type FormData = {
@@ -15,10 +15,10 @@ type FormData = {
   user: AuthUser | null
 }
 
-router.get("/resume-edit", authenticateToken, (req: Request, res: Response) => {
+router.get("/resume-edit", authenticateTokenStrict, (req: Request, res: Response) => {
   res.render("pages/edit.ejs", {user: req.user ? req.user : null})
 })
-router.get("/resume-edit/:id", authenticateToken, async (req: Request, res: Response) => {
+router.get("/resume-edit/:id", authenticateTokenStrict, async (req: Request, res: Response) => {
   const id = Number.parseInt(req.params.id);
   const resume_data = await ResumeDB.get(id);
 
@@ -87,10 +87,10 @@ router.get("/resume-edit/:id", authenticateToken, async (req: Request, res: Resp
   };
   res.render("pages/resumeForm.ejs", data);
 });
-router.get("/resume-new", authenticateToken, (req: Request, res: Response) => {
+router.get("/resume-new", authenticateTokenStrict, (req: Request, res: Response) => {
   res.render("pages/resumeForm.ejs", {user: req.user ? req.user : null});
 });
-router.get("/resume-view/:id", authenticateToken, async (req: Request, res: Response) => {
+router.get("/resume-view/:id", authenticateTokenStrict, async (req: Request, res: Response) => {
   try {
     const id: number = Number.parseInt(req.params.id);
     const resume: Resume = await ResumeDB.get(id);
@@ -109,7 +109,7 @@ router.get("/resume-view/:id", authenticateToken, async (req: Request, res: Resp
   }
 
 });
-router.post("/resume-validate", authenticateToken, async function (req: Request, res: Response) {
+router.post("/resume-validate", authenticateTokenStrict, async function (req: Request, res: Response) {
   const result = {
     success: false,
     msg: '',
