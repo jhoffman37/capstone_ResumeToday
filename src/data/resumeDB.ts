@@ -13,7 +13,7 @@ class Resume {
   public getAsHtmlElement(): Document {
     const html = this.html.trim();
     const dom = new JSDOM(html);
-    
+
     return dom.window.document;
   }
 };
@@ -42,6 +42,12 @@ const update = async (resume: Resume) => {
     SET title = $1, html = $2
     WHERE id = $3`;
   await pool.query(sql, [resume.title, resume.html, resume.id]);
+}
+
+const getResumeByUserId = async (user_id: number): Promise<Resume[]> => {
+  let result = await pool.query(`SELECT * FROM resumes
+    WHERE user_id = $1;`, [user_id]);
+  return result.rows;
 }
 
 const ResumeDB = {
