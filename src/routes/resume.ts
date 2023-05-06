@@ -1,8 +1,6 @@
 import express, {Request, Response} from "express";
 import { Resume, ResumeDB } from "../data/resumeDB";
-import { User, UserDB} from "../data/userDB";
-import { title } from "process";
-import {AuthUser, authenticateToken, authenticateTokenStrict} from "../auth/auth";
+import {AuthUser, authenticateTokenStrict} from "../auth/auth";
 const router = express.Router();
 
 type FormData = {
@@ -15,8 +13,10 @@ type FormData = {
   user: AuthUser | null
 }
 
-router.get("/resume-edit", authenticateTokenStrict, (req: Request, res: Response) => {
-  res.render("pages/edit.ejs", {user: req.user ? req.user : null})
+router.get("/resume-view", authenticateTokenStrict, async (req: Request, res: Response) => {
+  const resumes = await ResumeDB.getResumeByUserId(req.user.id);
+  console.log(resumes);
+  res.render("pages/viewResumes.ejs", {user: req.user ? req.user : null, resumes: resumes});
 })
 router.get("/resume-edit/:id", authenticateTokenStrict, async (req: Request, res: Response) => {
   const id = Number.parseInt(req.params.id);
@@ -24,7 +24,7 @@ router.get("/resume-edit/:id", authenticateTokenStrict, async (req: Request, res
 
   if (!resume_data) {
     const msg = `Could not load resume as it does not exist`;
-    res.render("pages/edit.ejs", { user: req.user ? req.user : null,
+    res.render("pages/viewResumes.ejs", { user: req.user ? req.user : null,
       msg
     });
     return;
@@ -32,7 +32,7 @@ router.get("/resume-edit/:id", authenticateTokenStrict, async (req: Request, res
 
   if (!req.user || resume_data.user_id !== req.user.id) {
     const msg = `You do not have permission to edit this resume`;
-    res.render("pages/edit.ejs", { user: req.user ? req.user : null,
+    res.render("pages/viewResumes.ejs", { user: req.user ? req.user : null,
       msg
     });
     return;

@@ -55,6 +55,7 @@ const ResumeDB = {
   getAll,
   insert,
   update,
+  getResumeByUserId,
 }
 
 export { Resume, ResumeDB };

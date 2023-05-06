@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('../shared/head') %>
+  <%- include('../shared/signedInHeader.ejs') %>
+  <body>
+    <h1>My Resumes</h1>
+    <div id="resumeList">
+      <% if (resumes.length === 0) {%>
+        <p>You have no resumes.</p>
+      <% } else { %>
+        <% for(let resume of resumes) { %>
+          <div class="resume">
+            <p><%= resume.title %></p>
+            <a href="/resume-edit/<%= resume.id %>">Edit</a>
+            <a href="/resume-view/<%= resume.id %>">View</a>
+          </div>
+        <% } %>
+      <% } %>
+    </div>
+  </body>
+
+</html>
