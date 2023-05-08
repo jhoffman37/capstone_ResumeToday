@@ -237,6 +237,11 @@ addSkillBtn.addEventListener('click', () => {
     // Init form
     window.addEventListener("load", (e) => {
       const skillList = "<%= locals.skills %>".split(',');
+
+      // Return if string is empty
+      if (!skillList[0]) {
+        return;
+      }
       for (const skill of skillList) {
         const dropdown = createSkillDropdown(skillOptions);
         const option = dropdown.querySelector("select > option");

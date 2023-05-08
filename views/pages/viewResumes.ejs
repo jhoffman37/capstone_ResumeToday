@@ -25,6 +25,7 @@
       <% for(let sharedRes of shared) { %>
         <div class="resume">
           <p><%= sharedRes.resume.title %></p>
+          <span>Shared by <%= sharedRes.ownerName %></span>
 
           <% if (sharedRes.perms.toLowerCase().includes("edit")) {%>
             <a href="/resume-edit/<%= sharedRes.resume.id %>">Edit</a>

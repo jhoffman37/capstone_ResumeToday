@@ -19,17 +19,21 @@ router.get("/resume-view", authenticateTokenStrict, async (req: Request, res: Re
   const all = await ResumeDB.getAll();
   const shared: any[] = [];
 
-  all.forEach(resume => {
+  for (const resume of all) {
+    const owner = await UserDB.getUserById(resume.user_id);
+
     resume.shared_users.forEach(userStr => {
       const user: SharedUser = JSON.parse(userStr);
       if (user.user_id !== req.user.id)
         return;
+
       shared.push({
         resume,
-        perms: user.perms
+        perms: user.perms,
+        ownerName: owner.username
       });
     });
-  });
+  }
 
   res.render("pages/viewResumes.ejs", {user: req.user ? req.user : null, resumes, shared});
 });
