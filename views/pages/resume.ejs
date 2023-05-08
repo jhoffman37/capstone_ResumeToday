@@ -7,7 +7,7 @@
 
   <%- include("../shared/signedInHeader.ejs") %>
   <div id="resumeDiv">
-  <h1 id="resumeName"><%= user.first_name + ' ' + user.last_name %></h1>
+  <h1 id="resumeName"><%= ownerName %></h1>
    
   <!-- Render resume here -->
   <%- resume.html %>

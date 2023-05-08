@@ -43,6 +43,17 @@ const getUserByUsername = async (username: string): Promise<any> => {
   }
 }
 
+const getUserById = async (id: Number): Promise<any> => {
+  let user: User;
+  let result = await pool.query('SELECT * FROM users WHERE id=$1;', [id]);
+  user = result.rows[0];
+  if (user) {
+    return user;
+  } else {
+    throw 'UserNotFound';
+  }
+}
+
 const checkUserExists = async (username: string): Promise<boolean> => {
   let result = await pool.query('SELECT * FROM users WHERE username=$1;', [username]);
   return result.rows.length > 0;
@@ -51,6 +62,7 @@ const checkUserExists = async (username: string): Promise<boolean> => {
 const UserDB = {
   getAllUsers,
   getUserByUsername,
+  getUserById,
   insertNewUser,
   checkUserExists
 }

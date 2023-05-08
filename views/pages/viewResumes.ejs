@@ -26,7 +26,7 @@
         <div class="resume">
           <p><%= sharedRes.resume.title %></p>
 
-          <% if (shared.perms === "edit") {%>
+          <% if (sharedRes.perms.toLowerCase().includes("edit")) {%>
             <a href="/resume-edit/<%= sharedRes.resume.id %>">Edit</a>
           <% } %>
 
@@ -73,7 +73,8 @@
       //
       //TODO: try to autocomplete user and warn if not existent
       shareInput.addEventListener('input', async (e) => {
-        console.log("yee");
+        msg.innerHTML = "";
+        msg.style.color = ""
       });
       shareInput.addEventListener('keydown', async (e) => {
         // user pressed 'enter'
@@ -101,7 +102,6 @@
         });
 
         const result = await res.json();
-        msg.style.color = ""
         msg.innerHTML = result.msg;
 
         if (!result.success) {
