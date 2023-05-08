@@ -15,7 +15,6 @@ type FormData = {
 
 router.get("/resume-view", authenticateTokenStrict, async (req: Request, res: Response) => {
   const resumes = await ResumeDB.getResumeByUserId(req.user.id);
-  console.log(resumes);
   res.render("pages/viewResumes.ejs", {user: req.user ? req.user : null, resumes: resumes});
 })
 router.get("/resume-edit/:id", authenticateTokenStrict, async (req: Request, res: Response) => {
@@ -76,13 +75,14 @@ router.get("/resume-edit/:id", authenticateTokenStrict, async (req: Request, res
     workExperience.push(data);
   }
 
+  const skills = html.getElementById("skills")?.innerHTML;
   const data: FormData = {
     projectTitle: resume.title,
     obj: html.getElementById("obj")?.innerHTML,
     education,
     workExperience,
-    skills: html.getElementById("skills")?.innerHTML,
-    awards: html.getElementById("awards")?.nodeValue,
+    skills: skills,
+    awards: html.getElementById("awards")?.innerHTML,
     user: req.user || null
   };
   res.render("pages/resumeForm.ejs", data);
@@ -206,12 +206,11 @@ router.post("/resume-validate", authenticateTokenStrict, async function (req: Re
       `;
     }
 
-    const skills = form.skills && form.skills.length ? `<h2>Skills</h2
+    const skills = form.skills && form.skills.length ? `<h2>Skills</h2>
       <p id="skills">${form.skills}</p>
     ` : "";
 
-    console.log(JSON.stringify(form))
-    const awards = form.awards ? `<h2>Awards and Honors</h2
+    const awards = form.awards ? `<h2>Awards and Honors</h2>
       <p id="awards">${form.awards}</p>
     ` : "";
 
