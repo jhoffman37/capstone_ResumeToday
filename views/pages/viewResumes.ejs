@@ -21,7 +21,7 @@
 
     <div id="shade">
       <div id="share-menu">
-        <h1>Share</h1>
+        <h2>Share</h2>
         <input type="text" name="share-txt" id="share-txt", placeholder="Add people">
         <select name="perms" id="perms">
           <option value="view">View</option>
@@ -40,8 +40,12 @@
         element.addEventListener('click', (e) => {
           const resumeClass = e.target.parentNode;
           const title = resumeClass.querySelector('p').innerHTML;
+          const h2 = shareMenu.querySelector("h2");
 
-          shareMenu.querySelector("h1").innerHTML = `Share "${title}"`;
+          const resId = resumeClass.querySelector("a").href.split('/');
+
+          h2.innerHTML = `Share "${title}"`;
+          h2.id = resId[resId.length - 1];
           shareMenu.parentNode.style.display = "flex";
         })
       );
@@ -64,10 +68,13 @@
           usernames = shareInput.value.split(',').forEach(username => username.trimStart);
         }
 
+        const resumeId = shareMenu.querySelector('h2').id;
+
         // update permissions for users who exist
         const res = await fetch("/resume-share", {
           method: "POST",
           body: JSON.stringify({
+            resumeId,
             usernames,
             perm: document.getElementById("perms").value
           }),

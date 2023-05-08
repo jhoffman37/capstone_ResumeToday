@@ -4,9 +4,15 @@ import { JSDOM } from "jsdom";
 
 const pool = getPool();
 
+type SharedUser = {
+  user_id: number,
+  perms: string
+}
+
 class Resume {
   id: number = -1;
   user_id: number = -1;
+  shared_users: string[] = [];
   title: string = "";
   html: string = "";
 
@@ -28,20 +34,21 @@ const get = async (id: number): Promise<Resume> => {
   let result = await pool.query(`SELECT * FROM resumes
     WHERE id = ${id};`);
   resume = result.rows[0];
+
   return resume;
 }
 
 const insert = async (resume: Resume) => {
-  let sql = `INSERT INTO resumes (user_id, title, html)
-    VALUES ($1, $2, $3)`;
-  await pool.query(sql, [resume.user_id, resume.title, resume.html]);
+  let sql = `INSERT INTO resumes (user_id, title, html, shared_users)
+    VALUES ($1, $2, $3, $4)`;
+  await pool.query(sql, [resume.user_id, resume.title, resume.html, []]);
 }
 
 const update = async (resume: Resume) => {
   const sql = `UPDATE resumes
-    SET title = $1, html = $2
-    WHERE id = $3`;
-  await pool.query(sql, [resume.title, resume.html, resume.id]);
+    SET title = $1, html = $2, shared_users = $3
+    WHERE id = $4`;
+  await pool.query(sql, [resume.title, resume.html, resume.shared_users, resume.id]);
 }
 
 const getResumeByUserId = async (user_id: number): Promise<Resume[]> => {
@@ -58,4 +65,4 @@ const ResumeDB = {
   getResumeByUserId,
 }
 
-export { Resume, ResumeDB };
+export { Resume, ResumeDB, SharedUser };

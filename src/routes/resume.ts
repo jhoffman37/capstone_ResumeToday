@@ -1,5 +1,5 @@
 import express, {Request, Response} from "express";
-import { Resume, ResumeDB } from "../data/resumeDB";
+import { Resume, ResumeDB, SharedUser } from "../data/resumeDB";
 import {AuthUser, authenticateTokenStrict} from "../auth/auth";
 import { UserDB } from "../data/userDB";
 const router = express.Router();
@@ -118,8 +118,9 @@ router.post("/resume-share", authenticateTokenStrict, async function (req: Reque
     msg: '',
   };
 
-  // Attempt to retrieve entered user ids
+  const userIds = [];
 
+  // Attempt to retrieve entered user ids
   try {
 
     for (const username of req.body.usernames) {
@@ -129,15 +130,51 @@ router.post("/resume-share", authenticateTokenStrict, async function (req: Reque
         result.msg += `User with name '${username}' does not exist\n`;
         continue;
       }
+      if (req.user && req.user.username === username) {
+        result.msg += `You may not share with yourself as you already own this resume\n`;
+        continue;
+      }
 
       const user = await UserDB.getUserByUsername(username);
-
+      userIds.push(user.id);
     }
 
   } catch (e) {
     console.error(e);
     result.msg += "A problem occured trying to retrieve users"
   }
+
+  // Set permissions and update resume data
+  const resumeId = Number.parseInt(req.body.resumeId);
+
+  try {
+    const resume = await ResumeDB.get(resumeId);
+
+    for (const userId of userIds) {
+      // Find existing user data and modify
+      const prevData = resume.shared_users.find(userStr => {
+        const user: SharedUser = JSON.parse(userStr);
+        return user.user_id === userId;
+      });
+
+      // Remove old data from array
+      if (prevData) {
+        const idx = resume.shared_users.indexOf(prevData);
+        resume.shared_users.splice(idx, 1)
+      }
+
+      resume.shared_users.push(`{ "user_id": ${userId}, "perms": "${req.body.perm}" }`);
+    }
+
+    await ResumeDB.update(resume);
+
+  } catch (e) {
+    console.error(e);
+    result.msg += "Uh oh! Failed to update share settings for this resume";
+  }
+
+  const resume = await ResumeDB.get(resumeId);
+  console.log(JSON.stringify(resume.shared_users));
 
   result.success = result.msg === "";
   res.send(result);
@@ -258,10 +295,7 @@ router.post("/resume-validate", authenticateTokenStrict, async function (req: Re
 
     // Insert resume into database
     const resume = new Resume();
-
-    // Use -1 as a placeholder since this has no id yet
-    resume.id = -1;
-
+    
     resume.user_id = req.user.id;
     resume.title = form.title;
     resume.html = html;

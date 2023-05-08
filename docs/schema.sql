@@ -15,6 +15,7 @@ CREATE TABLE resumes
 (
     id SERIAL PRIMARY KEY,
     user_id INT NOT NULL,
+    shared_users Text[] NOT NULL,
     title TEXT NOT NULL,
     html TEXT NOT NULL
 );
