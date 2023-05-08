@@ -324,24 +324,27 @@ router.post("/resume-validate", authenticateTokenStrict, async function (req: Re
       ${awards}
     `;
 
-    // Insert resume into database
-    const resume = new Resume();
-    
-    resume.user_id = req.user.id;
-    resume.title = form.title;
-    resume.html = html;
-
     try {
 
       // Check if editing existing resume
       if (req.body.url.search("resume-edit") != -1) {
         const id = Number.parseInt(req.body.url.split('/')[2]);
-        resume.id = id;
-        result.resumeId = id;
+        const resume = await ResumeDB.get(id);
 
+        resume.title = form.title;
+        resume.html = html;
+
+        result.resumeId = id;
         await ResumeDB.update(resume);
 
       } else {
+        // Insert resume into database
+        const resume = new Resume();
+        
+        resume.user_id = req.user.id;
+        resume.title = form.title;
+        resume.html = html;
+
         await ResumeDB.insert(resume);
         result.resumeId = (await ResumeDB.getAll()).length;
       }
