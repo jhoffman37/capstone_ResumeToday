@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 const router = express.Router();
 import { verifyUser } from "../auth/auth";
 import jwt from "jsonwebtoken";
+import { UserDB } from "../data/userDB";
 
 router.post("/authenticate", async (req: Request, res: Response) => {
   try {
@@ -11,7 +12,13 @@ router.post("/authenticate", async (req: Request, res: Response) => {
     if (username && password) {
       let userID = await verifyUser(username, password);
       if (userID && process.env.JWT_SECRET) {
-        const accessToken = jwt.sign({id: userID, username}, process.env.JWT_SECRET,
+
+        // Grab name info from database
+        const result = await UserDB.getUserByUsername(username);
+        const first_name = result.first_name;
+        const last_name = result.last_name;
+
+        const accessToken = jwt.sign({id: userID, username, first_name, last_name}, process.env.JWT_SECRET,
           {expiresIn: process.env.JWT_EXPIRES_IN ? process.env.JWT_EXPIRES_IN : "1h"});
         res.status(200).cookie('authorization','Bearer ' +
           accessToken, {httpOnly: true, secure: true}).json({success: true, msg: "User Logged In"});
