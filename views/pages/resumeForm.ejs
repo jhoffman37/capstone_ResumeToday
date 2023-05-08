@@ -325,7 +325,7 @@ addSkillBtn.addEventListener('click', () => {
         obj: document.getElementById("obj").innerHTML,
         education: [],
         workExperience: [],
-        skills: Array.from(document.querySelectorAll("#skills option:checked")).map(option => option.value),
+        skills: Array.from(document.querySelectorAll("#skills option:checked")).map(option => option.value).filter(val => val != ""),
         awards: document.getElementById("awards").innerHTML,
       };
 

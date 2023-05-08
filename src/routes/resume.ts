@@ -9,7 +9,7 @@ type FormData = {
   education: any[],
   workExperience: any[],
   skills: string | undefined,
-  awards: string | undefined,
+  awards: string | undefined | null,
   user: AuthUser | null
 }
 
@@ -82,7 +82,7 @@ router.get("/resume-edit/:id", authenticateTokenStrict, async (req: Request, res
     education,
     workExperience,
     skills: html.getElementById("skills")?.innerHTML,
-    awards: html.getElementById("awards")?.innerHTML,
+    awards: html.getElementById("awards")?.nodeValue,
     user: req.user || null
   };
   res.render("pages/resumeForm.ejs", data);
@@ -206,10 +206,11 @@ router.post("/resume-validate", authenticateTokenStrict, async function (req: Re
       `;
     }
 
-    const skills = form.skills ? `<h2>Skills</h2
+    const skills = form.skills && form.skills.length ? `<h2>Skills</h2
       <p id="skills">${form.skills}</p>
     ` : "";
 
+    console.log(JSON.stringify(form))
     const awards = form.awards ? `<h2>Awards and Honors</h2
       <p id="awards">${form.awards}</p>
     ` : "";
