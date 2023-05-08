@@ -181,7 +181,7 @@ router.post("/resume-validate", authenticateTokenStrict, async function (req: Re
         <section class="education">
           <h3 id="school-name">${data.schoolName}</h3>
           <div class="edu-setting">
-            <span class="edu-grad">${data.dateOfGraduation}</span>
+            <span class="edu-grad">${data.dateOfGraduation}</span><br>
             <span class="edu-where">${data.where}</span>
           </div>
           <p class="edu-certificates">${data.certificates}</p>
@@ -198,7 +198,7 @@ router.post("/resume-validate", authenticateTokenStrict, async function (req: Re
           <h3 class="work-position">${data.position}</h3>
           <span class="work-company">${data.company}</span>
           <div class="work-setting">
-            <span class="work-duration">${workDuration}</span>
+            <span class="work-duration">${workDuration}</span><br>
             <span class="work-where">${data.where}</span>
           </div>
           <p class="work-duties">${data.jobDuties}</p>
