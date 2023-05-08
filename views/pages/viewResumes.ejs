@@ -19,40 +19,43 @@
       <% } %>
     </div>
 
+    <div id="shade">
+      <div id="share-menu">
+        <h1>Share</h1>
+        <input type="text" name="share-txt" id="share-txt", placeholder="Add people">
+      </div>
+    </div>
+
     <script>
+      const shareMenu = document.getElementById("share-menu");
+
       document.querySelectorAll(".share-btn").forEach(element => 
         element.addEventListener('click', async (e) => {
           const resumeClass = e.target.parentNode;
           const title = resumeClass.querySelector('p').innerHTML;
-          resumeClass.appendChild(createShareMenu(title))
+
+          shareMenu.querySelector("h1").innerHTML = `Share "${title}"`;
+          shareMenu.parentNode.style.display = "flex";
         })
       );
-    
-      const createShareMenu = function (resumeTitle) {
-        const shade = document.createElement("div");
-        shade.id = "shade";
 
-        const div = document.createElement("div");
-        div.id = "share-menu";
-        shade.appendChild(div)
-
-        {
-          const h1 = document.createElement("h1");
-          h1.innerHTML = `Share "${resumeTitle}"`;
-          div.appendChild(h1);
-        }
-
-        {
-          const input = document.createElement("input");
-          input.type = "text";
-          input.id = "share-input"
-          input.innerText = "Add people";
-
-          div.appendChild(input);
-        }
-
-        return shade;
+      const exitShareMenu = function () {
+        shareMenu.parentNode.style.display = "none";
       }
+
+      // If shade is clicked, make hidden again
+      shareMenu.parentNode.addEventListener('click', (e) => {
+        if (e.target !== shareMenu.parentNode)
+          return;
+        exitShareMenu();
+      })
+
+      // If user presses escape, close menu
+      document.addEventListener('keydown', (e) => {
+        if (e.keyCode !== 27)
+          return;
+        exitShareMenu();
+      })
     </script>
 
   </body>

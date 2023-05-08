@@ -199,7 +199,7 @@ form, fieldset div {
 #shade {
   align-items: center;
   background-color: rgba(0.5, 0.5, 0.5, 0.5);
-  display: flex;
+  display: none;
   height: 100%;
   left: 0;
   justify-content: center;
@@ -212,4 +212,10 @@ form, fieldset div {
   background-color: var(--bg-color);
   padding: 1.5em;
   position: relative;
+}
+
+#share-menu input {
+  height: 1.5em;
+  padding: 0.5em;
+  width: 85%;
 }
