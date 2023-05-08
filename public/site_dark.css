@@ -1,10 +1,11 @@
 :root {
+  --bg-color: #000;
   --error-color: #a82929;
   --default-border: 1px solid #fff;
 }
 
 body {
-  background-color: #000;
+  background-color: var(--bg-color);
   color:white;
 }
 
@@ -117,13 +118,18 @@ h2 {
   background-color: white;
 }
 
-#resumeList {
+.resumeList {
   border: var(--default-border);
   padding-top: 2em;
   padding-bottom: 2em;
   width: 80%;
   margin: 0 auto;
   display: flex;
+}
+
+/* Add spacing in between consecutive list elements */
+.resumeList + .resumeList {
+  margin-top: 2em;
 }
 
 .resume {
@@ -196,4 +202,28 @@ form, fieldset div {
   flex-direction: column;
   gap: 1em;
   text-align: left;
+}
+
+#shade {
+  align-items: center;
+  background-color: rgba(0.5, 0.5, 0.5, 0.5);
+  display: none;
+  height: 100%;
+  left: 0;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+#share-menu {
+  background-color: var(--bg-color);
+  padding: 1.5em;
+  position: relative;
+}
+
+#share-menu input {
+  height: 1.5em;
+  padding: 0.5em;
+  width: 85%;
 }
