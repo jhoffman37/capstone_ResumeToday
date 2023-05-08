@@ -210,7 +210,7 @@ router.post("/resume-validate", authenticateTokenStrict, async function (req: Re
       <p id="skills">${form.skills}</p>
     ` : "";
 
-    const awards = form.awards ? `<h2>Awards</h2
+    const awards = form.awards ? `<h2>Awards and Honors</h2
       <p id="awards">${form.awards}</p>
     ` : "";
 
