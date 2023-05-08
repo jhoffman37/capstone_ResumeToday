@@ -87,10 +87,17 @@ router.get("/resume-edit/:id", authenticateTokenStrict, async (req: Request, res
     const data: any = {};
     const workDuration = work.querySelector('.work-duration')?.innerHTML.split(' - ');
 
+    let [startDate, endDate] = "";
+
+    if (workDuration) {
+      startDate = workDuration[0];
+      endDate = workDuration[1];
+    }
+
     data["position"] = work.querySelector('.work-position')?.innerHTML;
     data["company"] = work.querySelector('.work-company')?.innerHTML;
-    data["startDate"] = workDuration?.at(0);
-    data["endDate"] = workDuration?.at(1);
+    data["startDate"] = startDate;
+    data["endDate"] = endDate;
     data["where"] = work.querySelector(".work-where")?.innerHTML;
     data["jobDuties"] = work.querySelector('.work-duties')?.innerHTML;
 
@@ -203,8 +210,6 @@ router.post("/resume-share", authenticateTokenStrict, async function (req: Reque
     console.error(e);
     result.msg += "Uh oh! Failed to update share settings for this resume";
   }
-
-  const resume = await ResumeDB.get(resumeId);
 
   result.success = result.msg === "";
   res.send(result);
