@@ -46,7 +46,12 @@ router.get("/resume-edit/:id", authenticateTokenStrict, async (req: Request, res
     return;
   }
 
-  if (!req.user || resume_data.user_id !== req.user.id) {
+  const canEdit = resume_data.shared_users.find(userStr => {
+    const user: SharedUser = JSON.parse(userStr);
+    return user.user_id === req.user.id && user.perms === "edit";
+  });
+
+  if (!canEdit) {
     const msg = `You do not have permission to edit this resume`;
     res.render("pages/viewResumes.ejs", { user: req.user ? req.user : null,
       msg
@@ -112,7 +117,15 @@ router.get("/resume-view/:id", authenticateTokenStrict, async (req: Request, res
     const id: number = Number.parseInt(req.params.id);
     const resume: Resume = await ResumeDB.get(id);
 
-    if (!req.user || resume.user_id !== req.user.id) {
+    const canView = resume.shared_users.find(userStr => {
+      const user: SharedUser = JSON.parse(userStr);
+
+      // Since the other permissions require a user view the document
+      // we don't need to check the permission here
+      return user.user_id === req.user.id;
+    });
+
+    if (!canView) {
       res.status(401).send('You do not have permission to view this resume')
       return;
     }
