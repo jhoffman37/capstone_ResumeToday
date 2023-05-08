@@ -20,7 +20,8 @@ declare module 'express-serve-static-core' {
 export const authenticateToken =  async (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.cookies['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
-  if (token === null) return next();
+  // `token` could be undefined or null, so check if it is either of those values
+  if (!token) return next();
   if (process.env.JWT_SECRET) {
     jwt.verify(token, process.env.JWT_SECRET, (err: any, user: any) => {
       if (err) return next();
