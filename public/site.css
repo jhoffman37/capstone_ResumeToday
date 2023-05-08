@@ -1,10 +1,11 @@
 :root {
+  --bg-color: white;
   --error-color: #a82929;
   --default-border: 1px solid #000;
 }
 
 body {
-  background-color: white;
+  background-color: var(--bg-color);
   color:#000;
 }
 
@@ -193,4 +194,22 @@ form, fieldset div {
   flex-direction: column;
   gap: 1em;
   text-align: left;
+}
+
+#shade {
+  align-items: center;
+  background-color: rgba(0.5, 0.5, 0.5, 0.5);
+  display: flex;
+  height: 100%;
+  left: 0;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+#share-menu {
+  background-color: var(--bg-color);
+  padding: 1.5em;
+  position: relative;
 }

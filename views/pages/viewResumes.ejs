@@ -13,10 +13,48 @@
             <p><%= resume.title %></p>
             <a href="/resume-edit/<%= resume.id %>">Edit</a>
             <a href="/resume-view/<%= resume.id %>">View</a>
+            <button class="share-btn">Share</button>
           </div>
         <% } %>
       <% } %>
     </div>
+
+    <script>
+      document.querySelectorAll(".share-btn").forEach(element => 
+        element.addEventListener('click', async (e) => {
+          const resumeClass = e.target.parentNode;
+          const title = resumeClass.querySelector('p').innerHTML;
+          resumeClass.appendChild(createShareMenu(title))
+        })
+      );
+    
+      const createShareMenu = function (resumeTitle) {
+        const shade = document.createElement("div");
+        shade.id = "shade";
+
+        const div = document.createElement("div");
+        div.id = "share-menu";
+        shade.appendChild(div)
+
+        {
+          const h1 = document.createElement("h1");
+          h1.innerHTML = `Share "${resumeTitle}"`;
+          div.appendChild(h1);
+        }
+
+        {
+          const input = document.createElement("input");
+          input.type = "text";
+          input.id = "share-input"
+          input.innerText = "Add people";
+
+          div.appendChild(input);
+        }
+
+        return shade;
+      }
+    </script>
+
   </body>
 
 </html>
