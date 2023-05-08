@@ -205,7 +205,6 @@ router.post("/resume-share", authenticateTokenStrict, async function (req: Reque
   }
 
   const resume = await ResumeDB.get(resumeId);
-  console.log(JSON.stringify(resume.shared_users));
 
   result.success = result.msg === "";
   res.send(result);
