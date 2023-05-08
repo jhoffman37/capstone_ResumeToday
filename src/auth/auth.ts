@@ -34,7 +34,7 @@ export const authenticateToken =  async (req: Request, res: Response, next: Next
 export const authenticateTokenStrict =  async (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.cookies['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
-  if (token === null) return res.redirect('/login');
+  if (!token) return res.redirect('/login');
   if (process.env.JWT_SECRET) {
     jwt.verify(token, process.env.JWT_SECRET, (err: any, user: any) => {
       if (err) return res.redirect('/login');
