@@ -23,14 +23,21 @@
       <div id="share-menu">
         <h1>Share</h1>
         <input type="text" name="share-txt" id="share-txt", placeholder="Add people">
+        <select name="perms" id="perms">
+          <option value="view">View</option>
+          <option value="edit">Edit</option>
+        </select>
+        <span class="error-msg"></span>
       </div>
     </div>
 
     <script>
       const shareMenu = document.getElementById("share-menu");
+      const shareInput = document.getElementById("share-txt");
 
+      // open the share menu
       document.querySelectorAll(".share-btn").forEach(element => 
-        element.addEventListener('click', async (e) => {
+        element.addEventListener('click', (e) => {
           const resumeClass = e.target.parentNode;
           const title = resumeClass.querySelector('p').innerHTML;
 
@@ -38,6 +45,42 @@
           shareMenu.parentNode.style.display = "flex";
         })
       );
+
+      // attempt to share with entered users
+      //
+      //TODO: try to autocomplete user and warn if not existent
+      shareInput.addEventListener('input', async (e) => {
+        console.log("yee");
+      });
+      shareInput.addEventListener('keydown', async (e) => {
+        // user pressed 'enter'
+        if (e.keyCode !== 13)
+          return;
+
+        let usernames = [shareInput.value];
+
+        // check if multiple usernames were entered
+        if (usernames.includes(',')) {
+          usernames = shareInput.value.split(',').forEach(username => username.trimStart);
+        }
+
+        // update permissions for users who exist
+        const res = await fetch("/resume-share", {
+          method: "POST",
+          body: JSON.stringify({
+            usernames,
+            perm: document.getElementById("perms").value
+          }),
+          headers: { "Content-Type": "application/json" }
+        });
+
+        const result = await res.json();
+        document.querySelector("span.error-msg").innerHTML = result.msg;
+
+        if (!result.success) {
+          return;
+        }
+      })
 
       const exitShareMenu = function () {
         shareMenu.parentNode.style.display = "none";

@@ -51,7 +51,8 @@ const checkUserExists = async (username: string): Promise<boolean> => {
 const UserDB = {
   getAllUsers,
   getUserByUsername,
-  insertNewUser
+  insertNewUser,
+  checkUserExists
 }
 
 export { User, UserDB };

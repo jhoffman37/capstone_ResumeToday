@@ -1,6 +1,7 @@
 import express, {Request, Response} from "express";
 import { Resume, ResumeDB } from "../data/resumeDB";
 import {AuthUser, authenticateTokenStrict} from "../auth/auth";
+import { UserDB } from "../data/userDB";
 const router = express.Router();
 
 type FormData = {
@@ -16,7 +17,8 @@ type FormData = {
 router.get("/resume-view", authenticateTokenStrict, async (req: Request, res: Response) => {
   const resumes = await ResumeDB.getResumeByUserId(req.user.id);
   res.render("pages/viewResumes.ejs", {user: req.user ? req.user : null, resumes: resumes});
-})
+});
+
 router.get("/resume-edit/:id", authenticateTokenStrict, async (req: Request, res: Response) => {
   const id = Number.parseInt(req.params.id);
   const resume_data = await ResumeDB.get(id);
@@ -109,6 +111,38 @@ router.get("/resume-view/:id", authenticateTokenStrict, async (req: Request, res
   }
 
 });
+
+router.post("/resume-share", authenticateTokenStrict, async function (req: Request, res: Response) {
+  const result = {
+    success: false,
+    msg: '',
+  };
+
+  // Attempt to retrieve entered user ids
+
+  try {
+
+    for (const username of req.body.usernames) {
+      
+      const userExists = await UserDB.checkUserExists(username);
+      if (!userExists) {
+        result.msg += `User with name '${username}' does not exist\n`;
+        continue;
+      }
+
+      const user = await UserDB.getUserByUsername(username);
+
+    }
+
+  } catch (e) {
+    console.error(e);
+    result.msg += "A problem occured trying to retrieve users"
+  }
+
+  result.success = result.msg === "";
+  res.send(result);
+});
+
 router.post("/resume-validate", authenticateTokenStrict, async function (req: Request, res: Response) {
   const result = {
     success: false,
