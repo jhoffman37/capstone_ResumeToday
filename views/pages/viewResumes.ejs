@@ -3,8 +3,8 @@
   <%- include('../shared/head') %>
   <%- include('../shared/signedInHeader.ejs') %>
   <body>
-    <h1>My Resumes</h1>
-    <div id="resumeList">
+    <h2>My Resumes</h2>
+    <div class="resumeList">
       <% if (resumes.length === 0) {%>
         <p>You have no resumes.</p>
       <% } else { %>
@@ -17,6 +17,24 @@
           </div>
         <% } %>
       <% } %>
+    </div>
+
+    <% if (shared.length !== 0) {%>
+    <h2>Shared With Me</h2>
+    <div class="resumeList">
+      <% for(let sharedRes of shared) { %>
+        <div class="resume">
+          <p><%= sharedRes.resume.title %></p>
+
+          <% if (shared.perms === "edit") {%>
+            <a href="/resume-edit/<%= sharedRes.resume.id %>">Edit</a>
+          <% } %>
+
+          <a href="/resume-view/<%= sharedRes.resume.id %>">View</a>
+        </div>
+      <% } %>
+
+    <% } %>
     </div>
 
     <div id="shade">
@@ -34,6 +52,7 @@
     <script>
       const shareMenu = document.getElementById("share-menu");
       const shareInput = document.getElementById("share-txt");
+      const msg = document.querySelector("span.error-msg");
 
       // open the share menu
       document.querySelectorAll(".share-btn").forEach(element => 
@@ -82,11 +101,14 @@
         });
 
         const result = await res.json();
-        document.querySelector("span.error-msg").innerHTML = result.msg;
+        msg.style.color = ""
+        msg.innerHTML = result.msg;
 
         if (!result.success) {
           return;
         }
+        msg.innerHTML = "Permissions updated successfully!"
+        msg.style.color = "rgb(75, 150, 35)"
       })
 
       const exitShareMenu = function () {

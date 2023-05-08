@@ -118,13 +118,18 @@ h2 {
   color: #4a86e8;
 }
 
-#resumeList {
+.resumeList {
   border: var(--default-border);
   padding-top: 2em;
   padding-bottom: 2em;
   width: 80%;
   margin: 0 auto;
   display: flex;
+}
+
+/* Add spacing in between consecutive list elements */
+.resumeList + .resumeList {
+  margin-top: 2em;
 }
 
 .resume {

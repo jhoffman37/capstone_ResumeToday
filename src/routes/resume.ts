@@ -16,7 +16,22 @@ type FormData = {
 
 router.get("/resume-view", authenticateTokenStrict, async (req: Request, res: Response) => {
   const resumes = await ResumeDB.getResumeByUserId(req.user.id);
-  res.render("pages/viewResumes.ejs", {user: req.user ? req.user : null, resumes: resumes});
+  const all = await ResumeDB.getAll();
+  const shared: any[] = [];
+
+  all.forEach(resume => {
+    resume.shared_users.forEach(userStr => {
+      const user: SharedUser = JSON.parse(userStr);
+      if (user.user_id !== req.user.id)
+        return;
+      shared.push({
+        resume,
+        perms: user.perms
+      });
+    });
+  });
+
+  res.render("pages/viewResumes.ejs", {user: req.user ? req.user : null, resumes, shared});
 });
 
 router.get("/resume-edit/:id", authenticateTokenStrict, async (req: Request, res: Response) => {
