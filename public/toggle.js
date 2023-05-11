@@ -20,7 +20,7 @@ function toggleMode() {
   body.classList.add('transition');
   window.setTimeout(function() {
     body.classList.remove('transition');
-  }, 500);
+  }, 1);
 }
 
 var toggleBtn = document.getElementById('toggle-btn');
