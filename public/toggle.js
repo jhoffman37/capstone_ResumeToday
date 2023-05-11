@@ -12,16 +12,15 @@ function toggleMode() {
     logo.src = "../ResumeTodayLogo.png";
   }
 
-    // Add 'hidden' attribute to body
-    document.body.setAttribute('hidden', '');
-
-    // Remove 'hidden' attribute after 5ms
-    setTimeout(function() {
-      document.body.removeAttribute('hidden');
-    }, 5);
-
   cssMode.setAttribute('href', newMode);
   localStorage.setItem('preferredMode', newMode);
+
+  // Gradual transition to dark mode
+  var body = document.body;
+  body.classList.add('transition');
+  window.setTimeout(function() {
+    body.classList.remove('transition');
+  }, 500);
 }
 
 var toggleBtn = document.getElementById('toggle-btn');
