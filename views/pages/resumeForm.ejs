@@ -307,6 +307,14 @@ addSkillBtn.addEventListener('click', () => {
         for (const input of section.querySelectorAll("input, textarea")) {
           data[toCamalCase(input.id)] = input.value;
         }
+        // Validate that the start date is before the end date
+        const startDate = new Date(data.startDate);
+        const endDate = new Date(data.endDate);
+        if (startDate >= endDate) {
+          document.querySelector("span.error-msg").innerHTML = "End date must be after start date for work experience.";
+          return;
+        }
+
         formData.workExperience.push(data);
       }
 
