@@ -3,7 +3,9 @@
 <%- include('../shared/head') %>
 <body>
 <div id="fb-root"></div>
-<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v16.0" nonce="5V19FSnB"></script>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v16.0" nonce="5V19FSnB">
+const queryString = window.location.search;
+const viewNumber = str.substring(str.length - 1);</script>
 
   <%- include("../shared/signedInHeader.ejs") %>
   <div id="resumeDiv">
@@ -12,7 +14,7 @@
   <!-- Render resume here -->
   <%- resume.html %>
   
-  <a href = "/resume-view/${result.resumeId}" Download = "resume.html">
+  <a href = "'/resume-view/' + viewNumber" Download = "resume.html">
   <button type = "button">Download </button>
   
   <div class="fb-like" data-href="https://resume-today.onrender.com/resume-view" data-width="10" data-layout="" data-action="" data-size="" data-share="true"></div>
