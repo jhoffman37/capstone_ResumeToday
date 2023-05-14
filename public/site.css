@@ -265,6 +265,19 @@ form, fieldset div {
   width: 85%;
 }
 
+input, #input-autocomplete {
+  font-family: Arial;
+  font-size: medium;
+}
+
 #share-perms-btn {
   font-size: large;
+}
+
+/* This is really silly */
+#input-autocomplete {
+  position: absolute;
+  top: 7.45em;
+  left: 2.1em;
+  opacity: 50%;
 }
