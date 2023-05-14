@@ -238,8 +238,12 @@ form, fieldset div {
   position: relative;
 }
 
-#share-menu input {
+#share-txt {
   height: 1.5em;
   padding: 0.5em;
   width: 85%;
+}
+
+#share-perms-btn {
+  font-size: large;
 }
