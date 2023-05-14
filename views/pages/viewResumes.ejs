@@ -42,8 +42,8 @@
       <div id="share-menu">
         <h2>Share</h2>
         <input type="text" name="share-txt" id="share-txt" placeholder="Add people">
-        <input type="submit" value="+" id="share-perms-btn" title="Update Permissions">
-        <select name="perms" id="perms">
+        <input type="submit" value="+" id="share-perms-btn" title="Update Permissions" onclick="updateUserPerms()">
+        <select name="perms" id="perms" onchange="clearOutput()">
           <option value="view">View</option>
           <option value="edit">Edit</option>
         </select>
@@ -56,6 +56,11 @@
       const shareMenu = document.getElementById("share-menu");
       const shareInput = document.getElementById("share-txt");
       const msg = document.querySelector("span.error-msg");
+
+      const clearOutput = function () {
+        msg.innerHTML = "";
+        msg.style.color = "";
+      }
 
       const exitShareMenu = function () {
         shareMenu.parentNode.style.display = "none";
@@ -111,18 +116,13 @@
       //
       //TODO: try to autocomplete user and warn if not existent
       shareInput.addEventListener('input', async (e) => {
-        msg.innerHTML = "";
-        msg.style.color = ""
+        clearOutput();
       });
       shareInput.addEventListener('keydown', (e) => {
         // user pressed 'enter'
         if (e.keyCode !== 13)
           return;
 
-        updateUserPerms();
-      })
-
-      document.getElementById("share-perms-btn").addEventListener('click', (e) => {
         updateUserPerms();
       })
 
