@@ -41,11 +41,13 @@
     <div id="shade">
       <div id="share-menu">
         <h2>Share</h2>
-        <input type="text" name="share-txt" id="share-txt", placeholder="Add people">
+        <input type="text" name="share-txt" id="share-txt" placeholder="Add people">
+        <input type="submit" value="+" id="share-perms-btn" title="Update Permissions">
         <select name="perms" id="perms">
           <option value="view">View</option>
           <option value="edit">Edit</option>
         </select>
+        <button id="close-btn">Close</button>
         <span class="error-msg"></span>
       </div>
     </div>
@@ -55,33 +57,11 @@
       const shareInput = document.getElementById("share-txt");
       const msg = document.querySelector("span.error-msg");
 
-      // open the share menu
-      document.querySelectorAll(".share-btn").forEach(element => 
-        element.addEventListener('click', (e) => {
-          const resumeClass = e.target.parentNode;
-          const title = resumeClass.querySelector('p').innerHTML;
-          const h2 = shareMenu.querySelector("h2");
+      const exitShareMenu = function () {
+        shareMenu.parentNode.style.display = "none";
+      }
 
-          const resId = resumeClass.querySelector("a").href.split('/');
-
-          h2.innerHTML = `Share "${title}"`;
-          h2.id = resId[resId.length - 1];
-          shareMenu.parentNode.style.display = "flex";
-        })
-      );
-
-      // attempt to share with entered users
-      //
-      //TODO: try to autocomplete user and warn if not existent
-      shareInput.addEventListener('input', async (e) => {
-        msg.innerHTML = "";
-        msg.style.color = ""
-      });
-      shareInput.addEventListener('keydown', async (e) => {
-        // user pressed 'enter'
-        if (e.keyCode !== 13)
-          return;
-
+      const updateUserPerms = async function () {
         let usernames = [shareInput.value];
 
         // check if multiple usernames were entered
@@ -110,16 +90,50 @@
         }
         msg.innerHTML = "Permissions updated successfully!"
         msg.style.color = "rgb(75, 150, 35)"
+      }
+
+      // open the share menu
+      document.querySelectorAll(".share-btn").forEach(element => 
+        element.addEventListener('click', (e) => {
+          const resumeClass = e.target.parentNode;
+          const title = resumeClass.querySelector('p').innerHTML;
+          const h2 = shareMenu.querySelector("h2");
+
+          const resId = resumeClass.querySelector("a").href.split('/');
+
+          h2.innerHTML = `Share "${title}"`;
+          h2.id = resId[resId.length - 1];
+          shareMenu.parentNode.style.display = "flex";
+        })
+      );
+
+      // attempt to share with entered users
+      //
+      //TODO: try to autocomplete user and warn if not existent
+      shareInput.addEventListener('input', async (e) => {
+        msg.innerHTML = "";
+        msg.style.color = ""
+      });
+      shareInput.addEventListener('keydown', (e) => {
+        // user pressed 'enter'
+        if (e.keyCode !== 13)
+          return;
+
+        updateUserPerms();
       })
 
-      const exitShareMenu = function () {
-        shareMenu.parentNode.style.display = "none";
-      }
+      document.getElementById("share-perms-btn").addEventListener('click', (e) => {
+        updateUserPerms();
+      })
 
       // If shade is clicked, make hidden again
       shareMenu.parentNode.addEventListener('click', (e) => {
         if (e.target !== shareMenu.parentNode)
           return;
+        exitShareMenu();
+      })
+
+      document.getElementById("close-btn").addEventListener('click', (e) => {
         exitShareMenu();
       })
 
