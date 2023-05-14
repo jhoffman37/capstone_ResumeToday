@@ -14,9 +14,8 @@ const viewNumber = str.substring(str.length - 1);</script>
    
   <!-- Render resume here -->
   <%- resume.html %>
-  
-  <a href = "'/resume-view/' + viewNumber" Download = "resume.html">
-  <button type = "button">Download </button>
+
+  <a href="/resume-download/<%= resume.id %>" id="downloadButton" type="button" download>Download</a>
   
   <div class="fb-like" data-href="https://resume-today.onrender.com/resume-view" data-width="10" data-layout="" data-action="" data-size="" data-share="true"></div>
   </div>

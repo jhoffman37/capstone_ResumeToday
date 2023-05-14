@@ -2,6 +2,7 @@ import express, {Request, Response} from "express";
 import { Resume, ResumeDB, SharedUser } from "../data/resumeDB";
 import {AuthUser, authenticateTokenStrict} from "../auth/auth";
 import { UserDB } from "../data/userDB";
+const html_to_pdf = require('html-pdf-node');
 const router = express.Router();
 
 type FormData = {
@@ -366,6 +367,18 @@ router.post("/resume-validate", authenticateTokenStrict, async function (req: Re
 
   }
   res.send(result);
+});
+
+router.get('/resume-download/:id', authenticateTokenStrict, async function (req: Request, res: Response) {
+  const resume = await ResumeDB.get(parseInt(req.params.id));
+  const resumeHTML = resume.html;
+  const file = {content: resumeHTML};
+  const options = {format: 'A4'};
+
+  const pdf = html_to_pdf.generatePdf(file, options);
+  res.setHeader('Content-Type', 'application/pdf');
+  res.setHeader('Content-Disposition', `attachment; filename=${resume.title}.pdf`);
+  res.send(pdf).status(200);
 });
 
 export default router;
