@@ -91,7 +91,7 @@ a:hover {
     margin: 0 auto;
 }
 
-#toggle-btn, #downloadButton {
+#toggle-btn {
   border: var(--default-border);
   border-radius: 10px;
   width: fit-content;
@@ -101,7 +101,22 @@ a:hover {
   padding: 5px;
 }
 
-#toggle-btn:hover, #downloadButton:hover {
+#toggle-btn:hover {
+  background-color: #fff;
+  color: #4a86e8;
+}
+
+#downloadButton {
+    border: var(--default-border);
+    border-radius: 10px;
+    width: fit-content;
+    margin: auto;
+    color: white;
+    background-color: black;
+    padding: 5px;
+}
+
+#downloadButton:hover {
   background-color: #fff;
   color: #4a86e8;
 }

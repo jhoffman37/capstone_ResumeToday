@@ -372,10 +372,11 @@ router.post("/resume-validate", authenticateTokenStrict, async function (req: Re
 router.get('/resume-download/:id', authenticateTokenStrict, async function (req: Request, res: Response) {
   const resume = await ResumeDB.get(parseInt(req.params.id));
   const resumeHTML = resume.html;
-  const file = {content: resumeHTML};
+  const resumeTitle = '<h1>' + resume.title + "</h1>";
+  const file = {content: resumeTitle + resumeHTML};
   const options = {format: 'A4'};
 
-  const pdf = html_to_pdf.generatePdf(file, options);
+  const pdf = await html_to_pdf.generatePdf(file, options);
   res.setHeader('Content-Type', 'application/pdf');
   res.setHeader('Content-Disposition', `attachment; filename=${resume.title}.pdf`);
   res.send(pdf).status(200);
