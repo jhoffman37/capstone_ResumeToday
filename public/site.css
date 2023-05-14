@@ -87,8 +87,18 @@ a:hover {
 }
 
 #toggle-btn {
-  position: relative;
-  top: 25px;
+  border: var(--default-border);
+  border-radius: 10px;
+  width: fit-content;
+  margin: auto;
+  color: white;
+  background-color: black;
+  padding: 5px;
+}
+
+#toggle-btn:hover {
+  background-color: #fff;
+  color: #4a86e8;
 }
 
 #index {
