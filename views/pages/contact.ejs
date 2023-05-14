@@ -3,18 +3,20 @@
   <%- include('../shared/head') %>
   <body>
     <%- include('../shared/header', {user}) %>
-    <h1>Contact Us</h1>
-    <form>
-      <label for="firstName">First Name: </label>
-      <input id="firstName" type="text" name="firstName" placeholder="First Name" required>
-      <label for="lastName">Last Name: </label>
-      <input id="lastName" type="text" name="lastName" placeholder="Last Name" required>
-      <label for="email">Email: </label>
-      <input id="email" type="text" name="email" placeholder="Email" required>
-      <label for="comments">Comments: </label>
-      <input id="comments" type="text" name="comments" placeholder="Comments" required/>
-      <input id="contactSubmit" type="submit" value="Contact" />
-    </form>
-    <p>Thank you for contacting us, we will reach out as soon as possible.</p>
+    <div id="pageContent">
+      <h1>Contact Us</h1>
+      <form>
+        <label for="firstName">First Name: </label>
+        <input id="firstName" type="text" name="firstName" placeholder="First Name" required>
+        <label for="lastName">Last Name: </label>
+        <input id="lastName" type="text" name="lastName" placeholder="Last Name" required>
+        <label for="email">Email: </label>
+        <input id="email" type="text" name="email" placeholder="Email" required>
+        <label for="comments">Comments: </label>
+        <input id="comments" type="text" name="comments" placeholder="Comments" required/>
+        <input id="contactSubmit" type="submit" value="Contact" />
+      </form>
+      <p>Thank you for contacting us, we will reach out as soon as possible.</p>
+    </div>
   </body>
 </html>
