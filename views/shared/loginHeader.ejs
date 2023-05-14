@@ -30,6 +30,12 @@ if (preferredMode) {
 }
 
 function showContent() {
+  var preferred = localStorage.getItem('preferredMode');
+  if (preferred == '../site_dark.css') {
+    document.body.style.backgroundColor = '#000';
+  } else {
+    document.body.style.backgroundColor = '#fff';
+  }
   document.body.style.visibility = 'visible';
   document.body.style.opacity = 1;
 }
