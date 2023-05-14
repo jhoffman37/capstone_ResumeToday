@@ -141,9 +141,19 @@
           inputAutocomplete.innerHTML = result.usernames[0];
         });
         shareInput.addEventListener('keydown', (e) => {
-          inputAutocomplete.innerHTML = "";
 
-          //TODO: Check if user hit tab
+          // Check if user hit tab to fill input from autocomplete
+          if (e.keyCode === 9) {
+            if (!inputAutocomplete.innerHTML)
+              return;
+
+            // Prevent default behavior of the tab key indexing to the next element
+            e.preventDefault();
+            shareInput.value = inputAutocomplete.innerHTML;
+            return;
+          }
+
+          inputAutocomplete.innerHTML = "";
 
           // user pressed 'enter'
           if (e.keyCode !== 13)
