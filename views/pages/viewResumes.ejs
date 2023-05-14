@@ -116,9 +116,20 @@
 
         // attempt to share with entered users
         //
-        //TODO: try to autocomplete user and warn if not existent
+        // try to autocomplete user and warn if not existent
         shareInput.addEventListener('input', async (e) => {
           clearOutput();
+
+          const res = await fetch("/fetch-usernames", {
+            method: "POST",
+            body: JSON.stringify({
+              filter: shareInput.value
+            }),
+            headers: { "Content-Type": "application/json" }
+          });
+
+          const result = await res.json();
+          console.log(result.usernames)
         });
         shareInput.addEventListener('keydown', (e) => {
           // user pressed 'enter'
