@@ -30,3 +30,5 @@ A .env file will be required to run the webserver. It should contain the followi
 - jsdom
 - html-pdf-node
 - jasmine
+- showdown
+

@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "jasmine",
-    "coverage": "nyc npm test"
+    "coverage": "nyc npm test",
+    "start": "npx tsc && node target/server.js"
   },
   "repository": {
     "type": "git",

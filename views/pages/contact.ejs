@@ -11,7 +11,9 @@
         <label for="lastName">Last Name: </label>
         <input id="lastName" type="text" name="lastName" placeholder="Last Name" required>
         <label for="email">Email: </label>
-        <input id="email" type="text" name="email" placeholder="Email" required>
+        <input id="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+               type="text" name="email" placeholder="Email" required>
+        <p id="emailMsg" style="display: none;">Email Format: example@example.com</p>
         <label for="comments">Comments: </label>
         <input id="comments" type="text" name="comments" placeholder="Comments" required/>
         <input id="contactSubmit" type="submit" value="Contact" />
@@ -19,4 +21,17 @@
       <p>Thank you for contacting us, we will reach out as soon as possible.</p>
     </div>
   </body>
+  <script>
+    const emailInputMsg = document.getElementById('emailMsg');
+    const submitButton = document.getElementById('contactSubmit');
+    const emailInput = document.getElementById('email');
+
+    submitButton.addEventListener('click', () => {
+      if (emailInput.value.match(emailInput.pattern)) {
+        emailInputMsg.style.display = 'none';
+      } else {
+        emailInputMsg.style.display = 'block';
+      }
+    });
+  </script>
 </html>
