@@ -51,9 +51,12 @@ nav li a {
   padding: 0em 1em 0em 1em;
   width: fit-content;
   display: inline-block;
+  border-radius: 10px;
+  background-color: white;
+  border: 3px outset #4a86e8;
 }
 
-nav li:hover {
+nav li a:hover {
   background-color: #000;
 }
 
