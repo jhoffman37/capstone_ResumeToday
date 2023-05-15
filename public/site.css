@@ -215,14 +215,16 @@ h2 {
 
 p1 {
   border: var(--default-border);
-  border-radius: 50px;
   padding: 30px;
+  background-color: #4a86e8;
+  color: white;
 }
 
 p2 {
   border: var(--default-border);
-  border-radius: 30px;
   padding: 20px;
+  background-color: #4a86e8;
+  color: white;
 }
 
 p3 {
@@ -230,6 +232,11 @@ p3 {
   border-radius: 30px;
   padding: 20px;
   font-weight: bold;
+}
+
+p3:hover {
+  background-color: black;
+  color: #4a86e8;
 }
 
 .error-msg {
