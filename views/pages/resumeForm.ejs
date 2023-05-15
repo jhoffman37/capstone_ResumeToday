@@ -88,7 +88,25 @@
       <button type="submit">Save</button>
     </form>
 
+    <span>Need more options?</span>
+    <button id="direct-edit-btn" onclick="openDirectEditMode()">Edit directly</button>
+
+    <div id="shade">
+      <div id="direct-edit-menu" class="popup">
+        <h2>Edit Resume</h2>
+        <span>
+          This uses Markdown. 
+          <a href="https://www.markdownguide.org/" target="_blank">Click here</a> for reference
+        </span>
+        <textarea id="direct-edit-txt" cols="30" rows="10"><%= resumeMD %></textarea>
+        <button type="submit" id="direct-edit-save-btn">Save</button>
+        <button id="close-btn" onclick="exitDirectEditMode()">Close</button>
+        <span class="error-msg"></span>
+      </div>
+    </div>
+
     <script>
+      const directEditMenu = document.getElementById("direct-edit-menu");
       const form = document.getElementById("resume-form");
 
       // Converts any text such as a label name to an attribute format
@@ -198,6 +216,18 @@
     { category: 'Creative Skills', options: ['Graphic design', 'Content creation', 'Video production', 'Photography', 'Writing and editing'] }
   ];
 
+  const openDirectEditMode = function () {
+    directEditMenu.parentNode.style.display = "flex";
+    window.scrollTo(0, 0);
+
+    //TODO Attempt to update popup with new values
+
+  }
+
+  const exitDirectEditMode = function () {
+    directEditMenu.parentNode.style.display = "none";
+  }
+
   // Define a function to create a new dropdown input with the specified options
   function createSkillDropdown(skillOptions) {
     // Create the elements for the dropdown input
@@ -227,6 +257,16 @@
     return node;
   }
 
+  // Lock scrolling when popup is visible
+  window.addEventListener('scroll', (e) => {
+    // Check if popup visible
+    console.log(directEditMenu.parentNode.style.display)
+    const display = directEditMenu.parentNode.style.display;
+    if (!display || display === "none")
+      return;
+    window.scrollTo(0, 0);
+  });
+
   // Add an event listener to the button to create a new dropdown input when clicked
   addSkillBtn.addEventListener('click', () => {
     const newDropdown = createSkillDropdown(skillOptions);
@@ -253,6 +293,21 @@
         // addEducation();
         // addWorkExperience();
       });
+
+      // If shade is clicked, make hidden again
+      directEditMenu.parentNode.addEventListener('click', (e) => {
+        // Event might trigger if child element is clicked, so check
+        if (e.target !== directEditMenu.parentNode)
+          return;
+        exitDirectEditMode();
+      })
+        
+      // If user presses escape, close menu
+      document.addEventListener('keydown', (e) => {
+          if (e.keyCode !== 27)
+            return;
+          exitDirectEditMode();
+      })
 
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
@@ -323,7 +378,8 @@
           method: "POST",
           body: JSON.stringify({
             url: window.location.pathname,
-            form: formData
+            form: formData,
+            markdown: document.getElementById("direct-edit-txt").value
           }),
           headers: { "Content-Type": "application/json" }
         });
@@ -331,6 +387,25 @@
         const result = await res.json();
         if (!result.success) {
           document.querySelector("span.error-msg").innerHTML = result.msg;
+          return;
+        }
+        window.location.replace(`/resume-view/${result.resumeId}`);
+      })
+
+      document.getElementById("direct-edit-save-btn").addEventListener('click', async (e) => {
+        const res = await fetch("/resume-direct-edit", {
+          method: "POST",
+          body: JSON.stringify({
+            url: window.location.pathname,
+            title: document.getElementById("title").value,
+            markdown: document.getElementById("direct-edit-txt").value
+          }),
+          headers: { "Content-Type": "application/json" }
+        });
+
+        const result = await res.json();
+        if (!result.success) {
+          document.querySelectorAll("span.error-msg")[1].innerHTML = result.msg;
           return;
         }
         window.location.replace(`/resume-view/${result.resumeId}`);

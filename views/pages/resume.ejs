@@ -5,8 +5,7 @@
 <div id="pageContent">
 <div id="fb-root"></div>
 <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v16.0" nonce="5V19FSnB">
-const queryString = window.location.search;
-const viewNumber = str.substring(str.length - 1);</script>
+</script>
 
   <%- include("../shared/signedInHeader.ejs") %>
   <div id="resumeDiv">
@@ -17,7 +16,7 @@ const viewNumber = str.substring(str.length - 1);</script>
 
   <a href="/resume-download/<%= resume.id %>" id="downloadButton" type="button" download>Download PDF</a>
   
-  <div class="fb-like" data-href="https://resume-today.onrender.com/resume-view" data-width="10" data-layout="" data-action="" data-size="" data-share="true"></div>
+  <div class="fb-like" data-href="https://resume-today.onrender.com/resume-view/<%= resume.id %>" data-width="10" data-layout="" data-action="" data-size="" data-share="true"></div>
   </div>
 </div>
 </body>
