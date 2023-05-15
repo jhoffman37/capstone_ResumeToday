@@ -27,6 +27,7 @@
     "express": "^4.18.2",
     "express-jwt": "^8.4.1",
     "html-pdf-node": "^1.0.8",
+    "jasmine": "^5.0.0",
     "jsdom": "^21.1.2",
     "pg": "^8.10.0",
     "showdown": "^2.1.0"
