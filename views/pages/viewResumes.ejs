@@ -3,134 +3,185 @@
   <%- include('../shared/head') %>
   <%- include('../shared/signedInHeader.ejs') %>
   <body>
-    <h2>My Resumes</h2>
-    <div class="resumeList">
-      <% if (resumes.length === 0) {%>
-        <p>You have no resumes.</p>
-      <% } else { %>
-        <% for(let resume of resumes) { %>
+    <div id="pageContent">
+      <h2>My Resumes</h2>
+      <div class="resumeList">
+        <% if (resumes.length === 0) {%>
+          <p>You have no resumes.</p>
+        <% } else { %>
+          <% for(let resume of resumes) { %>
+            <div class="resume">
+              <p><%= resume.title %></p>
+              <a href="/resume-edit/<%= resume.id %>">Edit</a>
+              <a href="/resume-view/<%= resume.id %>">View</a>
+              <br>
+              <button class="share-btn">Share</button>
+            </div>
+          <% } %>
+        <% } %>
+      </div>
+
+      <% if (shared.length !== 0) {%>
+      <h2>Shared With Me</h2>
+      <div class="resumeList">
+        <% for(let sharedRes of shared) { %>
           <div class="resume">
-            <p><%= resume.title %></p>
-            <a href="/resume-edit/<%= resume.id %>">Edit</a>
-            <a href="/resume-view/<%= resume.id %>">View</a>
-            <button class="share-btn">Share</button>
+            <p><%= sharedRes.resume.title %></p>
+    
+            
+            <% if (sharedRes.perms.toLowerCase().includes("edit")) {%>
+              <a href="/resume-edit/<%= sharedRes.resume.id %>">Edit</a>
+            <% } %>
+
+            <a href="/resume-view/<%= sharedRes.resume.id %>">View</a>
+            <br><br><span>Shared by <%= sharedRes.ownerName %></span>
           </div>
         <% } %>
+
       <% } %>
-    </div>
-
-    <% if (shared.length !== 0) {%>
-    <h2>Shared With Me</h2>
-    <div class="resumeList">
-      <% for(let sharedRes of shared) { %>
-        <div class="resume">
-          <p><%= sharedRes.resume.title %></p>
-          <span>Shared by <%= sharedRes.ownerName %></span>
-
-          <% if (sharedRes.perms.toLowerCase().includes("edit")) {%>
-            <a href="/resume-edit/<%= sharedRes.resume.id %>">Edit</a>
-          <% } %>
-
-          <a href="/resume-view/<%= sharedRes.resume.id %>">View</a>
-        </div>
-      <% } %>
-
-    <% } %>
-    </div>
-
-    <div id="shade">
-      <div id="share-menu">
-        <h2>Share</h2>
-        <input type="text" name="share-txt" id="share-txt", placeholder="Add people">
-        <select name="perms" id="perms">
-          <option value="view">View</option>
-          <option value="edit">Edit</option>
-        </select>
-        <span class="error-msg"></span>
       </div>
-    </div>
 
-    <script>
-      const shareMenu = document.getElementById("share-menu");
-      const shareInput = document.getElementById("share-txt");
-      const msg = document.querySelector("span.error-msg");
+      <div id="shade">
+        <div id="share-menu" class="popup">
+          <h2>Share</h2>
+          <input type="text" name="share-txt" id="share-txt" placeholder="Add people">
+          <button type="submit" id="share-perms-btn" title="Update Permissions" onclick="updateUserPerms()">+</button>
+          <span id="input-autocomplete"></span>
+          <select name="perms" id="perms" onchange="clearOutput()">
+            <option value="view">View</option>
+            <option value="edit">Edit</option>
+          </select>
+          <button id="close-btn">Close</button>
+          <span class="error-msg"></span>
+        </div>
+      </div>
 
-      // open the share menu
-      document.querySelectorAll(".share-btn").forEach(element => 
-        element.addEventListener('click', (e) => {
-          const resumeClass = e.target.parentNode;
-          const title = resumeClass.querySelector('p').innerHTML;
-          const h2 = shareMenu.querySelector("h2");
+      <script>
+        const shareMenu = document.getElementById("share-menu");
+        const shareInput = document.getElementById("share-txt");
+        const inputAutocomplete = document.getElementById("input-autocomplete");
+        const msg = document.querySelector("span.error-msg");
 
-          const resId = resumeClass.querySelector("a").href.split('/');
-
-          h2.innerHTML = `Share "${title}"`;
-          h2.id = resId[resId.length - 1];
-          shareMenu.parentNode.style.display = "flex";
-        })
-      );
-
-      // attempt to share with entered users
-      //
-      //TODO: try to autocomplete user and warn if not existent
-      shareInput.addEventListener('input', async (e) => {
-        msg.innerHTML = "";
-        msg.style.color = ""
-      });
-      shareInput.addEventListener('keydown', async (e) => {
-        // user pressed 'enter'
-        if (e.keyCode !== 13)
-          return;
-
-        let usernames = [shareInput.value];
-
-        // check if multiple usernames were entered
-        if (usernames.includes(',')) {
-          usernames = shareInput.value.split(',').forEach(username => username.trimStart);
+        const clearOutput = function () {
+          msg.innerHTML = "";
+          msg.style.color = "";
         }
 
-        const resumeId = shareMenu.querySelector('h2').id;
+        const exitShareMenu = function () {
+          shareMenu.parentNode.style.display = "none";
+        }
 
-        // update permissions for users who exist
-        const res = await fetch("/resume-share", {
-          method: "POST",
-          body: JSON.stringify({
-            resumeId,
-            usernames,
-            perm: document.getElementById("perms").value
-          }),
-          headers: { "Content-Type": "application/json" }
+        const updateUserPerms = async function () {
+          let usernames = [shareInput.value];
+
+          // check if multiple usernames were entered
+          if (usernames.includes(',')) {
+            usernames = shareInput.value.split(',').forEach(username => username.trimStart);
+          }
+
+          const resumeId = shareMenu.querySelector('h2').id;
+
+          // update permissions for users who exist
+          const res = await fetch("/resume-share", {
+            method: "POST",
+            body: JSON.stringify({
+              resumeId,
+              usernames,
+              perm: document.getElementById("perms").value
+            }),
+            headers: { "Content-Type": "application/json" }
+          });
+
+          const result = await res.json();
+          msg.innerHTML = result.msg;
+
+          if (!result.success) {
+            return;
+          }
+          msg.innerHTML = "Permissions updated successfully!"
+          msg.style.color = "rgb(75, 150, 35)"
+        }
+
+        // open the share menu
+        document.querySelectorAll(".share-btn").forEach(element =>
+          element.addEventListener('click', (e) => {
+            const resumeClass = e.target.parentNode;
+            const title = resumeClass.querySelector('p').innerHTML;
+            const h2 = shareMenu.querySelector("h2");
+
+            const resId = resumeClass.querySelector("a").href.split('/');
+
+            h2.innerHTML = `Share "${title}"`;
+            h2.id = resId[resId.length - 1];
+            shareMenu.parentNode.style.display = "flex";
+          })
+        );
+
+        // attempt to share with entered users
+        //
+        // try to autocomplete user and warn if not existent
+        shareInput.addEventListener('input', async (e) => {
+          clearOutput();
+
+          const res = await fetch("/fetch-usernames", {
+            method: "POST",
+            body: JSON.stringify({
+              filter: shareInput.value
+            }),
+            headers: { "Content-Type": "application/json" }
+          });
+
+          const result = await res.json();
+
+          // It is possible this might return empty if there is no result
+          // so just reset the value
+          if (result.usernames.length < 1) {
+            inputAutocomplete.innerHTML = "";
+            return;
+          }
+          inputAutocomplete.innerHTML = result.usernames[0];
         });
+        shareInput.addEventListener('keydown', (e) => {
 
-        const result = await res.json();
-        msg.innerHTML = result.msg;
+          // Check if user hit tab to fill input from autocomplete
+          if (e.keyCode === 9) {
+            if (!inputAutocomplete.innerHTML)
+              return;
 
-        if (!result.success) {
-          return;
-        }
-        msg.innerHTML = "Permissions updated successfully!"
-        msg.style.color = "rgb(75, 150, 35)"
-      })
+            // Prevent default behavior of the tab key indexing to the next element
+            e.preventDefault();
+            shareInput.value = inputAutocomplete.innerHTML;
+            return;
+          }
 
-      const exitShareMenu = function () {
-        shareMenu.parentNode.style.display = "none";
-      }
+          inputAutocomplete.innerHTML = "";
 
-      // If shade is clicked, make hidden again
-      shareMenu.parentNode.addEventListener('click', (e) => {
-        if (e.target !== shareMenu.parentNode)
-          return;
-        exitShareMenu();
-      })
+          // user pressed 'enter'
+          if (e.keyCode !== 13)
+            return;
 
-      // If user presses escape, close menu
-      document.addEventListener('keydown', (e) => {
-        if (e.keyCode !== 27)
-          return;
-        exitShareMenu();
-      })
-    </script>
+          updateUserPerms();
+        })
 
+        // If shade is clicked, make hidden again
+        shareMenu.parentNode.addEventListener('click', (e) => {
+          if (e.target !== shareMenu.parentNode)
+            return;
+          exitShareMenu();
+        })
+
+        document.getElementById("close-btn").addEventListener('click', (e) => {
+          exitShareMenu();
+        })
+
+        // If user presses escape, close menu
+        document.addEventListener('keydown', (e) => {
+          if (e.keyCode !== 27)
+            return;
+          exitShareMenu();
+        })
+      </script>
+    </div>
   </body>
 
 </html>

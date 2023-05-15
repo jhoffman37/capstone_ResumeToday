@@ -3,7 +3,8 @@
   <%- include('../shared/head') %>
 <body>
   <%- include('../shared/header', {user}) %>
-  <h1>Register</h1>
+  <div id="pageContent">
+    <h1>Register</h1>
     <form>
         <label for="firstName">First Name: </label>
         <input id="firstName" type="text" name="firstName" placeholder="First Name" required>
@@ -17,6 +18,7 @@
     </form>
     <p>Already have an account? <a href="/login">Login</a></p>
     <p id="error" class="error-msg"></p>
+  </div>
   <script type="text/javascript" src="scripts/register.js"></script>
 </body>
 </html>

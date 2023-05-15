@@ -86,9 +86,39 @@ a li:hover {
   margin: 10px;
 }
 
-#toggle-btn {
-  position: relative;
-  top: 25px;
+#pageContent {
+  width: 80%;
+  margin: 0 auto;
+}
+
+#toggle-btn{
+  border: var(--default-border);
+  border-radius: 10px;
+  width: fit-content;
+  margin: auto;
+  color: black;
+  background-color: white;
+  padding: 5px;
+}
+
+#toggle-btn:hover {
+  background-color: #fff;
+  color: #4a86e8;
+}
+
+#downloadButton {
+  border: 1px solid black;
+  border-radius: 10px;
+  width: fit-content;
+  margin: auto;
+  color: white;
+  background-color: black;
+  padding: 5px;
+}
+
+#downloadButton:hover {
+  background-color: #fff;
+  color: #4a86e8;
 }
 
 #index {
@@ -140,8 +170,8 @@ h2 {
 .resume {
   text-align: center;
   border: var(--default-border);
-  width: 8em;
-  height: 5em;
+  width: 9em;
+  height: 8em;
   margin: 1em;
 }
 
@@ -150,6 +180,9 @@ h2 {
   border: var(--default-border);
   border-radius: 10px;
   padding: 0.5em;
+  margin-top: 1em;
+  color: white;
+  background-color: black;
 }
 
 .resume a:hover, .resume .share-btn:hover {
@@ -211,6 +244,7 @@ form, fieldset div {
   display: flex;
   flex-direction: column;
   gap: 1em;
+  margin-bottom: 1em;
   text-align: left;
 }
 
@@ -226,14 +260,36 @@ form, fieldset div {
   width: 100%;
 }
 
-#share-menu {
+.popup {
   background-color: var(--bg-color);
   padding: 1.5em;
   position: relative;
 }
 
-#share-menu input {
+#share-txt {
   height: 1.5em;
   padding: 0.5em;
   width: 85%;
+}
+
+input, #input-autocomplete {
+  font-family: Arial;
+  font-size: medium;
+}
+
+#share-perms-btn {
+  font-size: large;
+}
+
+/* This is really silly */
+#input-autocomplete {
+  position: absolute;
+  top: 7.45em;
+  left: 2.1em;
+  opacity: 50%;
+}
+
+#direct-edit-menu {
+  display: flex;
+  flex-direction: column;
 }

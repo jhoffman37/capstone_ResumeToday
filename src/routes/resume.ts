@@ -2,6 +2,11 @@ import express, {Request, Response} from "express";
 import { Resume, ResumeDB, SharedUser } from "../data/resumeDB";
 import {AuthUser, authenticateTokenStrict} from "../auth/auth";
 import { UserDB } from "../data/userDB";
+import { JSDOM } from "jsdom";
+
+import showdown from 'showdown';
+
+const html_to_pdf = require('html-pdf-node');
 const router = express.Router();
 
 type FormData = {
@@ -11,7 +16,8 @@ type FormData = {
   workExperience: any[],
   skills: string | undefined,
   awards: string | undefined | null,
-  user: AuthUser | null
+  user: AuthUser | null,
+  resumeMD: string
 }
 
 router.get("/resume-view", authenticateTokenStrict, async (req: Request, res: Response) => {
@@ -108,6 +114,9 @@ router.get("/resume-edit/:id", authenticateTokenStrict, async (req: Request, res
     workExperience.push(data);
   }
 
+  const converter = new showdown.Converter();
+  const resumeMD = converter.makeMarkdown(resume.html, new JSDOM().window.document);
+
   const skills = html.getElementById("skills")?.innerHTML;
   const data: FormData = {
     projectTitle: resume.title,
@@ -116,12 +125,13 @@ router.get("/resume-edit/:id", authenticateTokenStrict, async (req: Request, res
     workExperience,
     skills: skills,
     awards: html.getElementById("awards")?.innerHTML,
-    user: req.user || null
+    user: req.user || null,
+    resumeMD
   };
   res.render("pages/resumeForm.ejs", data);
 });
 router.get("/resume-new", authenticateTokenStrict, (req: Request, res: Response) => {
-  res.render("pages/resumeForm.ejs", {user: req.user ? req.user : null});
+  res.render("pages/resumeForm.ejs", {user: req.user ? req.user : null, resumeMD: "" });
 });
 router.get("/resume-view/:id", authenticateTokenStrict, async (req: Request, res: Response) => {
   try {
@@ -366,6 +376,75 @@ router.post("/resume-validate", authenticateTokenStrict, async function (req: Re
 
   }
   res.send(result);
+});
+
+router.post('/resume-direct-edit',  authenticateTokenStrict, async function (req: Request, res: Response) {
+  const result = {
+    success: false,
+    msg: '',
+    resumeId: -1
+  };
+
+  const converter = new showdown.Converter();
+  const html: string = converter.makeHtml(req.body.markdown);
+
+  if (!req.body.title)
+    result.msg += "Must include a title for this resume<br>";
+  else {
+    try {
+
+      // Check if editing existing resume
+      if (req.body.url.search("resume-edit") != -1) {
+        const id = Number.parseInt(req.body.url.split('/')[2]);
+        const resume = await ResumeDB.get(id);
+  
+        resume.title = req.body.title;
+        resume.html = html;
+  
+        result.resumeId = id;
+        await ResumeDB.update(resume);
+  
+      } else {
+        // Insert resume into database
+        const resume = new Resume();
+        
+        resume.user_id = req.user.id;
+        resume.title = req.body.title;
+        resume.html = html;
+  
+        await ResumeDB.insert(resume);
+        result.resumeId = (await ResumeDB.getAll()).length;
+      }
+  
+    } catch (e) {
+      console.error(e);
+  
+      result.success = false;
+      result.msg += "Uh oh! A problem with saving this resume has occured. Please try again later";
+    }
+  }
+
+  result.success = result.msg === "";
+  res.send(result);
+});
+
+router.get('/resume-download/:id', authenticateTokenStrict, async function (req: Request, res: Response) {
+  const resume = await ResumeDB.get(parseInt(req.params.id));
+
+  if (!resume || resume.user_id !== req.user.id) {
+    res.status(404).send("Not found");
+    return;
+  }
+
+  const resumeHTML = resume.html;
+  const resumeTitle = '<h1>' + resume.title + "</h1>";
+  const file = {content: resumeTitle + resumeHTML};
+  const options = {format: 'A4'};
+
+  const pdf = await html_to_pdf.generatePdf(file, options);
+  res.setHeader('Content-Type', 'application/pdf');
+  res.setHeader('Content-Disposition', `attachment; filename=${resume.title}.pdf`);
+  res.send(pdf).status(200);
 });
 
 export default router;

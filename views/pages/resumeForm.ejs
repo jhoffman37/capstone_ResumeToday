@@ -3,340 +3,415 @@
 <%- include('../shared/head') %>
 <body>
   <%- include("../shared/signedInHeader.ejs") %>
+  <div id="pageContent">
+    <h1>
+      <!-- If this field exists, user is most likely in edit mode -->
+      <%_ if (locals.projectTitle) { _%>
+        Edit
+      <%_ } else { _%>
+        New
+      <%_ } _%>
+      Resume
+    </h1>
 
-  <h1>
-    <!-- If this field exists, user is most likely in edit mode -->
-    <%_ if (locals.projectTitle) { _%>
-      Edit
-    <%_ } else { _%>
-      New
-    <%_ } _%>
-    Resume
-  </h1>
+    <form id="resume-form" class="form">
+      <span>* is a required field</span>
 
-  <form id="resume-form" class="form">
-    <span>* is a required field</span>
+      <label for="title">Title *</label>
+      <input type="text" id="title" name="title" value="<%= locals.projectTitle %>">
 
-    <label for="title">Title *</label>
-    <input type="text" id="title" name="title" value="<%= locals.projectTitle %>">
+      <label for="obj">Objective</label>
+      <textarea type="text" id="obj" name="obj"><%= locals.obj %></textarea>
 
-    <label for="obj">Objective</label>
-    <textarea type="text" id="obj" name="obj"><%= locals.obj %></textarea>
+      <fieldset id="education">
+        <legend>Education</legend>
+        <button type="button" onclick="addEducation()">Add an education</button>
+        <button type="button" onclick="remove('education')">Remove an education</button>
 
-    <fieldset id="education">
-      <legend>Education</legend>
-      <button type="button" onclick="addEducation()">Add an education</button>
-      <button type="button" onclick="remove('education')">Remove an education</button>
+        <%_ if (locals.education) { _%>
+          <%_ for (const edu of locals.education) { _%>
 
-      <%_ if (locals.education) { _%>
-        <%_ for (const edu of locals.education) { _%>
-          
-      <div class="section-edu">
-        <label for="school-name">School Name *</label>
-        <input id="school-name" type="text" name="school-name" value="<%= edu.schoolName %>">
-        <label for="where">Where *</label>
-        <input id="where" type="text" name="where" value="<%= edu.where %>">
-        <label for="date-of-graduation">Date of graduation *</label>
-        <input id="date-of-graduation" type="date" name="date-of-graduation" value="<%= edu.dateOfGraduation %>">
-        <label for="certificates">Certificates</label>
-        <textarea id="certificates" name="certificates"><%= edu.certificates %></textarea>
-      </div>
-
-        <%_ } -%> 
-      <%_ } -%>
-
-    </fieldset>
-
-    <fieldset id="experience">
-      <legend>Work Experience</legend>
-      <button type="button" onclick="addWorkExperience()">Add experience</button>
-      <button type="button" onclick="remove('experience')">Remove experience</button>
-
-      <%_ if (locals.education) { _%>
-        <%_ for (const work of locals.workExperience) { _%>
-        
-        <div class="section-work">
-          <label for="company">Company *</label>
-          <input id="company" type="text" name="company" value="<%= work.company %>">
-          <label for="position">Position title *</label>
-          <input id="position" type="text" name="position" value="<%= work.position%>">
+        <div class="section-edu">
+          <label for="school-name">School Name *</label>
+          <input id="school-name" type="text" name="school-name" value="<%= edu.schoolName %>">
           <label for="where">Where *</label>
-          <input id="where" type="text" name="where" value="<%= work.where %>">
-          <label for="start-date">Start date *</label>
-          <input id="start-date" type="date" name="start-date" value="<%= work.startDate %>">
-          <label for="end-date">End date *</label>
-          <input id="end-date" type="date" name="end-date" value="<%= work.endDate %>">
-          <label for="job-duties">Job duties</label>
-          <textarea id="job-duties" name="job-duties"><%= work.jobDuties %></textarea>
+          <input id="where" type="text" name="where" value="<%= edu.where %>">
+          <label for="date-of-graduation">Date of graduation *</label>
+          <input id="date-of-graduation" type="date" name="date-of-graduation" value="<%= edu.dateOfGraduation %>">
+          <label for="certificates">Certificates</label>
+          <textarea id="certificates" name="certificates"><%= edu.certificates %></textarea>
         </div>
-    
+
           <%_ } -%>
-        <%_ } -%> 
+        <%_ } -%>
 
+      </fieldset>
+
+      <fieldset id="experience">
+        <legend>Work Experience</legend>
+        <button type="button" onclick="addWorkExperience()">Add experience</button>
+        <button type="button" onclick="remove('experience')">Remove experience</button>
+
+        <%_ if (locals.education) { _%>
+          <%_ for (const work of locals.workExperience) { _%>
+
+          <div class="section-work">
+            <label for="company">Company *</label>
+            <input id="company" type="text" name="company" value="<%= work.company %>">
+            <label for="position">Position title *</label>
+            <input id="position" type="text" name="position" value="<%= work.position%>">
+            <label for="where">Where *</label>
+            <input id="where" type="text" name="where" value="<%= work.where %>">
+            <label for="start-date">Start date *</label>
+            <input id="start-date" type="date" name="start-date" value="<%= work.startDate %>">
+            <label for="end-date">End date *</label>
+            <input id="end-date" type="date" name="end-date" value="<%= work.endDate %>">
+            <label for="job-duties">Job duties</label>
+            <textarea id="job-duties" name="job-duties"><%= work.jobDuties %></textarea>
+          </div>
+
+            <%_ } -%>
+          <%_ } -%>
+
+      </fieldset>
+      <fieldset id="skills">
+        <legend>Skills</legend>
+        <button type="button" id="add-skill-btn">Add Skill</button>
+        <button type="button" onclick="remove('skills')">Remove Skill</button>
+        <div id="skills-container"></div>
     </fieldset>
-    <fieldset id="skills">
-      <legend>Skills</legend>
-      <button type="button" id="add-skill-btn">Add Skill</button>
-      <button type="button" onclick="remove('skills')">Remove Skill</button>
-      <div id="skills-container"></div>
-  </fieldset>
 
-    <label for="awards">Awards and Honors</label>
-    <textarea type="text" id="awards" name="awards"><%= locals.awards %></textarea>
+      <label for="awards">Awards and Honors</label>
+      <textarea type="text" id="awards" name="awards"><%= locals.awards %></textarea>
 
-    <span class="error-msg"></span>
-    <button type="submit">Save</button>
-  </form>
+      <span class="error-msg"></span>
+      <button type="submit">Save</button>
+    </form>
 
-  <script>
-    const form = document.getElementById("resume-form");
+    <span>Need more options?</span>
+    <button id="direct-edit-btn" onclick="openDirectEditMode()">Edit directly</button>
 
-    // Converts any text such as a label name to an attribute format
-    // e.g. "Work Experience *" -> "work-experience"
-    const toAttributeStr = function (str) {
-      return str.toLowerCase().replace(/[^a-zA-Z0-9 -]/g, '').trimEnd().replace(' ', '-');
-    }
-    const template = {
-      label: function (name) {
-        const label = document.createElement("label");
-        label.innerHTML = name;
-        label.htmlFor = toAttributeStr(name);
+    <div id="shade">
+      <div id="direct-edit-menu" class="popup">
+        <h2>Edit Resume</h2>
+        <span>
+          This uses Markdown. 
+          <a href="https://www.markdownguide.org/" target="_blank">Click here</a> for reference
+        </span>
+        <textarea id="direct-edit-txt" cols="30" rows="10"><%= resumeMD %></textarea>
+        <button type="submit" id="direct-edit-save-btn">Save</button>
+        <button id="close-btn" onclick="exitDirectEditMode()">Close</button>
+        <span class="error-msg"></span>
+      </div>
+    </div>
 
-        return label;
-      },
-      input: function (name, type) {
-        const input = document.createElement(type !== "textarea" ? "input" : type);
-        const attr = toAttributeStr(name);
+    <script>
+      const directEditMenu = document.getElementById("direct-edit-menu");
+      const form = document.getElementById("resume-form");
 
-        if (type === "textarea")
-          type = "text";
-
-        input.type = type;
-        input.id = attr;
-        input.name = attr;
-
-        return input;
+      // Converts any text such as a label name to an attribute format
+      // e.g. "Work Experience *" -> "work-experience"
+      const toAttributeStr = function (str) {
+        return str.toLowerCase().replace(/[^a-zA-Z0-9 -]/g, '').trimEnd().replace(' ', '-');
       }
-    }
+      const template = {
+        label: function (name) {
+          const label = document.createElement("label");
+          label.innerHTML = name;
+          label.htmlFor = toAttributeStr(name);
 
-    const remove = function (from) {
-      const element = document.getElementById(from);
+          return label;
+        },
+        input: function (name, type) {
+          const input = document.createElement(type !== "textarea" ? "input" : type);
+          const attr = toAttributeStr(name);
 
-      // Ignore the first 3 elements (buttons and legend)
-      if (element.children.length > 3)
-        element.lastElementChild.remove();
-    }
+          if (type === "textarea")
+            type = "text";
 
-    const addEducation = function () {
-      const node = document.createElement("div");
-      node.className = "section-edu";
+          input.type = type;
+          input.id = attr;
+          input.name = attr;
 
-      const elements = [
-        template.label("School Name *"),
-        template.input("school-name", "text"),
-
-        template.label("Where *"),
-        template.input("where", "text"),
-
-        template.label("Date of graduation *"),
-        template.input("date-of-graduation", "date"),
-
-        template.label("Certificates"),
-        template.input("certificates", "textarea"),
-      ];
-
-      for (const element of elements) {
-        node.appendChild(element);
+          return input;
+        }
       }
-      document.getElementById("education").appendChild(node);
-      return node;
-    }
 
-    const addWorkExperience = function () {
-      const node = document.createElement("div");
-      node.className = "section-work";
+      const remove = function (from) {
+        const element = document.getElementById(from);
 
-      const elements = [
-        template.label("Company *"),
-        template.input("company", "text"),
-
-        template.label("Position title *"),
-        template.input("position", "text"),
-
-        template.label("Where *"),
-        template.input("where", "text"),
-
-        template.label("Start date *"),
-        template.input("start-date", "date"),
-
-        template.label("End date"),
-        template.input("end-date", "date"),
-
-        template.label("Job duties"),
-        template.input("job-duties", "textarea"),
-      ];
-
-      for (const element of elements) {
-        node.appendChild(element);
+        // Ignore the first 3 elements (buttons and legend)
+        if (element.children.length > 3)
+          element.lastElementChild.remove();
       }
-      document.getElementById("experience").appendChild(node);
-      return node;
-    }
 
-// Get the button and container elements
-const addSkillBtn = document.getElementById('add-skill-btn');
-const skills = document.getElementById('skills');
+      const addEducation = function () {
+        const node = document.createElement("div");
+        node.className = "section-edu";
 
-// Define the skill options as an array of objects
-const skillOptions = [
-  { category: 'Technical Skills', options: ['Software proficiency', 'Data analysis and manipulation', 'Web design and development', 'Network administration and security', 'Database management'] },
-  { category: 'Programming Skills', options: ['HTML', 'CSS', 'JavaScript', 'PHP', 'SQL', 'PostgresSQL', 'Node', 'TypeScript', 'Rust']},
-  { category: 'Communication Skills', options: ['Written and verbal communication', 'Public speaking', 'Interpersonal skills', 'Active listening', 'Conflict resolution'] },
-  { category: 'Analytical Skills', options: ['Critical thinking', 'Problem-solving', 'Decision-making', 'Research and analysis', 'Quantitative reasoning'] },
-  { category: 'Leadership Skills', options: ['Team management', 'Project management', 'Strategic planning', 'Delegation', 'Mentoring and coaching'] },
-  { category: 'Organizational Skills', options: ['Time management', 'Prioritization', 'Scheduling', 'Budgeting', 'Resource allocation'] },
-  { category: 'Creative Skills', options: ['Graphic design', 'Content creation', 'Video production', 'Photography', 'Writing and editing'] }
-];
+        const elements = [
+          template.label("School Name *"),
+          template.input("school-name", "text"),
 
-// Define a function to create a new dropdown input with the specified options
-function createSkillDropdown(skillOptions) {
-  // Create the elements for the dropdown input
-  const select = document.createElement('select');
-  select.name = 'skill';
-  const defaultOption = document.createElement('option');
-  defaultOption.value = '';
-  defaultOption.textContent = 'Select a skill';
-  select.appendChild(defaultOption);
+          template.label("Where *"),
+          template.input("where", "text"),
 
-  // Add the options to the dropdown input
-  skillOptions.forEach(option => {
-    const optgroup = document.createElement('optgroup');
-    optgroup.label = option.category;
-    option.options.forEach(skill => {
-      const option = document.createElement('option');
-      option.value = skill;
-      option.textContent = skill;
-      optgroup.appendChild(option);
+          template.label("Date of graduation *"),
+          template.input("date-of-graduation", "date"),
+
+          template.label("Certificates"),
+          template.input("certificates", "textarea"),
+        ];
+
+        for (const element of elements) {
+          node.appendChild(element);
+        }
+        document.getElementById("education").appendChild(node);
+        return node;
+      }
+
+      const addWorkExperience = function () {
+        const node = document.createElement("div");
+        node.className = "section-work";
+
+        const elements = [
+          template.label("Company *"),
+          template.input("company", "text"),
+
+          template.label("Position title *"),
+          template.input("position", "text"),
+
+          template.label("Where *"),
+          template.input("where", "text"),
+
+          template.label("Start date *"),
+          template.input("start-date", "date"),
+
+          template.label("End date"),
+          template.input("end-date", "date"),
+
+          template.label("Job duties"),
+          template.input("job-duties", "textarea"),
+        ];
+
+        for (const element of elements) {
+          node.appendChild(element);
+        }
+        document.getElementById("experience").appendChild(node);
+        return node;
+      }
+
+  // Get the button and container elements
+  const addSkillBtn = document.getElementById('add-skill-btn');
+  const skills = document.getElementById('skills');
+
+  // Define the skill options as an array of objects
+  const skillOptions = [
+    { category: 'Technical Skills', options: ['Software proficiency', 'Data analysis and manipulation', 'Web design and development', 'Network administration and security', 'Database management'] },
+    { category: 'Programming Skills', options: ['HTML', 'CSS', 'JavaScript', 'PHP', 'SQL', 'PostgresSQL', 'Node', 'TypeScript', 'Rust']},
+    { category: 'Communication Skills', options: ['Written and verbal communication', 'Public speaking', 'Interpersonal skills', 'Active listening', 'Conflict resolution'] },
+    { category: 'Analytical Skills', options: ['Critical thinking', 'Problem-solving', 'Decision-making', 'Research and analysis', 'Quantitative reasoning'] },
+    { category: 'Leadership Skills', options: ['Team management', 'Project management', 'Strategic planning', 'Delegation', 'Mentoring and coaching'] },
+    { category: 'Organizational Skills', options: ['Time management', 'Prioritization', 'Scheduling', 'Budgeting', 'Resource allocation'] },
+    { category: 'Creative Skills', options: ['Graphic design', 'Content creation', 'Video production', 'Photography', 'Writing and editing'] }
+  ];
+
+  const openDirectEditMode = function () {
+    directEditMenu.parentNode.style.display = "flex";
+    window.scrollTo(0, 0);
+
+    //TODO Attempt to update popup with new values
+
+  }
+
+  const exitDirectEditMode = function () {
+    directEditMenu.parentNode.style.display = "none";
+  }
+
+  // Define a function to create a new dropdown input with the specified options
+  function createSkillDropdown(skillOptions) {
+    // Create the elements for the dropdown input
+    const select = document.createElement('select');
+    select.name = 'skill';
+    const defaultOption = document.createElement('option');
+    defaultOption.value = '';
+    defaultOption.textContent = 'Select a skill';
+    select.appendChild(defaultOption);
+
+    // Add the options to the dropdown input
+    skillOptions.forEach(option => {
+      const optgroup = document.createElement('optgroup');
+      optgroup.label = option.category;
+      option.options.forEach(skill => {
+        const option = document.createElement('option');
+        option.value = skill;
+        option.textContent = skill;
+        optgroup.appendChild(option);
+      });
+      select.appendChild(optgroup);
     });
-    select.appendChild(optgroup);
+
+    // Create a container for the dropdown input
+    const node = document.createElement('div');
+    node.appendChild(select);
+    return node;
+  }
+
+  // Lock scrolling when popup is visible
+  window.addEventListener('scroll', (e) => {
+    // Check if popup visible
+    console.log(directEditMenu.parentNode.style.display)
+    const display = directEditMenu.parentNode.style.display;
+    if (!display || display === "none")
+      return;
+    window.scrollTo(0, 0);
   });
 
-  // Create a container for the dropdown input
-  const node = document.createElement('div');
-  node.appendChild(select);
-  return node;
-}
-
-// Add an event listener to the button to create a new dropdown input when clicked
-addSkillBtn.addEventListener('click', () => {
-  const newDropdown = createSkillDropdown(skillOptions);
-  skills.appendChild(newDropdown);
-});
+  // Add an event listener to the button to create a new dropdown input when clicked
+  addSkillBtn.addEventListener('click', () => {
+    const newDropdown = createSkillDropdown(skillOptions);
+    skills.appendChild(newDropdown);
+  });
 
 
-    // Init form
-    window.addEventListener("load", (e) => {
-      const skillList = "<%= locals.skills %>".split(',');
+      // Init form
+      window.addEventListener("load", (e) => {
+        const skillList = "<%= locals.skills %>".split(',');
 
-      // Return if string is empty
-      if (!skillList[0]) {
-        return;
-      }
-      for (const skill of skillList) {
-        const dropdown = createSkillDropdown(skillOptions);
-        const option = dropdown.querySelector("select > option");
-
-        option.innerHTML = skill;
-        option.value = skill;
-        skills.appendChild(dropdown);
-      }
-      // addEducation();
-      // addWorkExperience();
-    });
-
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      const toCamalCase = function (str) {
-        const lower = str.toLowerCase();
-        const words = lower.split('-');
-        if (words.length <= 1)
-          return lower;
-
-        let newStr = words[0];
-        for (let i = 1; i < words.length; i++) {
-          const word = words[i];
-          const firstLetter = word.charAt(0).toUpperCase();
-
-          newStr += firstLetter + word.slice(1);
-        }
-        return newStr;
-      }
-
-      const formData = {
-        title: document.getElementById("title").innerHTML,
-        obj: document.getElementById("obj").innerHTML,
-        education: [],
-        workExperience: [],
-        skills: Array.from(document.querySelectorAll("#skills option:checked")).map(option => option.value).filter(val => val != ""),
-        awards: document.getElementById("awards").innerHTML,
-      };
-
-      // Add all values except education and work data
-      {
-        const query = form.querySelectorAll("form > input, form > textarea");
-        for (const input of query) {
-          formData[toCamalCase(input.id)] = input.value;
-        }
-      }
-
-      // Grab each education section, add all input values and push to list
-      const eduQuery = document.querySelectorAll(".section-edu");
-      for (const section of eduQuery) {
-        const data = {};
-        for (const input of section.querySelectorAll("input, textarea")) {
-          data[toCamalCase(input.id)] = input.value;
-        }
-        formData.education.push(data);
-      }
-
-      // Same as above but for work data
-      const workQuery = document.querySelectorAll(".section-work");
-      for (const section of workQuery) {
-        const data = {};
-        for (const input of section.querySelectorAll("input, textarea")) {
-          data[toCamalCase(input.id)] = input.value;
-        }
-        // Validate that the start date is before the end date
-        const startDate = new Date(data.startDate);
-        const endDate = new Date(data.endDate);
-        if (startDate >= endDate) {
-          document.querySelector("span.error-msg").innerHTML = "End date must be after start date for work experience.";
+        // Return if string is empty
+        if (!skillList[0]) {
           return;
         }
+        for (const skill of skillList) {
+          const dropdown = createSkillDropdown(skillOptions);
+          const option = dropdown.querySelector("select > option");
 
-        formData.workExperience.push(data);
-      }
-
-      // Validate form because you can never trust the client
-      const res = await fetch("/resume-validate", {
-        method: "POST",
-        body: JSON.stringify({
-          url: window.location.pathname,
-          form: formData
-        }),
-        headers: { "Content-Type": "application/json" }
+          option.innerHTML = skill;
+          option.value = skill;
+          skills.appendChild(dropdown);
+        }
+        // addEducation();
+        // addWorkExperience();
       });
 
-      const result = await res.json();
-      if (!result.success) {
-        document.querySelector("span.error-msg").innerHTML = result.msg;
-        return;
-      }
-      window.location.replace(`/resume-view/${result.resumeId}`);
-    })
+      // If shade is clicked, make hidden again
+      directEditMenu.parentNode.addEventListener('click', (e) => {
+        // Event might trigger if child element is clicked, so check
+        if (e.target !== directEditMenu.parentNode)
+          return;
+        exitDirectEditMode();
+      })
+        
+      // If user presses escape, close menu
+      document.addEventListener('keydown', (e) => {
+          if (e.keyCode !== 27)
+            return;
+          exitDirectEditMode();
+      })
 
-  </script>
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
 
+        const toCamalCase = function (str) {
+          const lower = str.toLowerCase();
+          const words = lower.split('-');
+          if (words.length <= 1)
+            return lower;
+
+          let newStr = words[0];
+          for (let i = 1; i < words.length; i++) {
+            const word = words[i];
+            const firstLetter = word.charAt(0).toUpperCase();
+
+            newStr += firstLetter + word.slice(1);
+          }
+          return newStr;
+        }
+
+        const formData = {
+          title: document.getElementById("title").innerHTML,
+          obj: document.getElementById("obj").innerHTML,
+          education: [],
+          workExperience: [],
+          skills: Array.from(document.querySelectorAll("#skills option:checked")).map(option => option.value).filter(val => val != ""),
+          awards: document.getElementById("awards").innerHTML,
+        };
+
+        // Add all values except education and work data
+        {
+          const query = form.querySelectorAll("form > input, form > textarea");
+          for (const input of query) {
+            formData[toCamalCase(input.id)] = input.value;
+          }
+        }
+
+        // Grab each education section, add all input values and push to list
+        const eduQuery = document.querySelectorAll(".section-edu");
+        for (const section of eduQuery) {
+          const data = {};
+          for (const input of section.querySelectorAll("input, textarea")) {
+            data[toCamalCase(input.id)] = input.value;
+          }
+          formData.education.push(data);
+        }
+
+        // Same as above but for work data
+        const workQuery = document.querySelectorAll(".section-work");
+        for (const section of workQuery) {
+          const data = {};
+          for (const input of section.querySelectorAll("input, textarea")) {
+            data[toCamalCase(input.id)] = input.value;
+          }
+          // Validate that the start date is before the end date
+          const startDate = new Date(data.startDate);
+          const endDate = new Date(data.endDate);
+          if (startDate >= endDate) {
+            document.querySelector("span.error-msg").innerHTML = "End date must be after start date for work experience.";
+            return;
+          }
+
+          formData.workExperience.push(data);
+        }
+
+        // Validate form because you can never trust the client
+        const res = await fetch("/resume-validate", {
+          method: "POST",
+          body: JSON.stringify({
+            url: window.location.pathname,
+            form: formData,
+            markdown: document.getElementById("direct-edit-txt").value
+          }),
+          headers: { "Content-Type": "application/json" }
+        });
+
+        const result = await res.json();
+        if (!result.success) {
+          document.querySelector("span.error-msg").innerHTML = result.msg;
+          return;
+        }
+        window.location.replace(`/resume-view/${result.resumeId}`);
+      })
+
+      document.getElementById("direct-edit-save-btn").addEventListener('click', async (e) => {
+        const res = await fetch("/resume-direct-edit", {
+          method: "POST",
+          body: JSON.stringify({
+            url: window.location.pathname,
+            title: document.getElementById("title").value,
+            markdown: document.getElementById("direct-edit-txt").value
+          }),
+          headers: { "Content-Type": "application/json" }
+        });
+
+        const result = await res.json();
+        if (!result.success) {
+          document.querySelectorAll("span.error-msg")[1].innerHTML = result.msg;
+          return;
+        }
+        window.location.replace(`/resume-view/${result.resumeId}`);
+      })
+
+    </script>
+  </div>
 </body>
 </html>
