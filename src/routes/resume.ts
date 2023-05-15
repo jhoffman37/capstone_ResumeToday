@@ -371,6 +371,12 @@ router.post("/resume-validate", authenticateTokenStrict, async function (req: Re
 
 router.get('/resume-download/:id', authenticateTokenStrict, async function (req: Request, res: Response) {
   const resume = await ResumeDB.get(parseInt(req.params.id));
+
+  if (!resume || resume.user_id !== req.user.id) {
+    res.status(404).send("Not found");
+    return;
+  }
+
   const resumeHTML = resume.html;
   const resumeTitle = '<h1>' + resume.title + "</h1>";
   const file = {content: resumeTitle + resumeHTML};
