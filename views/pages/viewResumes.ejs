@@ -45,6 +45,7 @@
           <h2>Share</h2>
           <input type="text" name="share-txt" id="share-txt" placeholder="Add people">
           <input type="submit" value="+" id="share-perms-btn" title="Update Permissions" onclick="updateUserPerms()">
+          <span id="input-autocomplete"></span>
           <select name="perms" id="perms" onchange="clearOutput()">
             <option value="view">View</option>
             <option value="edit">Edit</option>
@@ -57,6 +58,7 @@
       <script>
         const shareMenu = document.getElementById("share-menu");
         const shareInput = document.getElementById("share-txt");
+        const inputAutocomplete = document.getElementById("input-autocomplete");
         const msg = document.querySelector("span.error-msg");
 
         const clearOutput = function () {
@@ -116,11 +118,43 @@
 
         // attempt to share with entered users
         //
-        //TODO: try to autocomplete user and warn if not existent
+        // try to autocomplete user and warn if not existent
         shareInput.addEventListener('input', async (e) => {
           clearOutput();
+
+          const res = await fetch("/fetch-usernames", {
+            method: "POST",
+            body: JSON.stringify({
+              filter: shareInput.value
+            }),
+            headers: { "Content-Type": "application/json" }
+          });
+
+          const result = await res.json();
+
+          // It is possible this might return empty if there is no result
+          // so just reset the value
+          if (result.usernames.length < 1) {
+            inputAutocomplete.innerHTML = "";
+            return;
+          }
+          inputAutocomplete.innerHTML = result.usernames[0];
         });
         shareInput.addEventListener('keydown', (e) => {
+
+          // Check if user hit tab to fill input from autocomplete
+          if (e.keyCode === 9) {
+            if (!inputAutocomplete.innerHTML)
+              return;
+
+            // Prevent default behavior of the tab key indexing to the next element
+            e.preventDefault();
+            shareInput.value = inputAutocomplete.innerHTML;
+            return;
+          }
+
+          inputAutocomplete.innerHTML = "";
+
           // user pressed 'enter'
           if (e.keyCode !== 13)
             return;
