@@ -93,9 +93,13 @@
 
     <div id="shade">
       <div id="direct-edit-menu" class="popup">
-        <h2>Share</h2>
-        <textarea name="name here" id="" cols="30" rows="10"></textarea>
-        <button type="submit" id="share-perms-btn">Submit</button>
+        <h2>Edit Resume</h2>
+        <span>
+          This uses Markdown. 
+          <a href="https://www.markdownguide.org/" target="_blank">Click here</a> for reference
+        </span>
+        <textarea id="direct-edit-txt" cols="30" rows="10"><%= resumeMD %></textarea>
+        <button type="submit" id="direct-edit-save-btn">Save</button>
         <button id="close-btn" onclick="exitDirectEditMode()">Close</button>
         <span class="error-msg"></span>
       </div>
@@ -215,6 +219,9 @@
   const openDirectEditMode = function () {
     directEditMenu.parentNode.style.display = "flex";
     window.scrollTo(0, 0);
+
+    //TODO Attempt to update popup with new values
+
   }
 
   const exitDirectEditMode = function () {
@@ -371,7 +378,8 @@
           method: "POST",
           body: JSON.stringify({
             url: window.location.pathname,
-            form: formData
+            form: formData,
+            markdown: document.getElementById("direct-edit-txt").value
           }),
           headers: { "Content-Type": "application/json" }
         });
@@ -379,6 +387,25 @@
         const result = await res.json();
         if (!result.success) {
           document.querySelector("span.error-msg").innerHTML = result.msg;
+          return;
+        }
+        window.location.replace(`/resume-view/${result.resumeId}`);
+      })
+
+      document.getElementById("direct-edit-save-btn").addEventListener('click', async (e) => {
+        const res = await fetch("/resume-direct-edit", {
+          method: "POST",
+          body: JSON.stringify({
+            url: window.location.pathname,
+            title: document.getElementById("title").value,
+            markdown: document.getElementById("direct-edit-txt").value
+          }),
+          headers: { "Content-Type": "application/json" }
+        });
+
+        const result = await res.json();
+        if (!result.success) {
+          document.querySelectorAll("span.error-msg")[1].innerHTML = result.msg;
           return;
         }
         window.location.replace(`/resume-view/${result.resumeId}`);
