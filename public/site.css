@@ -95,7 +95,7 @@ a:hover {
   border: var(--default-border);
   border-radius: 10px;
   width: fit-content;
-  margin: auto;
+  margin: 2em;
   color: white;
   background-color: black;
   padding: 5px;
