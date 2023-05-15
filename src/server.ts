@@ -37,12 +37,11 @@ express()
   .post("/fetch-usernames", async (req: Request, res: Response) => {
     if (!req.body.filter)
       return;
-    const filter = req.body.filter.toLowerCase();
     const usernames: string[] = [];
 
     const users = await UserDB.getAllUsers();
     for (const user of users) {
-      if (!user.username.toLowerCase().startsWith(filter))
+      if (!user.username.startsWith(req.body.filter))
         continue;
       usernames.push(user.username);
     }
