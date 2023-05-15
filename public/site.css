@@ -238,6 +238,7 @@ form, fieldset div {
   display: flex;
   flex-direction: column;
   gap: 1em;
+  margin-bottom: 1em;
   text-align: left;
 }
 
@@ -253,7 +254,7 @@ form, fieldset div {
   width: 100%;
 }
 
-#share-menu {
+.popup {
   background-color: var(--bg-color);
   padding: 1.5em;
   position: relative;
@@ -280,4 +281,9 @@ input, #input-autocomplete {
   top: 7.45em;
   left: 2.1em;
   opacity: 50%;
+}
+
+#direct-edit-menu {
+  display: flex;
+  flex-direction: column;
 }
