@@ -4,8 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npx tsc && node target/server.js"
+    "test": "jasmine",
+    "coverage": "nyc npm test"
   },
   "repository": {
     "type": "git",
@@ -25,6 +25,7 @@
     "ejs": "^3.1.9",
     "express": "^4.18.2",
     "express-jwt": "^8.4.1",
+    "jasmine": "^4.6.0",
     "jsdom": "^21.1.2",
     "pg": "^8.10.0"
   },
