@@ -15,33 +15,23 @@
 <script src="../toggle.js"></script>
 <script>
 function showTheme() {
-  // check if user has a preferred mode and set it
   var preferredMode = localStorage.getItem('preferredMode');
   if (preferredMode) {
     var body = document.querySelector('body');
     var logo = document.querySelector('#logo');
     
-    // Remove existing theme classes
-    body.classList.remove('dark-mode', 'light-mode');
-    
-    // Add new theme class based on preferred mode
-    if (preferredMode == '../site_dark.css') {
+    // Add class based on preferred mode
+    if (preferredMode === '../site_dark.css') {
       body.classList.add('dark-mode');
-      logo.src = "../ResumeTodayLogo_dark.png";
+      logo.src = '../ResumeTodayLogo_dark.png';
     } else {
-      body.classList.add('light-mode');
-      logo.src = "../ResumeTodayLogo.png";
+      body.classList.remove('dark-mode');
+      logo.src = '../ResumeTodayLogo.png';
     }
   }
 }
 
-function showContent() {
-  document.body.style.visibility = 'visible';
-  document.body.style.opacity = 1;
-}
-
 window.addEventListener('DOMContentLoaded', function () {
   showTheme();
-  showContent();
 });
 </script>

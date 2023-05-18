@@ -17,4 +17,3 @@ function toggleMode() {
 
 var toggleBtn = document.getElementById('toggle-btn');
 toggleBtn.addEventListener('click', toggleMode);
-e
