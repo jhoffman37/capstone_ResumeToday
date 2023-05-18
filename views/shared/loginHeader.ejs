@@ -17,21 +17,34 @@
 function showTheme() {
   var preferredMode = localStorage.getItem('preferredMode');
   if (preferredMode) {
-    var body = document.querySelector('body');
-    var logo = document.querySelector('#logo');
-    
-    // Add class based on preferred mode
-    if (preferredMode === '../site_dark.css') {
-      body.classList.add('dark-mode');
-      logo.src = '../ResumeTodayLogo_dark.png';
-    } else {
-      body.classList.remove('dark-mode');
-      logo.src = '../ResumeTodayLogo.png';
-    }
+    setTheme(preferredMode); // Apply the preferred mode
+  } else {
+    setTheme('light')
   }
+}
+
+function setTheme(theme) {
+  var body = document.querySelector('body');
+  var logo = document.querySelector('#logo');
+
+  // Add class based on theme
+  if (theme === 'dark') {
+    body.classList.add('dark-mode');
+    logo.src = '../ResumeTodayLogo_dark.png';
+  } else {
+    body.classList.remove('dark-mode');
+    logo.src = '../ResumeTodayLogo.png';
+  }
+
+  // Store preferred mode in localStorage
+  localStorage.setItem('preferredMode', theme);
 }
 
 window.addEventListener('DOMContentLoaded', function () {
   showTheme();
 });
+
+// Usage example:
+// setTheme('dark'); // Set the preferred mode to 'dark'
+// setTheme('light'); // Set the preferred mode to 'light'
 </script>
