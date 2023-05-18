@@ -297,3 +297,146 @@ input, #input-autocomplete {
   display: flex;
   flex-direction: column;
 }
+
+/* Dark Mode Styles */
+body.dark-mode {
+  background-color: #000;
+  color: #fff;
+}
+
+.dark-mode header {
+  font-family: Euphemia;
+  text-align: left;
+  height: 10px;
+  width: 50px;
+}
+
+.dark-mode nav {
+  border-bottom: #fff 1px solid;
+}
+
+.dark-mode nav li {
+  border: 1px solid white;
+  color: #fff;
+}
+
+.dark-mode nav li a {
+  background-color: #000;
+  border: 3px outset #4a86e8;
+}
+
+.dark-mode nav li a:hover {
+  background-color: #fff;
+}
+
+.dark-mode nav a:hover {
+  color: #4a86e8;
+}
+
+.dark-mode a {
+  color: #fff;
+}
+
+.dark-mode a li:hover {
+  color: #000;
+}
+
+.dark-mode #navButtons {
+  border: 1px solid white;
+}
+
+.dark-mode #navLink {
+  color: #000 !important;
+}
+
+.dark-mode #toggle-btn {
+  color: #000;
+  background-color: #fff;
+}
+
+.dark-mode #toggle-btn:hover {
+  background-color: #fff;
+  color: #000;
+}
+
+.dark-mode #downloadButton {
+  color: #fff;
+  background-color: #000;
+}
+
+.dark-mode #downloadButton:hover {
+  background-color: #fff;
+  color: #000;
+}
+
+.dark-mode #userIdentifier {
+  color: #4a86e8;
+  background-color: #fff;
+}
+
+.dark-mode .resumeList {
+  border: 1px solid #fff;
+}
+
+.dark-mode .resume {
+  border: 1px solid #fff;
+}
+
+.dark-mode .resume a,
+.dark-mode .resume .share-btn {
+  background-color: #fff;
+  color: #000;
+}
+
+.dark-mode .resume a:hover,
+.dark-mode .resume .share-btn:hover {
+  background-color: #000;
+  color: #fff;
+}
+
+.dark-mode #resumeDiv {
+  color: #000;
+  background-color: #fff;
+}
+
+.dark-mode #resumeDiv h2 {
+  border-bottom: 1px solid #fff;
+}
+
+.dark-mode p1 {
+  border: 1px solid #fff;
+}
+.dark-mode p2 {
+  border: 1px solid #fff;
+}
+
+.dark-mode p3 {
+  background-color: #fff;
+  color: #000;
+}
+
+.dark-mode p3:hover {
+  background-color: #000;
+  color: #fff;
+}
+
+.dark-mode .popup {
+  color: #fff;
+  background-color: #000;
+}
+
+.dark-mode form,
+.dark-mode fieldset div {
+  text-align: left;
+}
+
+.dark-mode input,
+.dark-mode #input-autocomplete {
+  font-family: Arial;
+  font-size: medium;
+  color: #000;
+}
+
+.dark-mode #direct-edit-menu {
+  color: #fff;
+}

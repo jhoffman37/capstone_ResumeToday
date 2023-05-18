@@ -1,22 +1,14 @@
 function toggleMode() {
-  var cssMode = document.querySelector('#default');
+  var body = document.body;
   var logo = document.querySelector('#logo');
-  var currentMode = cssMode.getAttribute('href');
-  var newMode;
 
-  if (currentMode == '../site.css') {
-    newMode = '../site_dark.css';
-    logo.src = "../ResumeTodayLogo_dark.png";
-  } else {
-    newMode = '../site.css';
-    logo.src = "../ResumeTodayLogo.png";
-  }
-
-  cssMode.setAttribute('href', newMode);
-  localStorage.setItem('preferredMode', newMode);
+  body.classList.toggle('dark-mode');
+  logo.src = body.classList.contains('dark-mode') ? "../ResumeTodayLogo_dark.png" : "../ResumeTodayLogo.png";
+  
+  var currentMode = body.classList.contains('dark-mode') ? '../site_dark.css' : '../site.css';
+  localStorage.setItem('preferredMode', currentMode);
 
   // Gradual transition to dark mode
-  var body = document.body;
   body.classList.add('transition');
   window.setTimeout(function() {
     body.classList.remove('transition');
@@ -25,3 +17,4 @@ function toggleMode() {
 
 var toggleBtn = document.getElementById('toggle-btn');
 toggleBtn.addEventListener('click', toggleMode);
+e
