@@ -19,6 +19,20 @@ A .env file will be required to run the webserver. It should contain the followi
 - Optional: JWT_EXPIRES_IN (the expiry time for JWTs) (defaults to 1h)
 - Optional: BCRYPT_SALT_ROUNDS (the amount of rounds for salt generation for password hashing) (defaults to 10)
 
+## Testing
+To run the tests, run `npm test` in the root directory. This will run the tests and generate a coverage report in the
+terminal after it's done. The tests currently just test all the routes and some of the database functions to ensure that 
+the site is functional.
+
+## How to use
+The website will be hosted here at: https://resume-today.onrender.com/. 
+This will be the official website for the project. To use, simply go to the website and sign up for an account. Once there 
+click on the `New Resume` button to start the process. Once you fill out the form information, you will be shown the 
+preview of your resume. If you are satisfied with your resume then you can click the `Donwload PDF` to download it or use 
+the `Share` button to show it to others. Other links on the Nav Bar are there for viewing info about how to build a good
+resume or for contacting the developers. You can also fork the project and run it locally if you wish by following the
+installation/setup guide above.
+
 ### Dependencies
 - express
 - dotenv
