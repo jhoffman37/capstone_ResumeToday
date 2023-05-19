@@ -8,6 +8,7 @@ body {
   background-color: var(--bg-color);
   color:#000;
   visibility: hidden;
+  opacity: 0;
 }
 
 header {
