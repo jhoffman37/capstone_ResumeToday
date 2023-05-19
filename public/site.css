@@ -5,7 +5,7 @@
 }
 
 body {
-  background-color: var(--bg-color);
+  background-color: transparent;
   color:#000;
   visibility: hidden;
   opacity: 0;
