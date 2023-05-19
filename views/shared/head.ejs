@@ -5,6 +5,40 @@
     <%_ } _%>
     Resume Today
   </title>
+  <script>
+    function showTheme() {
+      var preferredMode = localStorage.getItem('preferredMode');
+      if (preferredMode) {
+        setTheme(preferredMode); // Apply the preferred mode
+      } else {
+        setTheme('light');
+      }
+    }
+  
+    function setTheme(theme) {
+      var body = document.querySelector('body');
+      var logo = document.querySelector('#logo');
+  
+      // Add class based on theme
+      if (theme === 'dark') {
+        body.classList.add('dark-mode');
+        logo.src = '../ResumeTodayLogo_dark.png';
+      } else {
+        body.classList.remove('dark-mode');
+        logo.src = '../ResumeTodayLogo.png';
+      }
+  
+      // Store preferred mode in localStorage
+      localStorage.setItem('preferredMode', theme);
+  
+      // Show the content once the theme is applied
+      document.body.style.visibility = 'visible';
+      document.body.style.opacity = 1;
+    }
+  
+    window.addEventListener('DOMContentLoaded', showTheme);
+  </script>
+  
   <link rel="preload" href="../site.css" as="style">
   <link id='default' rel="stylesheet" type="text/css" href="/site.css">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">

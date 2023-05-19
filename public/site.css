@@ -7,6 +7,7 @@
 body {
   background-color: var(--bg-color);
   color:#000;
+  visibility: hidden;
 }
 
 header {
