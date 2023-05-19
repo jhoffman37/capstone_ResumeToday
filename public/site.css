@@ -197,6 +197,10 @@ h2 {
   cursor: pointer;
 }
 
+#pageView {
+  text-align: center;
+}
+
 #resumeDiv {
   border: var(--default-border);
   width: 1063px;
