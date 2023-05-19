@@ -8,9 +8,11 @@
   <script>
     function showTheme() {
       var preferredMode = localStorage.getItem('preferredMode');
-      if (preferredMode) {
+      if (preferredMode === 'dark') {
+        document.body.style.backgroundColor = 'black';
         setTheme(preferredMode); // Apply the preferred mode
       } else {
+        document.body.style.backgroundColor = 'white';
         setTheme('light');
       }
     }
